@@ -3,6 +3,12 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
     <string name="action_settings">Settings</string>
+
+    <!--navigation drawer-->
+    <string name="home">Start</string>
+    <string name="childinfo">Kindinfo</string>
+    <string name="agenda">Agenda</string>
+    <string name="finance">Financiën</string>
+
 </resources>
