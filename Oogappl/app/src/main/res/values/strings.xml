@@ -10,5 +10,6 @@
     <string name="childinfo">Kindinfo</string>
     <string name="agenda">Agenda</string>
     <string name="finance">Financiën</string>
+    <string name="profile">Profiel</string>
 
 </resources>

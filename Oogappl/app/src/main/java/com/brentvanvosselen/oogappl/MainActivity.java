@@ -10,11 +10,18 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    public void clickProfile(View view){
+        //displaySelectedScreen(R.id.profile_imageview);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +40,18 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        //Use the headerView to get the items from the header in the navigation drawer
+        View headerView = navigationView.getHeaderView(0);
+
+        //When the user clicks on the image in the navigation drawer, navigate to the profile fragment
+        ImageView vImageViewProfile = headerView.findViewById(R.id.profile_imageview);
+        vImageViewProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                displaySelectedScreen(R.id.profile_imageview);
+            }
+        });
 
 
         //navigate to the home fragment
@@ -82,6 +101,9 @@ public class MainActivity extends AppCompatActivity
         Fragment fragment = null;
 
         switch(id){
+            case R.id.profile_imageview:
+                fragment = new ProfileFragment();
+                break;
             case R.id.nav_home:
                 fragment = new HomeFragment();
                 break;
