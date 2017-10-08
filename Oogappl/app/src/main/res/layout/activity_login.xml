@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.brentvanvosselen.oogappl.LoginActivity"
-    android:id="@+id/activity_login">
+    android:id="@+id/activity_login"
+
+    android:fitsSystemWindows="true">
 
     <include
         layout="@layout/content_login"

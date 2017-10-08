@@ -12,8 +12,17 @@
     <string name="finance">Financiën</string>
     <string name="profile">Profiel</string>
 
-    <!-- Strings related to login -->
+    <!-- Strings related to login and register-->
     <string name="login">Log in</string>
     <string name="create_new_account">Of, creëer een nieuw account</string>
     <string name="register">Registreer</string>
+    <string name="firstname">Voornaam</string>
+    <string name="lastname">Achternaam</string>
+    <string name="email">E-mail</string>
+    <string name="password">Wachtwoord</string>
+    <string name="repeat_password">Herhaal wachtwoord</string>
+    <string name="personal_data">Persoonsgegevens</string>
+    <string name="security_data">Beveiligingsgegevens</string>
+
+
 </resources>

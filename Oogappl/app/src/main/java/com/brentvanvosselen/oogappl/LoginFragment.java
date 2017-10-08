@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 /**
@@ -19,15 +20,15 @@ public class LoginFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().setTitle(R.string.login);
+
 
         View content = getView();
-        TextView vRegisterTextView = (TextView) content.findViewById(R.id.registerTextView);
+        TextView vTextViewRegister = content.findViewById(R.id.textview_button_createaccount);
 
-        vRegisterTextView.setOnClickListener(new View.OnClickListener() {
+        vTextViewRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i("Event: ", "Clicked on create new account");
+                Log.i("Event", "Clicked on create new account");
                 Fragment register_fragment = new RegisterFragment();
 
                 if (register_fragment != null){
@@ -37,6 +38,16 @@ public class LoginFragment extends Fragment {
                 }
             }
         });
+
+
+
+        Button vButtonRegister = content.findViewById(R.id.button_login);
+        vButtonRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("Event", "Clicked on log in");
+            }
+        });
     }
 
     @Nullable
@@ -44,4 +55,6 @@ public class LoginFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_login, container, false);
     }
+
+
 }
