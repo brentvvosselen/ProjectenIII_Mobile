@@ -16,12 +16,14 @@ import java.net.URLEncoder;
 
 public class RestClient extends AsyncTask<Void, Void, String> {
 
+    private final String IPADRESS = "";
+
     private String url;
     private String requestMethod;
 
     public RestClient(String url, String requestMethod) {
         try {
-            this.url = url; //URLEncoder.encode(url, "UTF-8");
+            this.url = "http://" + IPADRESS + url;
             this.requestMethod = requestMethod;
         } catch (Exception e) {
             e.printStackTrace();
@@ -76,7 +78,7 @@ public class RestClient extends AsyncTask<Void, Void, String> {
         } catch (MalformedURLException e) {
             Log.i("Connection", "Bad URL");
         } catch (IOException e) {
-            Log.i("Connection", "IOException");
+            Log.i("Connection", e.getMessage());
         } finally {
             if (connection != null) {
                 connection.disconnect();

@@ -50,7 +50,7 @@ public class LoginFragment extends Fragment {
             }
         });
 
-        this.client = new RestClient("http://127.0.0.1:5000/api/parents", "GET");
+        this.client = new RestClient(":5000/api/parents", "GET");
         this.client.execute();
     }
 
