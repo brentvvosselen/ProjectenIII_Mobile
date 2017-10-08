@@ -19,8 +19,6 @@ import com.brentvanvosselen.oogappl.RestClient.RestClient;
 
 public class LoginFragment extends Fragment {
 
-    private RestClient client;
-
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -50,8 +48,15 @@ public class LoginFragment extends Fragment {
             }
         });
 
-        this.client = new RestClient(":5000/api/parents", "GET");
-        this.client.execute();
+
+
+        new RestClient(":5000/api/parents", "GET") {
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                Log.i("json", s);
+            }
+        }.execute();
     }
 
     @Nullable

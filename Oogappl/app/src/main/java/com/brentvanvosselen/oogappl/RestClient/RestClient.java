@@ -100,10 +100,4 @@ public class RestClient extends AsyncTask<Void, Void, String> {
     protected String doInBackground(Void... params) {
         return getJson();
     }
-
-    @Override
-    protected void onPostExecute(String s) {
-        super.onPostExecute(s);
-        Log.i("json", s);
-    }
 }
