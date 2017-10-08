@@ -24,24 +24,5 @@ public class LoginActivity extends AppCompatActivity {
             ft.replace(R.id.content_login,login_fragment);
             ft.commit();
         }
-
-        /*
-        View content = login_fragment.getView();
-        TextView vRegisterTextView = (TextView) content.findViewById(R.id.registerTextView);
-
-        vRegisterTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.i("Event: ", "Clicked on create new account");
-                Fragment register_fragment = new RegisterFragment();
-
-                if (register_fragment != null){
-                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                    ft.replace(R.id.content_login,register_fragment);
-                    ft.commit();
-                }
-            }
-        });
-        */
     }
 }

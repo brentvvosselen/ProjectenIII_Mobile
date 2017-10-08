@@ -11,16 +11,19 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.brentvanvosselen.oogappl.RestClient.RestClient;
+
 /**
  * Created by joshi on 08/10/2017.
  */
 
 public class LoginFragment extends Fragment {
 
+    private RestClient client;
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
 
         View content = getView();
         TextView vTextViewRegister = content.findViewById(R.id.textview_button_createaccount);
@@ -39,8 +42,6 @@ public class LoginFragment extends Fragment {
             }
         });
 
-
-
         Button vButtonRegister = content.findViewById(R.id.button_login);
         vButtonRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,6 +49,9 @@ public class LoginFragment extends Fragment {
                 Log.i("Event", "Clicked on log in");
             }
         });
+
+        this.client = new RestClient("http://127.0.0.1:5000/api/parents", "GET");
+        this.client.execute();
     }
 
     @Nullable
@@ -55,6 +59,4 @@ public class LoginFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_login, container, false);
     }
-
-
 }
