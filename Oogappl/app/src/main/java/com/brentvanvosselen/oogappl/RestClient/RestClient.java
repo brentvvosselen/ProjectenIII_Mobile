@@ -16,7 +16,7 @@ import java.net.URLEncoder;
 
 public class RestClient extends AsyncTask<Void, Void, String> {
 
-    private final String IPADRESS = "";
+    private final String IPADRESS = "192.168.0.240";
 
     private String url;
     private String requestMethod;
