@@ -23,6 +23,7 @@ public class LoginFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
         View content = getView();
         TextView vTextViewRegister = content.findViewById(R.id.textview_button_createaccount);
 
