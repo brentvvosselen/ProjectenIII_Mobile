@@ -16,7 +16,7 @@ import java.net.URLEncoder;
 
 public class RestClient extends AsyncTask<Void, Void, String> {
 
-    private final String IPADRESS = "192.168.0.240";
+    private final String IPADRESS = "172.18.142.235";
 
     private String url;
     private String requestMethod;
@@ -38,7 +38,7 @@ public class RestClient extends AsyncTask<Void, Void, String> {
         this.requestMethod = requestMethod;
     }
 
-    public String getJson() {
+    public String getJson(Void... params) {
         HttpURLConnection connection = null;
         BufferedReader reader = null;
 
@@ -98,6 +98,6 @@ public class RestClient extends AsyncTask<Void, Void, String> {
 
     @Override
     protected String doInBackground(Void... params) {
-        return getJson();
+        return getJson(params);
     }
 }

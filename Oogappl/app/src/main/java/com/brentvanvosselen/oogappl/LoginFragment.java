@@ -11,7 +11,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.brentvanvosselen.oogappl.RestClient.RestClient;
+import com.brentvanvosselen.oogappl.RestClient.APIInterface;
+import com.brentvanvosselen.oogappl.RestClient.ParentList;
+import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by joshi on 08/10/2017.
@@ -19,10 +25,11 @@ import com.brentvanvosselen.oogappl.RestClient.RestClient;
 
 public class LoginFragment extends Fragment {
 
+    APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
 
         View content = getView();
         TextView vTextViewRegister = content.findViewById(R.id.textview_button_createaccount);
@@ -49,18 +56,22 @@ public class LoginFragment extends Fragment {
             }
         });
 
-
-
-        new RestClient(":5000/api/parents", "GET") {
+        Call call = apiInterface.doGetParents();
+        call.enqueue(new Callback() {
             @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-                if(s.isEmpty() || s == null) {
-                    Log.i("json", "No parents");
-                }
-                Log.i("json", s);
+            public void onResponse(Call call, Response response) {
+                Log.i("API event", response.message());
+                ParentList parents = (ParentList) response.body();
+                Log.i("API event", parents.toString());
             }
-        }.execute();
+
+            @Override
+            public void onFailure(Call call, Throwable t) {
+                Log.i("API event", "DIDNT WORK");
+                Log.i("API event", t.getMessage());
+                call.cancel();
+            }
+        });
     }
 
     @Nullable
