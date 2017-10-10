@@ -55,6 +55,9 @@ public class LoginFragment extends Fragment {
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
+                if(s.isEmpty() || s == null) {
+                    Log.i("json", "No parents");
+                }
                 Log.i("json", s);
             }
         }.execute();
