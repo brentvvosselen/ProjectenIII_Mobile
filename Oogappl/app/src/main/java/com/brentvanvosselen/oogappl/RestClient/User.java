@@ -1,8 +1,11 @@
 package com.brentvanvosselen.oogappl.RestClient;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
-public class User {
+public class User implements Parcelable {
 
     @SerializedName("_id")
     private String id;
@@ -22,43 +25,61 @@ public class User {
         this.password = password;
     }
 
-    public String getId() {
-        return id;
+    public User(String email, String password) {
+        this.email = email;
+        this.password = password;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public String getId() {
+        return id;
     }
 
     public String getFirstname() {
         return firstname;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-
     public String getLastname() {
         return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int flag) {
+        parcel.writeString(id);
+        parcel.writeString(firstname);
+        parcel.writeString(lastname);
+        parcel.writeString(email);
+        parcel.writeString(password);
+    }
+
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
+
+    private User(Parcel in) {
+        this.id = in.readString();
+        this.firstname = in.readString();
+        this.lastname = in.readString();
+        this.email = in.readString();
+        this.password = in.readString();
     }
 }

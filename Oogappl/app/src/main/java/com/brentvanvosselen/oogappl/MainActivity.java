@@ -23,12 +23,15 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+import com.brentvanvosselen.oogappl.RestClient.User;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private Boolean loggedIn = false;
+    private User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +42,12 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Intent intent = getIntent();
+        currentUser = intent.getParcelableExtra("currentUser");
 
-
-
-        if(!loggedIn) {
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
+        if(currentUser == null) {
+            Intent loginIntent = new Intent(this, LoginActivity.class);
+            startActivity(loginIntent);
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

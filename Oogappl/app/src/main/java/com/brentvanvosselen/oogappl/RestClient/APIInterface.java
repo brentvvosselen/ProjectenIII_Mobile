@@ -25,7 +25,10 @@ public interface APIInterface {
     Call<Parent> createParent(@Body Parent p);
 
     @POST("/api/signup")
-    Call<Object> createUser(@Body User u);
+    Call<SuccesMessage> createUser(@Body User u);
+
+    @POST("/api/login")
+    Call<SuccesMessage> loginUser(@Body User u);
 
 
     /*
@@ -47,7 +50,6 @@ public interface APIInterface {
 
             @Override
             public void onFailure(Call call, Throwable t) {
-                Log.i("API event", "DIDNT WORK");
                 Log.i("API event", t.getMessage());
                 call.cancel();
             }
@@ -72,7 +74,6 @@ public interface APIInterface {
 
             @Override
             public void onFailure(Call call, Throwable t) {
-                Log.i("API event", "DIDNT WORK");
                 Log.i("API event", t.getMessage());
                 call.cancel();
             }
@@ -91,7 +92,6 @@ public interface APIInterface {
 
             @Override
             public void onFailure(Call call, Throwable t) {
-                Log.i("API event", "DIDNT WORK");
                 Log.i("API event", t.getMessage());
                 call.cancel();
             }

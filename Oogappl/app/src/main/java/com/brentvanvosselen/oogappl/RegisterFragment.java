@@ -118,7 +118,6 @@ public class RegisterFragment extends Fragment{
 
             @Override
             public void onFailure(Call call, Throwable t) {
-                Log.i("API event", "DIDNT WORK");
                 Log.i("API event", t.getMessage());
                 call.cancel();
             }
