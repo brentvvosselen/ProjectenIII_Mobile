@@ -12,20 +12,19 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.brentvanvosselen.oogappl.RestClient.APIInterface;
-import com.brentvanvosselen.oogappl.RestClient.ParentList;
+import com.brentvanvosselen.oogappl.RestClient.Parent;
 import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * Created by joshi on 08/10/2017.
- */
-
 public class LoginFragment extends Fragment {
 
-    APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
+    private APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
+    private String email;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -33,6 +32,18 @@ public class LoginFragment extends Fragment {
 
         View content = getView();
         TextView vTextViewRegister = content.findViewById(R.id.textview_button_createaccount);
+
+        Bundle bundle = (Bundle) getArguments();
+
+        if(bundle != null) {
+            this.email = bundle.getString("email");
+            Log.i("Saved", "Received email: " + this.email);
+        }
+
+        if(email != null) {
+            TextView vTextViewEmail = content.findViewById(R.id.edittext_login_email);
+            vTextViewEmail.setText(this.email);
+        }
 
         vTextViewRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,23 +64,6 @@ public class LoginFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Log.i("Event", "Clicked on log in");
-            }
-        });
-
-        Call call = apiInterface.doGetParents();
-        call.enqueue(new Callback() {
-            @Override
-            public void onResponse(Call call, Response response) {
-                Log.i("API event", response.message());
-                ParentList parents = (ParentList) response.body();
-                Log.i("API event", parents.toString());
-            }
-
-            @Override
-            public void onFailure(Call call, Throwable t) {
-                Log.i("API event", "DIDNT WORK");
-                Log.i("API event", t.getMessage());
-                call.cancel();
             }
         });
     }

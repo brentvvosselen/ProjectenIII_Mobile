@@ -24,7 +24,7 @@ public class LoginActivity extends AppCompatActivity {
 
         if (login_fragment != null){
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.content_login,login_fragment);
+            ft.replace(R.id.content_login, login_fragment);
             ft.commit();
         }
     }
