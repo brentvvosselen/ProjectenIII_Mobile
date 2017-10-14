@@ -3,16 +3,32 @@ package com.brentvanvosselen.oogappl;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.brentvanvosselen.oogappl.RestClient.APIInterface;
+import com.brentvanvosselen.oogappl.RestClient.Parent;
+import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
+import com.brentvanvosselen.oogappl.RestClient.User;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by brentvanvosselen on 04/10/2017.
  */
 
 public class ProfileFragment extends Fragment {
+
+    //declaration fo the api-interface
+    private APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
+
+
     TextView vTextViewEmail, vTextViewFirstname, vTextViewLastname, vTextViewAddress, vTextViewTelephone, vTextViewWork;
 
 
@@ -23,6 +39,7 @@ public class ProfileFragment extends Fragment {
         TextView title = getActivity().findViewById(getResources().getIdentifier("action_bar_title", "id", getActivity().getPackageName()));
         title.setText(R.string.profile);
 
+        //getting the textviews
         final View content = getView();
         vTextViewEmail = content.findViewById(R.id.textview_profile_email);
         vTextViewFirstname = content.findViewById(R.id.textview_profile_firstname);
@@ -31,6 +48,34 @@ public class ProfileFragment extends Fragment {
         vTextViewTelephone = content.findViewById(R.id.textview_profile_telephone);
         vTextViewWork = content.findViewById(R.id.textview_profile_work);
 
+        //get the user from the api-server
+        Call call = apiInterface.getParentByEmail(((MainActivity) getActivity()).getUserEmail());
+        call.enqueue(new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) {
+                if(response.isSuccessful()){
+                    Parent parent = (Parent) response.body();
+                    vTextViewEmail.setText(parent.getEmail());
+                    vTextViewFirstname.setText(parent.getFirstname());
+                    vTextViewLastname.setText(parent.getLastname());
+                    vTextViewAddress.setText(parent.getAddressStreet() + " " + parent.getAddressNumber() + "\n" + parent.getAddressPostalcode() + " " + parent.getAddressCity());
+                    vTextViewTelephone.setText(parent.getTelephoneNumber());
+                    vTextViewWork.setText(parent.getWorkName() + "\n" + parent.getWorkNumber());
+
+                }else{
+                    Toast.makeText(getContext(), "Getting user information failed", Toast.LENGTH_SHORT).show();
+                    Log.i("USER","FAIL: "+ response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call call, Throwable t) {
+                Log.i("API EVENT", t.getMessage());
+                call.cancel();
+            }
+         });
+
+        //go to editfragment when the user clicks on the edit button
 
 
 

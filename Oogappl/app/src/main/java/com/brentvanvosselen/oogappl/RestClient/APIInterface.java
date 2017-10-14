@@ -6,6 +6,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 public interface APIInterface {
 
@@ -29,6 +30,9 @@ public interface APIInterface {
 
     @POST("/api/login")
     Call<SuccesMessage> loginUser(@Body User u);
+
+    @GET("/api/parents/{email}")
+    Call<Parent> getParentByEmail(@Path("email") String email);
 
 
     /*

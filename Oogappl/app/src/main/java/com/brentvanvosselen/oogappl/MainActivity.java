@@ -123,7 +123,6 @@ public class MainActivity extends AppCompatActivity
 
     private void displaySelectedScreen(int id){
         Fragment fragment = null;
-
         switch(id){
             case R.id.profile_imageview:
                 fragment = new ProfileFragment();
@@ -186,5 +185,10 @@ public class MainActivity extends AppCompatActivity
                 appCompatTextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             }
         }
+    }
+
+
+    public String getUserEmail(){
+        return currentUser.getEmail();
     }
 }
