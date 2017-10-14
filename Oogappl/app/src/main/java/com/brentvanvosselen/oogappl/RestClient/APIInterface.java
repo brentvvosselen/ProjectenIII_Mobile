@@ -34,6 +34,9 @@ public interface APIInterface {
     @GET("/api/parents/{email}")
     Call<Parent> getParentByEmail(@Path("email") String email);
 
+    @POST("/api/parents/edit")
+    Call<SuccesMessage> saveProfile(@Body Parent p);
+
 
     /*
     Voorbeeld van API call

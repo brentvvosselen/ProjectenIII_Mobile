@@ -90,8 +90,6 @@ public class ProfileFragment extends Fragment {
                 }
             }
         });
-
-
     }
 
     @Nullable

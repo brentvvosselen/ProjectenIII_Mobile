@@ -20,35 +20,55 @@ public class Parent {
     private String firstname;
     @SerializedName("lastname")
     private String lastname;
-    @SerializedName("address_city")
+    @SerializedName("addressCity")
     private String addressCity;
-    @SerializedName("address_number")
+    @SerializedName("addressNumber")
     private String addressNumber;
-    @SerializedName("address_street")
+    @SerializedName("addressStreet")
     private String addressStreet;
-    @SerializedName("address_postalcode")
+    @SerializedName("addressPostalcode")
     private String addressPostalcode;
-    @SerializedName("number")
+    @SerializedName("telephoneNumber")
     private String telephoneNumber;
-    @SerializedName("work_name")
+    @SerializedName("workName")
     private String workName;
-    @SerializedName("work_number")
+    @SerializedName("workNumber")
     private String workNumber;
 
-    public Parent(String id, String email, String firstname, String lastname, String addressCity, String addressNumber, String addressStreet, String addressPostalcode, String telephoneNumber, String workName, String workNumber) {
+    public Parent(String id, String email, String firstname, String lastname) {
         this.id = id;
         this.email = email;
         this.firstname = firstname;
         this.lastname = lastname;
-        this.addressCity = addressCity;
-        this.addressNumber = addressNumber;
-        this.addressStreet = addressStreet;
-        this.addressPostalcode = addressPostalcode;
-        this.telephoneNumber = telephoneNumber;
-        this.workName = workName;
-        this.workNumber = workNumber;
     }
 
+    public void setAddressCity(String addressCity) {
+        this.addressCity = addressCity;
+    }
+
+    public void setAddressNumber(String addressNumber) {
+        this.addressNumber = addressNumber;
+    }
+
+    public void setAddressStreet(String addressStreet) {
+        this.addressStreet = addressStreet;
+    }
+
+    public void setAddressPostalcode(String addressPostalcode) {
+        this.addressPostalcode = addressPostalcode;
+    }
+
+    public void setTelephoneNumber(String telephoneNumber) {
+        this.telephoneNumber = telephoneNumber;
+    }
+
+    public void setWorkName(String workName) {
+        this.workName = workName;
+    }
+
+    public void setWorkNumber(String workNumber) {
+        this.workNumber = workNumber;
+    }
 
     public String getId() {
         return id;
