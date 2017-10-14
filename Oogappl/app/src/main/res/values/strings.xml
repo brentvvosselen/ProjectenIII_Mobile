@@ -5,6 +5,9 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_settings">Settings</string>
 
+    <!-- algemeen-->
+    <string name="save">Opslaan</string>
+
     <!--navigation drawer-->
     <string name="home">Start</string>
     <string name="childinfo">Kindinfo</string>
@@ -23,6 +26,17 @@
     <string name="repeat_password">Herhaal wachtwoord</string>
     <string name="personal_data">Persoonsgegevens</string>
     <string name="security_data">Beveiligingsgegevens</string>
+
+
+    <!-- Strings related to profile-->
+    <string name="edit">Wijzig</string>
+    <string name="address_street">Straat</string>
+    <string name="address_number">Huisnummer</string>
+    <string name="address_postalcode">Postcode</string>
+    <string name="address_city">Stad</string>
+    <string name="telephonenumber">Telefoonnummer</string>
+    <string name="work_name">Bedrijfsnaam</string>
+    <string name="work_number">Bedrijfstelefoonnummer</string>
 
 
 </resources>

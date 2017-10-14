@@ -70,6 +70,7 @@ public class LoginFragment extends Fragment {
                 if (register_fragment != null){
                     FragmentTransaction ft = getFragmentManager().beginTransaction();
                     ft.replace(R.id.content_login,register_fragment);
+                    ft.detach(getFragmentManager().findFragmentById(R.id.content_login));
                     ft.commit();
                 }
             }

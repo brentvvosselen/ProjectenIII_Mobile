@@ -18,6 +18,7 @@
         app:layout_constraintVertical_bias="1.0">
 
         <android.support.constraint.ConstraintLayout
+            android:id="@+id/content_profile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 

@@ -3,10 +3,12 @@ package com.brentvanvosselen.oogappl;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -76,7 +78,18 @@ public class ProfileFragment extends Fragment {
          });
 
         //go to editfragment when the user clicks on the edit button
-
+        Button vButtonEdit = content.findViewById(R.id.button_profile_edit);
+        vButtonEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment editFragment = new ProfileEditFragment();
+                if (editFragment != null){
+                    FragmentTransaction ft = getFragmentManager().beginTransaction();
+                    ft.replace(R.id.content_main,editFragment);
+                    ft.commit();
+                }
+            }
+        });
 
 
     }
