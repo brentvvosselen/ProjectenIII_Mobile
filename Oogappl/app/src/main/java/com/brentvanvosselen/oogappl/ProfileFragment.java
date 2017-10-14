@@ -13,6 +13,7 @@ import android.widget.TextView;
  */
 
 public class ProfileFragment extends Fragment {
+    TextView vTextViewEmail, vTextViewFirstname, vTextViewLastname, vTextViewAddress, vTextViewTelephone, vTextViewWork;
 
 
     @Override
@@ -21,6 +22,18 @@ public class ProfileFragment extends Fragment {
 
         TextView title = getActivity().findViewById(getResources().getIdentifier("action_bar_title", "id", getActivity().getPackageName()));
         title.setText(R.string.profile);
+
+        final View content = getView();
+        vTextViewEmail = content.findViewById(R.id.textview_profile_email);
+        vTextViewFirstname = content.findViewById(R.id.textview_profile_firstname);
+        vTextViewLastname = content.findViewById(R.id.textview_profile_lastname);
+        vTextViewAddress = content.findViewById(R.id.textview_profile_address);
+        vTextViewTelephone = content.findViewById(R.id.textview_profile_telephone);
+        vTextViewWork = content.findViewById(R.id.textview_profile_work);
+
+
+
+
     }
 
     @Nullable
