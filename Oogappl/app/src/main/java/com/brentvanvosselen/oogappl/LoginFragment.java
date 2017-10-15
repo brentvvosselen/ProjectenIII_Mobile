@@ -69,7 +69,7 @@ public class LoginFragment extends Fragment {
 
                 if (register_fragment != null){
                     FragmentTransaction ft = getFragmentManager().beginTransaction();
-                    ft.replace(R.id.content_login,register_fragment);
+                    ft.replace(R.id.content_login,register_fragment, "CURRENT_FRAGMENT");
                     ft.detach(getFragmentManager().findFragmentById(R.id.content_login));
                     ft.commit();
                 }
@@ -91,16 +91,7 @@ public class LoginFragment extends Fragment {
                     vEditTextPassword.setError("Password can't be empty");
                 } else {
                     User u = new User(email, password);
-                    boolean succes = login(u);
-
-                    if(!succes) {
-                        Toast toast = Toast.makeText(context, "Login failed", Toast.LENGTH_SHORT);
-                        toast.show();
-                    } else {
-                        Intent intent = new Intent(activity, MainActivity.class);
-                        intent.putExtra("currentUser", u);
-                        startActivity(intent);
-                    }
+                    login(u);
                 }
             }
         });
@@ -112,24 +103,22 @@ public class LoginFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_login, container, false);
     }
 
-    private boolean login(User u) {
+    private void login(final User u) {
         Call call = apiInterface.loginUser(u);
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
                 if(response.isSuccessful()) {
-                    Log.i("LOGIN", "Succesfull");
-
+                    Log.i("LOGIN", "SUCCESS");
+                    Intent intent = new Intent(activity, MainActivity.class);
+                    intent.putExtra("currentUser", u);
+                    startActivity(intent);
                 } else {
                     Toast toast = Toast.makeText(context, "Login failed", Toast.LENGTH_SHORT);
                     toast.show();
                     Log.i("LOGIN", "FAIL: " + response.message());
+                    call.cancel();
                 }
-                /*
-                Log.i("LOGIN", "user logged in");
-                SuccesMessage message = (SuccesMessage) response.body();
-                Log.i("API call", message.getSucces() + "  " + message.getMessage());
-                */
             }
 
             @Override
@@ -138,7 +127,9 @@ public class LoginFragment extends Fragment {
                 call.cancel();
             }
         });
+    }
 
-        return !call.isCanceled();
+    public void onBackPressed() {
+        getActivity().finishAffinity();
     }
 }

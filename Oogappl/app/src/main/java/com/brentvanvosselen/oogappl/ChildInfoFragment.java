@@ -9,10 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-/**
- * Created by brentvanvosselen on 03/10/2017.
- */
-
 public class ChildInfoFragment extends Fragment {
 
     @Override
@@ -21,11 +17,17 @@ public class ChildInfoFragment extends Fragment {
 
         TextView title = getActivity().findViewById(getResources().getIdentifier("action_bar_title", "id", getActivity().getPackageName()));
         title.setText(R.string.childinfo);
+
+        initFragment();
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_childinfo,container,false);
+    }
+
+    private void initFragment() {
+
     }
 }

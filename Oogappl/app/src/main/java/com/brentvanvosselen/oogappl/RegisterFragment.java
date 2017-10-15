@@ -125,4 +125,11 @@ public class RegisterFragment extends Fragment{
 
         return !call.isCanceled();
     }
+
+    public void onBackPressed() {
+        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+        Fragment login_fragment = new LoginFragment();
+        ft.replace(R.id.content_login, login_fragment, "CURRENT_FRAGMENT");
+        ft.commit();
+    }
 }

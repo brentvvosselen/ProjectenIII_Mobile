@@ -34,6 +34,8 @@ public class Parent {
     private String workName;
     @SerializedName("workNumber")
     private String workNumber;
+    @SerializedName("children")
+    private Child[] children;
 
     public Parent(String id, String email, String firstname, String lastname) {
         this.id = id;
