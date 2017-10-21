@@ -1,4 +1,4 @@
-package com.brentvanvosselen.oogappl;
+package com.brentvanvosselen.oogappl.fragments;
 
 
 import android.os.Bundle;
@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.brentvanvosselen.oogappl.R;
 
 public class ChildInfoFragment extends Fragment {
 

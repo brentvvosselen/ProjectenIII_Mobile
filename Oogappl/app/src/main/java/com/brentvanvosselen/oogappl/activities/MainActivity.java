@@ -1,4 +1,4 @@
-package com.brentvanvosselen.oogappl;
+package com.brentvanvosselen.oogappl.activities;
 
 
 import android.content.Intent;
@@ -14,7 +14,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,7 +22,13 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+import com.brentvanvosselen.oogappl.R;
 import com.brentvanvosselen.oogappl.RestClient.User;
+import com.brentvanvosselen.oogappl.fragments.AgendaFragment;
+import com.brentvanvosselen.oogappl.fragments.ChildInfoFragment;
+import com.brentvanvosselen.oogappl.fragments.FinanceFragment;
+import com.brentvanvosselen.oogappl.fragments.HomeFragment;
+import com.brentvanvosselen.oogappl.fragments.ProfileFragment;
 
 import java.util.ArrayList;
 

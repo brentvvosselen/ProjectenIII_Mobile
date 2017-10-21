@@ -1,10 +1,9 @@
-package com.brentvanvosselen.oogappl;
+package com.brentvanvosselen.oogappl.fragments;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -17,13 +16,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.brentvanvosselen.oogappl.activities.MainActivity;
+import com.brentvanvosselen.oogappl.R;
 import com.brentvanvosselen.oogappl.RestClient.APIInterface;
-import com.brentvanvosselen.oogappl.RestClient.Parent;
 import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
-import com.brentvanvosselen.oogappl.RestClient.SuccesMessage;
 import com.brentvanvosselen.oogappl.RestClient.User;
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
