@@ -8,7 +8,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitClient {
 
     private static Retrofit retrofit;
+<<<<<<< HEAD
     private static final String IPADRESS = "192.168.0.171";
+=======
+    private static final String IPADRESS = "192.168.0.240";
+>>>>>>> 5c2763961514b7189a77de83786fac6833eb8c41
 
     public static Retrofit getClient() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();

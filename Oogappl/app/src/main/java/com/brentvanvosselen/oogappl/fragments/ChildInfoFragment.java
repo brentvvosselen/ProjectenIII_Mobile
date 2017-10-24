@@ -1,4 +1,4 @@
-package com.brentvanvosselen.oogappl;
+package com.brentvanvosselen.oogappl.fragments;
 
 
 import android.os.Bundle;
@@ -9,7 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+<<<<<<< HEAD:Oogappl/app/src/main/java/com/brentvanvosselen/oogappl/ChildInfoFragment.java
 import com.brentvanvosselen.oogappl.RestClient.Parent;
+=======
+import com.brentvanvosselen.oogappl.R;
+>>>>>>> 5c2763961514b7189a77de83786fac6833eb8c41:Oogappl/app/src/main/java/com/brentvanvosselen/oogappl/fragments/ChildInfoFragment.java
 
 public class ChildInfoFragment extends Fragment {
 

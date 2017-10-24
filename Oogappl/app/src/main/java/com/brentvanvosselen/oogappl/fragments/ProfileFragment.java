@@ -1,4 +1,4 @@
-package com.brentvanvosselen.oogappl;
+package com.brentvanvosselen.oogappl.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,10 +12,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.brentvanvosselen.oogappl.activities.MainActivity;
+import com.brentvanvosselen.oogappl.R;
 import com.brentvanvosselen.oogappl.RestClient.APIInterface;
 import com.brentvanvosselen.oogappl.RestClient.Parent;
 import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
-import com.brentvanvosselen.oogappl.RestClient.User;
 
 import retrofit2.Call;
 import retrofit2.Callback;
