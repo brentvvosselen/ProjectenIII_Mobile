@@ -121,8 +121,7 @@ public class LoginFragment extends Fragment {
                     Log.i("Response: " ,sharedPreferences.getString("currentUser",null));
                     startActivity(intent);
                 } else {
-                    Toast toast = Toast.makeText(context, "Login failed", Toast.LENGTH_SHORT);
-                    toast.show();
+                    Toast.makeText(context, "Login failed", Toast.LENGTH_SHORT).show();
                     Log.i("LOGIN", "FAIL: " + response.message());
                 }
             }

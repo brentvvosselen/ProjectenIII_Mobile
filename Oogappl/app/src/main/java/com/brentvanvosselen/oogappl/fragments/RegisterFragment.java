@@ -1,5 +1,6 @@
 package com.brentvanvosselen.oogappl.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.brentvanvosselen.oogappl.R;
 import com.brentvanvosselen.oogappl.RestClient.APIInterface;
@@ -22,19 +24,23 @@ import retrofit2.Response;
 
 public class RegisterFragment extends Fragment{
 
-    APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
+    private APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
 
-    EditText vEditTextFirstname;
-    EditText vEditTextLastname;
-    EditText vEditTextEmail;
-    EditText vEditTextPassword;
-    EditText vEditTextPasswordConfirm;
+    private Context context;
+    private EditText vEditTextFirstname;
+    private EditText vEditTextLastname;
+    private EditText vEditTextEmail;
+    private EditText vEditTextPassword;
+    private EditText vEditTextPasswordConfirm;
+
+    private Boolean succes = false;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         final View content = getView();
+        context = getActivity().getApplicationContext();
 
         vEditTextFirstname = content.findViewById(R.id.edittext_register_firstname);
         vEditTextLastname = content.findViewById(R.id.edittext_register_lastname);
@@ -81,7 +87,7 @@ public class RegisterFragment extends Fragment{
 
                 if (correctForm) {
                     User u = new User(firstname, lastname, email, password);
-                    boolean succes = Register(u);
+                    Register(u);
                     Log.i("API call", succes?"SUCCES":"FAIL");
 
                     if(succes) {
@@ -95,6 +101,8 @@ public class RegisterFragment extends Fragment{
                             ft.replace(R.id.content_login, login_fragment);
                             ft.commit();
                         }
+                    } else {
+                        Toast.makeText(context, "Register failed", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -107,22 +115,28 @@ public class RegisterFragment extends Fragment{
         return inflater.inflate(R.layout.fragment_register, container, false);
     }
 
-    private boolean Register(User u) {
+    private void Register(User u) {
         Call call = apiInterface.createUser(u);
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
+                succes = false;
                 Log.i("API event", response.message());
+
+                if(response.message() == "SUCCES") {
+                    succes = true;
+                } else {
+                    succes = false;
+                }
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
                 Log.i("API event", t.getMessage());
+                succes = false;
                 call.cancel();
             }
         });
-
-        return !call.isCanceled();
     }
 
     public void onBackPressed() {
