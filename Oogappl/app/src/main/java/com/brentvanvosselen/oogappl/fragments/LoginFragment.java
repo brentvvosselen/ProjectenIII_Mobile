@@ -2,6 +2,7 @@ package com.brentvanvosselen.oogappl.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,11 +17,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.brentvanvosselen.oogappl.ObjectSerializer;
 import com.brentvanvosselen.oogappl.activities.MainActivity;
 import com.brentvanvosselen.oogappl.R;
 import com.brentvanvosselen.oogappl.RestClient.APIInterface;
 import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
 import com.brentvanvosselen.oogappl.RestClient.User;
+
+import java.io.IOException;
+import java.io.Serializable;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -109,6 +114,11 @@ public class LoginFragment extends Fragment {
                     Log.i("LOGIN", "SUCCESS");
                     Intent intent = new Intent(activity, MainActivity.class);
                     intent.putExtra("currentUser", u);
+                    saveUser(response.body().toString());
+
+                    //VOORBEELD OM USER UIT LOCALSTORAGE TE HALEN
+                    SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments",Context.MODE_PRIVATE);
+                    Log.i("Response: " ,sharedPreferences.getString("currentUser",null));
                     startActivity(intent);
                 } else {
                     Toast toast = Toast.makeText(context, "Login failed", Toast.LENGTH_SHORT);
@@ -127,5 +137,14 @@ public class LoginFragment extends Fragment {
 
     public void onBackPressed() {
         getActivity().finishAffinity();
+    }
+
+    private void saveUser(String u){
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments",Context.MODE_PRIVATE);
+        try{
+            sharedPreferences.edit().putString("currentUser", u).apply();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 }

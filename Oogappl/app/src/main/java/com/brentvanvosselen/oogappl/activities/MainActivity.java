@@ -14,6 +14,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,13 +23,10 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
-<<<<<<< HEAD:Oogappl/app/src/main/java/com/brentvanvosselen/oogappl/MainActivity.java
 import com.brentvanvosselen.oogappl.RestClient.APIInterface;
 import com.brentvanvosselen.oogappl.RestClient.Parent;
 import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
-=======
 import com.brentvanvosselen.oogappl.R;
->>>>>>> 5c2763961514b7189a77de83786fac6833eb8c41:Oogappl/app/src/main/java/com/brentvanvosselen/oogappl/activities/MainActivity.java
 import com.brentvanvosselen.oogappl.RestClient.User;
 import com.brentvanvosselen.oogappl.fragments.AgendaFragment;
 import com.brentvanvosselen.oogappl.fragments.ChildInfoFragment;
