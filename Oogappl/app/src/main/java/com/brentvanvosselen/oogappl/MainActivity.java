@@ -23,15 +23,25 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+import com.brentvanvosselen.oogappl.RestClient.APIInterface;
+import com.brentvanvosselen.oogappl.RestClient.Parent;
+import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
 import com.brentvanvosselen.oogappl.RestClient.User;
 
 import java.util.ArrayList;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private Boolean loggedIn = false;
+    // private Boolean loggedIn = false;
     private User currentUser;
+    private Parent parent;
+
+    APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +89,10 @@ public class MainActivity extends AppCompatActivity
 
         //navigate to the home fragment
         displaySelectedScreen(R.id.nav_home);
+
+        if(currentUser != null) {
+            getParentApi();
+        }
     }
 
     @Override
@@ -190,5 +204,26 @@ public class MainActivity extends AppCompatActivity
 
     public String getUserEmail(){
         return currentUser.getEmail();
+    }
+
+    private void getParentApi() {
+        Call<Parent> call = apiInterface.getParentByEmail(this.currentUser.getEmail());
+        call.enqueue(new Callback<Parent>() {
+            @Override
+            public void onResponse(Call<Parent> call, Response<Parent> response) {
+                Log.i("API event", "SUCCES");
+                parent = response.body();
+            }
+
+            @Override
+            public void onFailure(Call<Parent> call, Throwable t) {
+                Log.i("API event", t.getMessage());
+                call.cancel();
+            }
+        });
+    }
+
+    public Parent getParentObj() {
+        return this.parent;
     }
 }

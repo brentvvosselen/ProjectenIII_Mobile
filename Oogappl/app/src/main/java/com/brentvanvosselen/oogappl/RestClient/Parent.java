@@ -115,4 +115,6 @@ public class Parent {
     public String getWorkNumber() {
         return workNumber;
     }
+
+    public Child[] getChildren() { return this.children; }
 }

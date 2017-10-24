@@ -63,10 +63,6 @@ public interface APIInterface {
         });
      */
 
-
-
-
-
         /*
         Call call = apiInterface.doGetParents();
         call.enqueue(new Callback() {

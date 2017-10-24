@@ -9,7 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.brentvanvosselen.oogappl.RestClient.Parent;
+
 public class ChildInfoFragment extends Fragment {
+
+    private Parent parent;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {

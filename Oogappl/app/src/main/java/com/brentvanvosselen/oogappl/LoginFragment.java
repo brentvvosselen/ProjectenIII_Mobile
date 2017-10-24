@@ -117,7 +117,6 @@ public class LoginFragment extends Fragment {
                     Toast toast = Toast.makeText(context, "Login failed", Toast.LENGTH_SHORT);
                     toast.show();
                     Log.i("LOGIN", "FAIL: " + response.message());
-                    call.cancel();
                 }
             }
 

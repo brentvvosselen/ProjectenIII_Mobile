@@ -9,9 +9,9 @@ public class User implements Parcelable {
 
     @SerializedName("_id")
     private String id;
-    @SerializedName("firstname")
+    @SerializedName("firstName")
     private String firstname;
-    @SerializedName("lastname")
+    @SerializedName("lastName")
     private String lastname;
     @SerializedName("email")
     private String email;
