@@ -16,9 +16,9 @@ public class Parent {
     private String id;
     @SerializedName("email")
     private String email;
-    @SerializedName("firstname")
+    @SerializedName("firstName")
     private String firstname;
-    @SerializedName("lastname")
+    @SerializedName("lastName")
     private String lastname;
     @SerializedName("addressCity")
     private String addressCity;

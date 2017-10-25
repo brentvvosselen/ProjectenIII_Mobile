@@ -5,7 +5,9 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
-public class User implements Parcelable {
+import java.io.Serializable;
+
+public class User implements Parcelable, Serializable {
 
     @SerializedName("_id")
     private String id;

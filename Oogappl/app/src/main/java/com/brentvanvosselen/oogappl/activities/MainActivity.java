@@ -95,10 +95,6 @@ public class MainActivity extends AppCompatActivity
 
         //navigate to the home fragment
         displaySelectedScreen(R.id.nav_home);
-
-        if(currentUser != null) {
-            getParentApi();
-        }
     }
 
     @Override
@@ -210,26 +206,5 @@ public class MainActivity extends AppCompatActivity
 
     public String getUserEmail(){
         return currentUser.getEmail();
-    }
-
-    private void getParentApi() {
-        Call<Parent> call = apiInterface.getParentByEmail(this.currentUser.getEmail());
-        call.enqueue(new Callback<Parent>() {
-            @Override
-            public void onResponse(Call<Parent> call, Response<Parent> response) {
-                Log.i("API event", "SUCCES");
-                parent = response.body();
-            }
-
-            @Override
-            public void onFailure(Call<Parent> call, Throwable t) {
-                Log.i("API event", t.getMessage());
-                call.cancel();
-            }
-        });
-    }
-
-    public Parent getParentObj() {
-        return this.parent;
     }
 }

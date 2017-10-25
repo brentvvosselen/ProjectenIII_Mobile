@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -113,12 +114,9 @@ public class LoginFragment extends Fragment {
                 if(response.isSuccessful()) {
                     Log.i("LOGIN", "SUCCESS");
                     Intent intent = new Intent(activity, MainActivity.class);
-                    intent.putExtra("currentUser", u);
-                    saveUser(response.body().toString());
+                    intent.putExtra("currentUser", (Parcelable) u);
+                    saveUser(u);
 
-                    //VOORBEELD OM USER UIT LOCALSTORAGE TE HALEN
-                    SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments",Context.MODE_PRIVATE);
-                    Log.i("Response: " ,sharedPreferences.getString("currentUser",null));
                     startActivity(intent);
                 } else {
                     Toast.makeText(context, "Login failed", Toast.LENGTH_SHORT).show();
@@ -129,6 +127,7 @@ public class LoginFragment extends Fragment {
             @Override
             public void onFailure(Call call, Throwable t) {
                 Log.i("API event", t.getMessage());
+                Toast.makeText(context, "Failed to connect to server", Toast.LENGTH_SHORT).show();
                 call.cancel();
             }
         });
@@ -138,10 +137,11 @@ public class LoginFragment extends Fragment {
         getActivity().finishAffinity();
     }
 
-    private void saveUser(String u){
+    private void saveUser(User u){
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments",Context.MODE_PRIVATE);
+        String serialized = ObjectSerializer.serialize2(u);
         try{
-            sharedPreferences.edit().putString("currentUser", u).apply();
+            sharedPreferences.edit().putString("currentUser", serialized).apply();
         }catch(Exception e){
             e.printStackTrace();
         }

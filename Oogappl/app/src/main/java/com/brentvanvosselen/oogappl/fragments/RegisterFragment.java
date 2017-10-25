@@ -88,22 +88,6 @@ public class RegisterFragment extends Fragment{
                 if (correctForm) {
                     User u = new User(firstname, lastname, email, password);
                     Register(u);
-                    Log.i("API call", succes?"SUCCES":"FAIL");
-
-                    if(succes) {
-                        Fragment login_fragment = new LoginFragment();
-
-                        if (login_fragment != null){
-                            Bundle bundle = new Bundle();
-                            bundle.putString("email", email);
-                            login_fragment.setArguments(bundle);
-                            FragmentTransaction ft = getFragmentManager().beginTransaction();
-                            ft.replace(R.id.content_login, login_fragment);
-                            ft.commit();
-                        }
-                    } else {
-                        Toast.makeText(context, "Register failed", Toast.LENGTH_SHORT).show();
-                    }
                 }
             }
         });
@@ -115,25 +99,32 @@ public class RegisterFragment extends Fragment{
         return inflater.inflate(R.layout.fragment_register, container, false);
     }
 
-    private void Register(User u) {
+    private void Register(final User u) {
         Call call = apiInterface.createUser(u);
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
-                succes = false;
                 Log.i("API event", response.message());
 
-                if(response.message() == "SUCCES") {
-                    succes = true;
+                if(response.isSuccessful()) {
+                    Fragment login_fragment = new LoginFragment();
+
+                    if (login_fragment != null){
+                        Bundle bundle = new Bundle();
+                        bundle.putString("email", u.getEmail());
+                        login_fragment.setArguments(bundle);
+                        FragmentTransaction ft = getFragmentManager().beginTransaction();
+                        ft.replace(R.id.content_login, login_fragment);
+                        ft.commit();
+                    }
                 } else {
-                    succes = false;
+                    Toast.makeText(context, "Register failed", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
                 Log.i("API event", t.getMessage());
-                succes = false;
                 call.cancel();
             }
         });
