@@ -12,9 +12,8 @@
     <include
         android:id="@+id/content_login"
         layout="@layout/content_login"
-        android:layout_width="384dp"
-        android:layout_height="511dp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp" />
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        />
 
 </android.support.constraint.ConstraintLayout>
