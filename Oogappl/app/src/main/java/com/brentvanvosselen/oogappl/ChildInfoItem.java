@@ -2,6 +2,7 @@ package com.brentvanvosselen.oogappl;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.TextView;
 
@@ -12,34 +13,35 @@ public class ChildInfoItem extends GridLayout {
     private String name;
     private String value;
 
-    public ChildInfoItem(Context context, String name, String value) {
+    public ChildInfoItem(Context context, String name, String value, boolean editable) {
         super(context);
-        initItem(name, value);
+        initItem(name, value, editable);
     }
 
-    /*
-    public ChildInfoItem(Context context, AttributeSet attrs, String name, String value) {
-        super(context, attrs);
-    }
-
-    public ChildInfoItem(Context context, AttributeSet attrs, int defStyleAttr, String name, String value) {
-        super(context, attrs, defStyleAttr);
-    }
-    */
-
-    private void initItem(String name, String value) {
+    private void initItem(String name, String value, boolean editable) {
         this.name = name;
         this.value = value;
 
         this.setRowCount(1);
         this.setColumnCount(2);
 
-        TextView textViewName = new TextView(getContext());
-        textViewName.setText(name);
-        this.addView(textViewName);
+        if(editable) {
+            TextView textViewName = new TextView(getContext());
+            textViewName.setText(name);
+            this.addView(textViewName);
 
-        TextView textViewValue = new TextView(getContext());
-        textViewValue.setText(value);
-        this.addView(textViewValue);
+            EditText textViewValue = new EditText(getContext());
+            textViewValue.setText(value);
+            this.addView(textViewValue);
+        } else {
+            TextView textViewName = new TextView(getContext());
+            textViewName.setText(name);
+            this.addView(textViewName);
+
+            TextView textViewValue = new TextView(getContext());
+            textViewValue.setText(value);
+            this.addView(textViewValue);
+        }
+
     }
 }

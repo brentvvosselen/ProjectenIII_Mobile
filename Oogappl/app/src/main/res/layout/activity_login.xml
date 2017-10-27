@@ -2,17 +2,19 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.brentvanvosselen.oogappl.activities.LoginActivity"
-    android:id="@+id/activity_login"
 
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    tools:context="com.brentvanvosselen.oogappl.activities.LoginActivity">
 
     <include
+        android:id="@+id/content_login"
         layout="@layout/content_login"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/content_login"/>
+        android:layout_width="384dp"
+        android:layout_height="511dp"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp" />
 
 </android.support.constraint.ConstraintLayout>

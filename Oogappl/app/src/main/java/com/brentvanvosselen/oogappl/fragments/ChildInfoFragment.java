@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.brentvanvosselen.oogappl.ChildInfoView;
 import com.brentvanvosselen.oogappl.ObjectSerializer;
 import com.brentvanvosselen.oogappl.RestClient.APIInterface;
 import com.brentvanvosselen.oogappl.RestClient.Parent;
@@ -29,6 +30,7 @@ import retrofit2.Response;
 public class ChildInfoFragment extends Fragment {
 
     private Parent parent;
+    private View view;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -43,7 +45,8 @@ public class ChildInfoFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_childinfo, container, false);
+        this.view = inflater.inflate(R.layout.fragment_childinfo, container, false);
+        return view;
     }
 
     private void initFragment() {
@@ -55,7 +58,11 @@ public class ChildInfoFragment extends Fragment {
             public void onResponse(Call call, Response response) {
                 if(response.isSuccessful()) {
                     parent = (Parent) response.body();
-                    Log.i("PARENT", parent.getEmail());
+                    ChildInfoView childInfoView = view.findViewById(R.id.childInfo);
+                    if(parent.getChildren() == null ) {
+                        Log.i("Children", "no children...");
+                    }
+                    childInfoView.setChildren(parent.getChildren());
                 } else {
                     Toast.makeText(getContext(), "Call failed", Toast.LENGTH_SHORT).show();
                     Log.i("LOGIN", "FAIL: " + response.message());

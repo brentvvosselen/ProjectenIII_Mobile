@@ -34,8 +34,8 @@ public class Parent {
     private String workName;
     @SerializedName("workNumber")
     private String workNumber;
-    @SerializedName("children")
-    private Child[] children;
+    @SerializedName("group")
+    private Group group;
 
     public Parent(String id, String email, String firstname, String lastname) {
         this.id = id;
@@ -116,5 +116,5 @@ public class Parent {
         return workNumber;
     }
 
-    public Child[] getChildren() { return this.children; }
+    public Child[] getChildren() { return this.group.getChildren(); }
 }
