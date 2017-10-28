@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.brentvanvosselen.oogappl.ChildSetupItem;
 import com.brentvanvosselen.oogappl.ObjectSerializer;
 import com.brentvanvosselen.oogappl.R;
 import com.brentvanvosselen.oogappl.RestClient.APIInterface;
@@ -21,7 +20,6 @@ import com.brentvanvosselen.oogappl.fragments.setup.SetupChildrenFragment;
 import com.brentvanvosselen.oogappl.fragments.setup.SetupOtherParentFragment;
 import com.brentvanvosselen.oogappl.fragments.setup.SetupTypeFragment;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
