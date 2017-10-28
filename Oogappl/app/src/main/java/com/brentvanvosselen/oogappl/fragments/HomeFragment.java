@@ -2,6 +2,7 @@ package com.brentvanvosselen.oogappl.fragments;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +22,7 @@ import com.brentvanvosselen.oogappl.RestClient.APIInterface;
 import com.brentvanvosselen.oogappl.RestClient.Parent;
 import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
 import com.brentvanvosselen.oogappl.RestClient.User;
+import com.brentvanvosselen.oogappl.activities.SetupActivity;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,6 +43,16 @@ public class HomeFragment extends Fragment {
         TextView title = getActivity().findViewById(getResources().getIdentifier("action_bar_title", "id", getActivity().getPackageName()));
         title.setText(R.string.home);
 
+        Button vButtonSetup = getView().findViewById(R.id.button_home_setup);
+        vButtonSetup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), SetupActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        //Indien de gebruiker de setup nog niet doorlopen heeft, krijgt hij dit kaartje te zien
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
         User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
         Call call = RetrofitClient.getClient().create(APIInterface.class).getParentByEmail(currentUser.getEmail());
@@ -61,6 +74,9 @@ public class HomeFragment extends Fragment {
                 Log.i("API:", "could not find parent (home-setup)");
             }
         });
+
+
+
     }
 
     @Nullable

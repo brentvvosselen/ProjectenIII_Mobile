@@ -38,5 +38,13 @@
     <string name="work_name">Bedrijfsnaam</string>
     <string name="work_number">Bedrijfstelefoonnummer</string>
 
+    <!--setup-->
+    <string name="setup">Setup</string>
+    <string name="mother">Moeder</string>
+    <string name="father">Vader</string>
+    <string name="setup_description">Jij bent...</string>
+    <string name="setup_parent_description">Geef ons wat informatie over de andere ouder...</string>
+    <string name="setup_children_description">Geef ons wat informatie over je kind(eren)...</string>
+    <string name="complete_setup">Beëindig setup</string>
 
 </resources>
