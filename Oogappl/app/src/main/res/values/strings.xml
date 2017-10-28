@@ -7,6 +7,8 @@
 
     <!-- algemeen-->
     <string name="save">Opslaan</string>
+    <string name="add">Voeg Toe</string>
+    <string name="cancel">Terug</string>
 
     <!--navigation drawer-->
     <string name="home">Start</string>
@@ -48,5 +50,8 @@
     <string name="complete_setup">Beëindig setup</string>
     <string name="gender">Geslacht</string>
     <string name="birthdate">Geboortedatum</string>
+
+    <!--childinfo-->
+    <string name="add_child">Voeg een kind toe:</string>
 
 </resources>

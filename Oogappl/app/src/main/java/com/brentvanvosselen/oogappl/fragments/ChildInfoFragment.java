@@ -1,7 +1,10 @@
 package com.brentvanvosselen.oogappl.fragments;
 
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,6 +17,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -76,7 +81,31 @@ public class ChildInfoFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.action_add_child){
-            Log.i("Action","Add child");
+            //custom dialog
+           /* final Dialog mDialog = new Dialog(getContext());
+            mDialog.setContentView(R.layout.dialog_add_child);
+            mDialog.setTitle("Add a child");
+            */
+
+            //set custom components
+
+            final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            final LayoutInflater inflater = getActivity().getLayoutInflater();
+            final View mView = inflater.inflate(R.layout.dialog_add_child,null);
+
+            builder.setView(mView)
+                    .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                           
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    }).show();
         }
         return super.onOptionsItemSelected(item);
     }
