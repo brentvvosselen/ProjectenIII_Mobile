@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.brentvanvosselen.oogappl.ChildInfoView;
 import com.brentvanvosselen.oogappl.ObjectSerializer;
 import com.brentvanvosselen.oogappl.RestClient.APIInterface;
+import com.brentvanvosselen.oogappl.RestClient.Child;
 import com.brentvanvosselen.oogappl.RestClient.Parent;
 import com.brentvanvosselen.oogappl.R;
 import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
@@ -81,29 +82,69 @@ public class ChildInfoFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.action_add_child){
-            //custom dialog
-           /* final Dialog mDialog = new Dialog(getContext());
-            mDialog.setContentView(R.layout.dialog_add_child);
-            mDialog.setTitle("Add a child");
-            */
-
-            //set custom components
-
+            //create an alert dialog
             final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             final LayoutInflater inflater = getActivity().getLayoutInflater();
+            //inflate custom dialog
             final View mView = inflater.inflate(R.layout.dialog_add_child,null);
 
+            final EditText vEdittextGender = mView.findViewById(R.id.edittext_add_child_gender);
+            final EditText vEdittextFirstname = mView.findViewById(R.id.edittext_add_child_firstname);
+            final EditText vEdittextLastname = mView.findViewById(R.id.edittext_add_child_lastname);
+            final EditText vEdittextBirthdate = mView.findViewById(R.id.edittext_add_child_birthdate);
+            //set the custom dialog to the alertDialogBuilder and add 2 buttons
             builder.setView(mView)
                     .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                           
+                        public void onClick(final DialogInterface dialogInterface, int i) {
+                            //create new child
+                            final Child child = new Child(vEdittextFirstname.getText().toString(),vEdittextLastname.getText().toString(),vEdittextGender.getText().toString(),Integer.parseInt(vEdittextBirthdate.getText().toString()),true);
+                            //get user from localstorage
+                            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
+                            User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
+                            //create call to save child
+                            Call callUser = RetrofitClient.getClient().create(APIInterface.class).getParentByEmail(currentUser.getEmail());
+                            callUser.enqueue(new Callback() {
+                                @Override
+                                public void onResponse(Call call, Response response) {
+                                    if(response.isSuccessful()){
+                                        Parent parent = (Parent) response.body();
+                                        Call callChild = RetrofitClient.getClient().create(APIInterface.class).addChild(parent.getId(),child);
+                                        callChild.enqueue(new Callback() {
+                                            @Override
+                                            public void onResponse(Call call, Response response) {
+                                                if(response.isSuccessful()){
+                                                    Toast.makeText(getContext(),"New child created", Toast.LENGTH_SHORT).show();
+                                                }else{
+                                                    Toast.makeText(getContext(),"Not saved", Toast.LENGTH_SHORT).show();
+                                                }
+                                                dialogInterface.dismiss();
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call call, Throwable t) {
+                                                Toast.makeText(getContext(),"Failed", Toast.LENGTH_SHORT).show();
+                                                dialogInterface.dismiss();
+                                            }
+                                        });
+                                    }else{
+                                        Toast.makeText(getContext(),"Not saved", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call call, Throwable t) {
+                                    Toast.makeText(getContext(),"Failed", Toast.LENGTH_SHORT).show();
+
+                                }
+                            });
+
                         }
                     })
                     .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-
+                            dialogInterface.cancel();
                         }
                     }).show();
         }

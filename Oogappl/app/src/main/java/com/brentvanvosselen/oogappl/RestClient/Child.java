@@ -17,6 +17,8 @@ public class Child implements Serializable {
     private String gender;
     @SerializedName("age")
     private int age;
+    @SerializedName("birthyear")
+    private int birthdate;
     @SerializedName("categories")
     private Category[] category;
 
@@ -37,6 +39,13 @@ public class Child implements Serializable {
         this.lastname = lastname;
         this.gender = gender;
         this.age = age;
+    }
+
+    public Child(String firstname, String lastname, String gender, int birthdate,boolean WEGDOEN){
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.gender = gender;
+        this.birthdate = birthdate;
     }
 
     public ArrayList<String> getCategoryNames() {

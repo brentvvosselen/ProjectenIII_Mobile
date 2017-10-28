@@ -43,6 +43,9 @@ public interface APIInterface {
     @POST("/api/setup")
     Call<SuccesMessage> completeSetup(@Body SetupValues s);
 
+    @POST("/api/child/{id}")
+    Call<SuccesMessage> addChild(@Path("id") String id, @Body Child child);
+
 
     /*
     Voorbeeld van API call
