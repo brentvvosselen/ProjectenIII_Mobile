@@ -17,4 +17,8 @@ public class Group {
     public Child[] getChildren() {
         return this.children;
     }
+
+    public void setChildren(Child[] children) {
+        this.children = children;
+    }
 }

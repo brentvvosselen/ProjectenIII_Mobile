@@ -37,6 +37,9 @@ public interface APIInterface {
     @POST("/api/parents/edit")
     Call<SuccesMessage> saveProfile(@Body Parent p);
 
+    @POST("/api/children/update")
+    Call<Child> saveChild(@Body Child c);
+
 
     /*
     Voorbeeld van API call

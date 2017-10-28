@@ -49,6 +49,11 @@ public class ChildInfoFragment extends Fragment {
         return view;
     }
 
+    public void onResume() {
+        super.onResume();
+        initFragment();
+    }
+
     private void initFragment() {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
         User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
@@ -62,7 +67,7 @@ public class ChildInfoFragment extends Fragment {
                     if(parent.getChildren() == null ) {
                         Log.i("Children", "no children...");
                     }
-                    childInfoView.setChildren(parent.getChildren());
+                    childInfoView.setVariables(parent);
                 } else {
                     Toast.makeText(getContext(), "Call failed", Toast.LENGTH_SHORT).show();
                     Log.i("LOGIN", "FAIL: " + response.message());

@@ -16,9 +16,9 @@ public class Parent {
     private String id;
     @SerializedName("email")
     private String email;
-    @SerializedName("firstName")
+    @SerializedName("firstname")
     private String firstname;
-    @SerializedName("lastName")
+    @SerializedName("lastname")
     private String lastname;
     @SerializedName("addressCity")
     private String addressCity;
@@ -117,4 +117,8 @@ public class Parent {
     }
 
     public Child[] getChildren() { return this.group.getChildren(); }
+
+    public void setChildren(Child[] children) {
+        this.group.setChildren(children);
+    }
 }

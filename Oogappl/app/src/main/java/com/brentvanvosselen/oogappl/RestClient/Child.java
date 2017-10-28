@@ -1,48 +1,24 @@
 package com.brentvanvosselen.oogappl.RestClient;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.google.gson.annotations.SerializedName;
 
-public class Child implements Parcelable {
+import java.io.Serializable;
+import java.util.ArrayList;
 
+public class Child implements Serializable {
+
+    @SerializedName("_id")
+    private String _id;
     @SerializedName("firstname")
     private String firstname;
     @SerializedName("lastname")
     private String lastname;
-    @SerializedName("info")
-    private String info;
-
-    protected Child(Parcel in) {
-        firstname = in.readString();
-        lastname = in.readString();
-        info = in.readString();
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(firstname);
-        dest.writeString(lastname);
-        dest.writeString(info);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    public static final Creator<Child> CREATOR = new Creator<Child>() {
-        @Override
-        public Child createFromParcel(Parcel in) {
-            return new Child(in);
-        }
-
-        @Override
-        public Child[] newArray(int size) {
-            return new Child[size];
-        }
-    };
+    @SerializedName("gender")
+    private String gender;
+    @SerializedName("age")
+    private int age;
+    @SerializedName("categories")
+    private Category[] category;
 
     public String getFirstname() {
         return firstname;
@@ -52,7 +28,19 @@ public class Child implements Parcelable {
         return lastname;
     }
 
-    public String getInfo() {
-        return info;
+    public Category[] getCategory() {
+        return this.category;
+    }
+
+    public ArrayList<String> getCategoryNames() {
+        ArrayList<String> names = new ArrayList<>();
+        for (int i = 0; i < this.category.length; i++) {
+            names.add(category[i].getName());
+        }
+        return names;
+    }
+
+    public void addInfo(int catIndex, String name, String value) {
+        this.category[catIndex].addInfo(name, value);
     }
 }
