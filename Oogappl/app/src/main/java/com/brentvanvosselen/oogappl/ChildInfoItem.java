@@ -36,7 +36,7 @@ public class ChildInfoItem extends GridLayout {
         this.setColumnCount(2);
 
         TextView textViewName = new TextView(getContext());
-        textViewName.setText(name);
+        textViewName.setText(name + ": ");
         this.addView(textViewName);
 
         if(editable) {
