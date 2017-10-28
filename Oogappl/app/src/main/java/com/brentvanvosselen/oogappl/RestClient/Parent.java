@@ -36,6 +36,8 @@ public class Parent {
     private String workNumber;
     @SerializedName("group")
     private Group group;
+    @SerializedName("doneSetup")
+    private boolean doneSetup;
 
     public Parent(String id, String email, String firstname, String lastname) {
         this.id = id;
@@ -115,6 +117,8 @@ public class Parent {
     public String getWorkNumber() {
         return workNumber;
     }
+
+    public boolean hasDoneSetup(){ return doneSetup;}
 
     public Child[] getChildren() { return this.group.getChildren(); }
 
