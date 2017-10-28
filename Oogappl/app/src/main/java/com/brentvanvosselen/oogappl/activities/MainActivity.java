@@ -110,6 +110,17 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag("CURRENT_FRAGMENT");
+
+        if (fragment instanceof ChildInfoFragment) {
+            ((ChildInfoFragment) fragment).onResume();
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         //getMenuInflater().inflate(R.menu.main, menu);
@@ -161,7 +172,7 @@ public class MainActivity extends AppCompatActivity
 
         if (fragment != null){
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.content_main,fragment);
+            ft.replace(R.id.content_main,fragment, "CURRENT_FRAGMENT");
             ft.commit();
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

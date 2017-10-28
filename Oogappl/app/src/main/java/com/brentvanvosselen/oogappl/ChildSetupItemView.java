@@ -30,6 +30,5 @@ public class ChildSetupItemView extends LinearLayout{
     public void initView(){
         this.setOrientation(LinearLayout.VERTICAL);
 
-        if()
     }
 }
