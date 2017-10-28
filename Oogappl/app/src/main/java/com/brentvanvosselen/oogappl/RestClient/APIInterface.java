@@ -40,6 +40,9 @@ public interface APIInterface {
     @POST("/api/children/update")
     Call<Child> saveChild(@Body Child c);
 
+    @POST("/api/setup")
+    Call<SuccesMessage> completeSetup(@Body SetupValues s);
+
 
     /*
     Voorbeeld van API call

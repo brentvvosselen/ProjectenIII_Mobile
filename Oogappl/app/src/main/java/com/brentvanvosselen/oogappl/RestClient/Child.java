@@ -32,6 +32,13 @@ public class Child implements Serializable {
         return this.category;
     }
 
+    public Child(String firstname, String lastname, String gender, int age) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.gender = gender;
+        this.age = age;
+    }
+
     public ArrayList<String> getCategoryNames() {
         ArrayList<String> names = new ArrayList<>();
         for (int i = 0; i < this.category.length; i++) {

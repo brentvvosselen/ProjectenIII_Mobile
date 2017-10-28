@@ -46,5 +46,7 @@
     <string name="setup_parent_description">Geef ons wat informatie over de andere ouder...</string>
     <string name="setup_children_description">Geef ons wat informatie over je kind(eren)...</string>
     <string name="complete_setup">Beëindig setup</string>
+    <string name="gender">Geslacht</string>
+    <string name="birthdate">Geboortedatum</string>
 
 </resources>
