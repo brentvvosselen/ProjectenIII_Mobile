@@ -64,6 +64,9 @@ public class MainActivity extends AppCompatActivity
         if(currentUser == null) {
             Intent loginIntent = new Intent(this, LoginActivity.class);
             startActivity(loginIntent);
+        }else{
+            //navigate to the home fragment
+            displaySelectedScreen(R.id.nav_home);
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -93,8 +96,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        //navigate to the home fragment
-        displaySelectedScreen(R.id.nav_home);
+
     }
 
     @Override
