@@ -9,6 +9,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -32,6 +35,10 @@ public class ChildInfoFragment extends Fragment {
     private Parent parent;
     private View view;
 
+
+    public ChildInfoFragment(){
+        setHasOptionsMenu(true);
+    }
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -49,9 +56,29 @@ public class ChildInfoFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
     public void onResume() {
         super.onResume();
         initFragment();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.add_child,menu);
+        super.onCreateOptionsMenu(menu,inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.action_add_child){
+            Log.i("Action","Add child");
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void initFragment() {
