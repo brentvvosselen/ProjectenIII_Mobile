@@ -2,8 +2,10 @@ package com.brentvanvosselen.oogappl;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -69,7 +71,7 @@ public class ChildInfoView extends ScrollView {
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                     selectedChild = i;
-                    updateContent(content);
+                    updateContent(content, false);
                 }
 
                 @Override
@@ -78,13 +80,13 @@ public class ChildInfoView extends ScrollView {
                 }
             });
 
-            updateContent(content);
+            updateContent(content, false);
         }
 
         this.addView(linearLayout);
     }
 
-    private void updateContent(LinearLayout linearLayout) {
+    private void updateContent(LinearLayout linearLayout, boolean editable) {
         linearLayout.removeAllViews();
         linearLayout.setOrientation(LinearLayout.VERTICAL);
 
@@ -96,59 +98,88 @@ public class ChildInfoView extends ScrollView {
             Log.i("CATEGORY", "IS EMPTY");
         } else {
             for (Category c : cats) {
-                TextView catName = new TextView(getContext());
-                catName.setText(c.getName());
-                linearLayout.addView(catName);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+                params.leftMargin = 16;
+                params.rightMargin = 16;
+                params.bottomMargin = 24;
 
-                for (Info info : c.getInfo()) {
-                    ChildInfoItem item = new ChildInfoItem(getContext(), info.getName(), info.getValue(), true, c);
-                    linearLayout.addView(item);
-                }
+                CardView card = new CardView(getContext());
+                card.setElevation(4);
+
+                updateCard(c, card, false);
+
+                linearLayout.addView(card, params);
             }
-
-            Button buttonAdd = new Button(getContext());
-            buttonAdd.setText("Add info");
-            buttonAdd.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(getContext(), ChildInfoPopUp.class);
-                    intent.putExtra("childId", index);
-                    intent.putStringArrayListExtra("catNames", children[index].getCategoryNames());
-                    intent.putExtra("child", ObjectSerializer.serialize2(children[index]));
-                    getContext().startActivity(intent);
-                }
-            });
-            linearLayout.addView(buttonAdd);
         }
+
+        Button buttonAdd = new Button(getContext());
+        buttonAdd.setText("Add info");
+        buttonAdd.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), ChildInfoPopUp.class);
+                intent.putExtra("childId", index);
+                intent.putStringArrayListExtra("catNames", children[index].getCategoryNames());
+                intent.putExtra("child", ObjectSerializer.serialize2(children[index]));
+                getContext().startActivity(intent);
+            }
+        });
+        linearLayout.addView(buttonAdd);
 
         Button buttonSave = new Button(getContext());
         buttonSave.setText("Save");
         buttonSave.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                for (Child c : children) {
-                    Call call = RetrofitClient.getClient().create(APIInterface.class).saveChild(c);
-                    call.enqueue(new Callback() {
-                        @Override
-                        public void onResponse(Call call, Response response) {
-                            if (response.isSuccessful()) {
-                                Toast.makeText(getContext(), "Save succesfull", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(getContext(), "Save not succesfull", Toast.LENGTH_SHORT).show();
-                            }
-                        }
+                saveChanges();
 
-                        @Override
-                        public void onFailure(Call call, Throwable t) {
-                            Toast.makeText(getContext(), "Failed to connect to server", Toast.LENGTH_SHORT).show();
-                            call.cancel();
-                        }
-                    });
-                }
+
             }
         });
 
         linearLayout.addView(buttonSave);
+    }
+
+    private void updateCard(final Category c, final CardView card, final boolean editable) {
+        card.removeAllViews();
+        LinearLayout cardLinear = new LinearLayout(getContext());
+        cardLinear.setOrientation(LinearLayout.VERTICAL);
+        cardLinear.setPadding(8, 8, 8, 8);
+
+        TextView catName = new TextView(getContext());
+        catName.setText(c.getName());
+        catName.setTextSize(18);
+        catName.setGravity(Gravity.CENTER_HORIZONTAL);
+        catName.setTextColor(getResources().getColor(R.color.blue_mid));
+        catName.setPadding(0, 32, 0, 0);
+        cardLinear.addView(catName);
+
+        LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        params2.leftMargin = 16;
+        params2.rightMargin = 16;
+
+        for (Info info : c.getInfo()) {
+            ChildInfoItem item = new ChildInfoItem(getContext(), info.getName(), info.getValue(), editable, c);
+            item.setPadding(16, 16, 16, 16);
+            cardLinear.addView(item, params2);
+        }
+
+        Button buttonEdit = new Button(getContext());
+        buttonEdit.setText("Edit");
+        buttonEdit.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateCard(c, card, !editable);
+
+                if(editable) {
+                    saveChanges();
+                }
+            }
+        });
+
+        cardLinear.addView(buttonEdit);
+
+        card.addView(cardLinear);
     }
 
     public void setVariables(Parent parent) {
@@ -165,5 +196,27 @@ public class ChildInfoView extends ScrollView {
         }
 
         return names;
+    }
+
+    private void saveChanges() {
+        for (Child c : children) {
+            Call call = RetrofitClient.getClient().create(APIInterface.class).saveChild(c);
+            call.enqueue(new Callback() {
+                @Override
+                public void onResponse(Call call, Response response) {
+                    if (response.isSuccessful()) {
+                        Toast.makeText(getContext(), "Save succesfull", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), "Save not succesfull", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call call, Throwable t) {
+                    Toast.makeText(getContext(), "Failed to connect to server", Toast.LENGTH_SHORT).show();
+                    call.cancel();
+                }
+            });
+        }
     }
 }
