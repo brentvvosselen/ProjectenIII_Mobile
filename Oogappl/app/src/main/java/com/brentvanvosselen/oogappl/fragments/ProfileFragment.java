@@ -6,6 +6,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -32,7 +35,7 @@ public class ProfileFragment extends Fragment {
     private APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
 
 
-    TextView vTextViewEmail, vTextViewFirstname, vTextViewLastname, vTextViewAddress, vTextViewTelephone, vTextViewWork;
+    TextView vTextViewEmail, vTextViewFirstname, vTextViewAddress, vTextViewTelephone, vTextViewWork;
 
 
     @Override
@@ -46,7 +49,6 @@ public class ProfileFragment extends Fragment {
         final View content = getView();
         vTextViewEmail = content.findViewById(R.id.textview_profile_email);
         vTextViewFirstname = content.findViewById(R.id.textview_profile_firstname);
-        vTextViewLastname = content.findViewById(R.id.textview_profile_lastname);
         vTextViewAddress = content.findViewById(R.id.textview_profile_address);
         vTextViewTelephone = content.findViewById(R.id.textview_profile_telephone);
         vTextViewWork = content.findViewById(R.id.textview_profile_work);
@@ -59,8 +61,7 @@ public class ProfileFragment extends Fragment {
                 if(response.isSuccessful()){
                     Parent parent = (Parent) response.body();
                     vTextViewEmail.setText(parent.getEmail());
-                    vTextViewFirstname.setText(parent.getFirstname());
-                    vTextViewLastname.setText(parent.getLastname());
+                    vTextViewFirstname.setText(parent.getFirstname() + " " + parent.getLastname());
                     vTextViewAddress.setText(parent.getAddressStreet() + " " + parent.getAddressNumber() + "\n" + parent.getAddressPostalcode() + " " + parent.getAddressCity());
                     vTextViewTelephone.setText(parent.getTelephoneNumber());
                     vTextViewWork.setText(parent.getWorkName() + "\n" + parent.getWorkNumber());
@@ -79,7 +80,7 @@ public class ProfileFragment extends Fragment {
          });
 
         //go to editfragment when the user clicks on the edit button
-        Button vButtonEdit = content.findViewById(R.id.button_profile_edit);
+        /*Button vButtonEdit = content.findViewById(R.id.button_profile_edit);
         vButtonEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,12 +91,37 @@ public class ProfileFragment extends Fragment {
                     ft.commit();
                 }
             }
-        });
+        });*/
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_profile,container,false);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_edit,menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.action_edit){
+            Fragment editFragment = new ProfileEditFragment();
+            if (editFragment != null){
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.content_main,editFragment);
+                ft.commit();
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

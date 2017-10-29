@@ -9,7 +9,7 @@ public class RetrofitClient {
 
     private static Retrofit retrofit;
 
-    private static final String IPADRESS = "192.168.0.170";
+    private static final String IPADRESS = "192.168.0.241";
 
     public static Retrofit getClient() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
