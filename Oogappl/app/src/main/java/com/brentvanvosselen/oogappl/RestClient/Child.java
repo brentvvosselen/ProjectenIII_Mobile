@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Child implements Serializable {
 
@@ -15,10 +16,8 @@ public class Child implements Serializable {
     private String lastname;
     @SerializedName("gender")
     private String gender;
-    @SerializedName("age")
-    private int age;
-    @SerializedName("birthyear")
-    private int birthdate;
+    @SerializedName("birthdate")
+    private Date birthdate;
     @SerializedName("categories")
     private Category[] category;
 
@@ -34,14 +33,7 @@ public class Child implements Serializable {
         return this.category;
     }
 
-    public Child(String firstname, String lastname, String gender, int age) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.gender = gender;
-        this.age = age;
-    }
-
-    public Child(String firstname, String lastname, String gender, int birthdate,boolean WEGDOEN){
+    public Child(String firstname, String lastname, String gender, Date birthdate) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.gender = gender;

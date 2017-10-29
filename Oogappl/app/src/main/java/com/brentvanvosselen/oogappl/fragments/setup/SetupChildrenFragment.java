@@ -1,20 +1,27 @@
 package com.brentvanvosselen.oogappl.fragments.setup;
 
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.brentvanvosselen.oogappl.R;
 import com.brentvanvosselen.oogappl.RestClient.Child;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,6 +29,8 @@ import java.util.List;
  */
 
 public class SetupChildrenFragment extends Fragment {
+
+    final String DATE_FORMAT = "dd/MM/yyyy";
 
     public interface OnEndSelected{
         public void onEndSetup(List<Child> children);
@@ -55,7 +64,15 @@ public class SetupChildrenFragment extends Fragment {
                     EditText vEdittextFirstname = main.getChildAt(i).findViewById(R.id.edittext_setup_child_firstname);
                     EditText vEdittextLastname = main.getChildAt(i).findViewById(R.id.edittext_setup_child_lastname);
                     EditText vEdittextBirthdate = main.getChildAt(i).findViewById(R.id.edittext_setup_child_birthdate);
-                    children.add(new Child(vEdittextFirstname.getText().toString(),vEdittextLastname.getText().toString(),vEdittextGender.getText().toString(),Integer.parseInt(vEdittextBirthdate.getText().toString())));
+
+                    SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+                    Date birthdate = new Date();
+                    try{
+                        birthdate = dateFormat.parse(vEdittextBirthdate.getText().toString());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    children.add(new Child(vEdittextFirstname.getText().toString(),vEdittextLastname.getText().toString(),vEdittextGender.getText().toString(),birthdate));
                 }
 
                 OnEndSelected mCallback = (OnEndSelected) getActivity();
@@ -64,6 +81,44 @@ public class SetupChildrenFragment extends Fragment {
 
             }
         });
+
+
+        final Calendar myCalendar = Calendar.getInstance();
+
+        EditText edittext = (EditText)getView().findViewById(R.id.edittext_setup_child_birthdate);
+        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateLabel(myCalendar);
+            }
+        };
+
+
+
+
+        edittext.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
+                    DatePickerDialog dialog =  new DatePickerDialog(getContext(),date,myCalendar.get(Calendar.YEAR),myCalendar.get(Calendar.MONTH),myCalendar.get(Calendar.DAY_OF_MONTH));
+                    dialog.getDatePicker().setMaxDate(new Date().getTime());
+                    dialog.show();
+                }
+                return true;
+            }
+
+        });
+
+    }
+
+
+    private void updateLabel(Calendar cal){
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+        EditText edittext = (EditText)getView().findViewById(R.id.edittext_setup_child_birthdate);
+        edittext.setText(sdf.format(cal.getTime()));
 
     }
 
