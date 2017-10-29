@@ -59,7 +59,7 @@ public class ChildInfoView extends ScrollView {
 
         if (this.children != null) {
             Spinner childPicker = new Spinner(getContext());
-            ArrayAdapter<String> childAdapter = new ArrayAdapter<String>(getContext(), R.layout.support_simple_spinner_dropdown_item, getChildNames());
+            ArrayAdapter<String> childAdapter = new ArrayAdapter<>(getContext(), R.layout.support_simple_spinner_dropdown_item, getChildNames());
             childPicker.setAdapter(childAdapter);
 
             linearLayout.addView(childPicker);
@@ -125,19 +125,6 @@ public class ChildInfoView extends ScrollView {
             }
         });
         linearLayout.addView(buttonAdd);
-
-        Button buttonSave = new Button(getContext());
-        buttonSave.setText("Save");
-        buttonSave.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                saveChanges();
-
-
-            }
-        });
-
-        linearLayout.addView(buttonSave);
     }
 
     private void updateCard(final Category c, final CardView card, final boolean editable) {
@@ -165,7 +152,12 @@ public class ChildInfoView extends ScrollView {
         }
 
         Button buttonEdit = new Button(getContext());
-        buttonEdit.setText("Edit");
+        if(editable) {
+            buttonEdit.setText("Save");
+        } else {
+            buttonEdit.setText("Edit");
+        }
+
         buttonEdit.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {

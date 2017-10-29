@@ -17,8 +17,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +35,9 @@ import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
 import com.brentvanvosselen.oogappl.RestClient.User;
 import com.brentvanvosselen.oogappl.activities.MainActivity;
 
+import java.lang.reflect.Array;
+import java.util.zip.Inflater;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -39,8 +45,7 @@ import retrofit2.Response;
 public class ChildInfoFragment extends Fragment {
 
     private Parent parent;
-    private View view;
-
+    private View mainView;
 
     public ChildInfoFragment(){
         setHasOptionsMenu(true);
@@ -52,14 +57,18 @@ public class ChildInfoFragment extends Fragment {
         TextView title = getActivity().findViewById(getResources().getIdentifier("action_bar_title", "id", getActivity().getPackageName()));
         title.setText(R.string.childinfo);
 
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        mainView =  inflater.inflate(R.layout.fragment_childinfo, null);
+        ViewGroup main = getView().findViewById(R.id.linearLayout_childinfo_child);
+        main.addView(mainView);
+
         initFragment();
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        this.view = inflater.inflate(R.layout.fragment_childinfo, container, false);
-        return view;
+        return inflater.inflate(R.layout.fragment_childinfo, container, false);
     }
 
     @Override
@@ -68,10 +77,12 @@ public class ChildInfoFragment extends Fragment {
         setHasOptionsMenu(true);
     }
 
+    /*
     public void onResume() {
         super.onResume();
         initFragment();
     }
+    */
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -160,11 +171,7 @@ public class ChildInfoFragment extends Fragment {
             public void onResponse(Call call, Response response) {
                 if(response.isSuccessful()) {
                     parent = (Parent) response.body();
-                    ChildInfoView childInfoView = view.findViewById(R.id.childInfo);
-                    if(parent.getChildren() == null ) {
-                        Log.i("Children", "no children...");
-                    }
-                    childInfoView.setVariables(parent);
+                    initCategories();
                 } else {
                     Toast.makeText(getContext(), "Call failed", Toast.LENGTH_SHORT).show();
                     Log.i("LOGIN", "FAIL: " + response.message());
@@ -179,4 +186,25 @@ public class ChildInfoFragment extends Fragment {
             }
         });
     }
+
+    private void initCategories() {
+        Child[] children = parent.getChildren();
+        ArrayAdapter<String> childAdapter = new ArrayAdapter<>(getContext(), R.layout.support_simple_spinner_dropdown_item, getChildNames(children));
+        Spinner s = mainView.findViewById(R.id.spinner_child);
+        s.setAdapter(childAdapter);
+    }
+
+    private String[] getChildNames(Child[] children) {
+        String[] names = new String[children.length];
+
+        for (int i = 0; i < children.length; i++) {
+            String temp = children[i].getFirstname() + " " + children[i].getLastname();
+            names[i] = temp;
+        }
+
+        return names;
+    }
 }
+
+
+
