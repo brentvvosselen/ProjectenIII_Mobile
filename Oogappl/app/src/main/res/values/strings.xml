@@ -28,6 +28,7 @@
     <string name="repeat_password">Herhaal wachtwoord</string>
     <string name="personal_data">Persoonsgegevens</string>
     <string name="security_data">Beveiligingsgegevens</string>
+    <string name="work_data">Werkgegevens</string>
 
 
     <!-- Strings related to profile-->
