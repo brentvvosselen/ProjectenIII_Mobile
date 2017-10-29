@@ -2,6 +2,7 @@ package com.brentvanvosselen.oogappl.fragments;
 
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -15,10 +16,12 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -36,6 +39,10 @@ import com.brentvanvosselen.oogappl.RestClient.User;
 import com.brentvanvosselen.oogappl.activities.MainActivity;
 
 import java.lang.reflect.Array;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.zip.Inflater;
 
 import retrofit2.Call;
@@ -44,8 +51,12 @@ import retrofit2.Response;
 
 public class ChildInfoFragment extends Fragment {
 
+    final String DATE_FORMAT = "dd/MM/yyyy";
+
     private Parent parent;
     private View mainView;
+
+    EditText vEdittextBirthdate;
 
     public ChildInfoFragment(){
         setHasOptionsMenu(true);
@@ -102,14 +113,47 @@ public class ChildInfoFragment extends Fragment {
             final EditText vEdittextGender = mView.findViewById(R.id.edittext_add_child_gender);
             final EditText vEdittextFirstname = mView.findViewById(R.id.edittext_add_child_firstname);
             final EditText vEdittextLastname = mView.findViewById(R.id.edittext_add_child_lastname);
-            final EditText vEdittextBirthdate = mView.findViewById(R.id.edittext_add_child_birthdate);
+
+            vEdittextBirthdate = mView.findViewById(R.id.edittext_add_child_birthdate);
+            final Calendar myCalendar = Calendar.getInstance();
+
+            final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener(){
+
+                @Override
+                public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
+                    myCalendar.set(Calendar.YEAR, year);
+                    myCalendar.set(Calendar.MONTH, monthOfYear);
+                    myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                    updateLabel(myCalendar);
+                }
+            };
+
+            vEdittextBirthdate.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
+                        DatePickerDialog dialog =  new DatePickerDialog(getContext(),date,myCalendar.get(Calendar.YEAR),myCalendar.get(Calendar.MONTH),myCalendar.get(Calendar.DAY_OF_MONTH));
+                        dialog.getDatePicker().setMaxDate(new Date().getTime());
+                        dialog.show();
+                    }
+                    return true;
+                }
+            });
             //set the custom dialog to the alertDialogBuilder and add 2 buttons
             builder.setView(mView)
                     .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(final DialogInterface dialogInterface, int i) {
+                            //parse date
+                            SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+                            Date birthdate = new Date();
+                            try{
+                                birthdate = dateFormat.parse(vEdittextBirthdate.getText().toString());
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
                             //create new child
-                            final Child child = new Child(vEdittextFirstname.getText().toString(),vEdittextLastname.getText().toString(),vEdittextGender.getText().toString(),Integer.parseInt(vEdittextBirthdate.getText().toString()),true);
+                            final Child child = new Child(vEdittextFirstname.getText().toString(),vEdittextLastname.getText().toString(),vEdittextGender.getText().toString(),birthdate);
                             //get user from localstorage
                             SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
                             User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
@@ -160,6 +204,13 @@ public class ChildInfoFragment extends Fragment {
                     }).show();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void updateLabel(Calendar cal){
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+        vEdittextBirthdate.setText(sdf.format(cal.getTime()));
+
+
     }
 
     private void initFragment() {
