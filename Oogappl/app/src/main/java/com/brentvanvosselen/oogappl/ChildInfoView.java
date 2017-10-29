@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,12 +22,6 @@ import com.brentvanvosselen.oogappl.RestClient.Child;
 import com.brentvanvosselen.oogappl.RestClient.Info;
 import com.brentvanvosselen.oogappl.RestClient.Parent;
 import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
-import com.brentvanvosselen.oogappl.activities.ChildInfoPopUp;
-
-import org.w3c.dom.Text;
-
-import java.lang.reflect.Array;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -112,12 +105,13 @@ public class ChildInfoView extends ScrollView {
             }
         }
 
+        /*
         Button buttonAdd = new Button(getContext());
         buttonAdd.setText("Add info");
         buttonAdd.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getContext(), ChildInfoPopUp.class);
+                // Intent intent = new Intent(getContext(), ChildInfoPopUp.class);
                 intent.putExtra("childId", index);
                 intent.putStringArrayListExtra("catNames", children[index].getCategoryNames());
                 intent.putExtra("child", ObjectSerializer.serialize2(children[index]));
@@ -125,6 +119,7 @@ public class ChildInfoView extends ScrollView {
             }
         });
         linearLayout.addView(buttonAdd);
+        */
     }
 
     private void updateCard(final Category c, final CardView card, final boolean editable) {

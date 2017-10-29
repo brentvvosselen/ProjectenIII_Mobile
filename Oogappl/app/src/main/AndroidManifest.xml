@@ -35,9 +35,6 @@
         <activity android:name=".activities.LoginActivity">
 
         </activity>
-        <activity android:name=".activities.ChildInfoPopUp"
-            android:theme="@style/AppTheme.CustomTheme"
-            ></activity>
     </application>
 
 </manifest>
