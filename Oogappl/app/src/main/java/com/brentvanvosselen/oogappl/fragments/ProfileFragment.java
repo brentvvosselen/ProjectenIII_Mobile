@@ -35,7 +35,7 @@ public class ProfileFragment extends Fragment {
     private APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
 
 
-    TextView vTextViewEmail, vTextViewFirstname, vTextViewAddress, vTextViewTelephone, vTextViewWork;
+    TextView vTextViewEmail, vTextViewFirstname, vTextViewAddress, vTextViewTelephone, vTextViewWork, vTextViewType;
 
 
     @Override
@@ -52,6 +52,7 @@ public class ProfileFragment extends Fragment {
         vTextViewAddress = content.findViewById(R.id.textview_profile_address);
         vTextViewTelephone = content.findViewById(R.id.textview_profile_telephone);
         vTextViewWork = content.findViewById(R.id.textview_profile_work);
+        vTextViewType = content.findViewById(R.id.textview_profile_type);
 
         //get the user from the api-server
         Call call = apiInterface.getParentByEmail(((MainActivity) getActivity()).getUserEmail());
@@ -65,6 +66,18 @@ public class ProfileFragment extends Fragment {
                     vTextViewAddress.setText(parent.getAddressStreet() + " " + parent.getAddressNumber() + "\n" + parent.getAddressPostalcode() + " " + parent.getAddressCity());
                     vTextViewTelephone.setText(parent.getTelephoneNumber());
                     vTextViewWork.setText(parent.getWorkName() + "\n" + parent.getWorkNumber());
+                    if(parent.getType() != null){
+                        switch (parent.getType()){
+                            case "M": vTextViewType.setText(R.string.mother);
+                                break;
+                            case "F": vTextViewType.setText(R.string.father);
+                                break;
+                            default:
+                                vTextViewType.setText("");
+                        }
+                    }else{
+                        vTextViewType.setText("");
+                    }
 
                 }else{
                     Toast.makeText(getContext(), "Getting user information failed", Toast.LENGTH_SHORT).show();

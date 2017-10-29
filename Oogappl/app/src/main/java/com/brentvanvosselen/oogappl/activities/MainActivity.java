@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.brentvanvosselen.oogappl.RestClient.APIInterface;
 import com.brentvanvosselen.oogappl.RestClient.Parent;
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity
         }else{
             //navigate to the home fragment
             displaySelectedScreen(R.id.nav_home);
+
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -88,13 +90,47 @@ public class MainActivity extends AppCompatActivity
         View headerView = navigationView.getHeaderView(0);
 
         //When the user clicks on the image in the navigation drawer, navigate to the profile fragment
-        ImageView vImageViewProfile = headerView.findViewById(R.id.profile_imageview);
+        final ImageView vImageViewProfile = headerView.findViewById(R.id.profile_imageview);
         vImageViewProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 displaySelectedScreen(R.id.profile_imageview);
             }
         });
+
+        //show name and type in navigation bar if currentUser != null
+        if(currentUser!=null){
+            final TextView vTextViewProfileName = headerView.findViewById(R.id.profile_name);
+            final TextView vTextViewProfileType = headerView.findViewById(R.id.profile_type);
+            Call call = apiInterface.getParentByEmail(currentUser.getEmail());
+            call.enqueue(new Callback() {
+                @Override
+                public void onResponse(Call call, Response response) {
+                    if(response.isSuccessful()){
+                        Parent p = (Parent)response.body();
+                        vTextViewProfileName.setText(p.getFirstname() + " " + p.getLastname());
+                        if(p.getType() != null){
+                            switch (p.getType()){
+                                case "M": vTextViewProfileType.setText(R.string.mother);
+                                    break;
+                                case "F": vTextViewProfileType.setText(R.string.father);
+                                    break;
+                                default:
+                                    vTextViewProfileType.setText("");
+                            }
+                        }
+                    }else{
+                        Log.i("API event", "not succesful to get user");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call call, Throwable t) {
+                    Log.i("API event", "Fail to get user");
+                }
+            });
+        }
+
 
 
     }

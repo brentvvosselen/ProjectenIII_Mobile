@@ -34,6 +34,8 @@ public class Parent {
     private String workName;
     @SerializedName("workNumber")
     private String workNumber;
+    @SerializedName("type")
+    private String type;
     @SerializedName("group")
     private Group group;
     @SerializedName("doneSetup")
@@ -119,6 +121,8 @@ public class Parent {
     }
 
     public boolean hasDoneSetup(){ return doneSetup;}
+
+    public String getType(){ return type; }
 
     public Child[] getChildren() { return this.group.getChildren(); }
 
