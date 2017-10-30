@@ -16,7 +16,9 @@
         android:id="@+id/textView_item_value"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:textAlignment="textStart"
         android:layout_weight="1"
-        android:text="TextView" />
+        android:gravity="right"
+        android:paddingRight="4dp"
+        android:text="TextView"
+        android:textAlignment="gravity" />
 </LinearLayout>

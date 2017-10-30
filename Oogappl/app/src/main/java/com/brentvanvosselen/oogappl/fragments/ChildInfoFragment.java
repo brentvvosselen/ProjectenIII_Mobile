@@ -141,14 +141,14 @@ public class ChildInfoFragment extends Fragment {
                     .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(final DialogInterface dialogInterface, int i) {
-                            boolean correctform = false;
+                            boolean correctform = true;
                             //parse date
                             SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
                             Date birthdate = new Date();
                             try {
                                 birthdate = dateFormat.parse(vEdittextBirthdate.getText().toString());
                             } catch (ParseException e) {
-                                e.printStackTrace();
+                                Log.i("DATE", e.getMessage());
                             }
                             //create new child
                             String firstname = vEdittextFirstname.getText().toString();
@@ -161,7 +161,6 @@ public class ChildInfoFragment extends Fragment {
                                 vEdittextLastname.setError("De achternaam moet minstens 3 karakters bevatten");
                                 correctform = false;
                             }
-
 
                             final Child child = new Child(firstname, lastname, vEdittextGender.getText().toString(), birthdate);
                             //get user from localstorage
@@ -196,16 +195,19 @@ public class ChildInfoFragment extends Fragment {
                                                 }
                                             });
                                         } else {
+                                            Log.i("CHILD CALL", "FAIL");
                                             Toast.makeText(getContext(), "Not saved", Toast.LENGTH_SHORT).show();
                                         }
                                     }
 
                                     @Override
                                     public void onFailure(Call call, Throwable t) {
+                                        Log.i("PARENT CALL", "FAIL");
                                         Toast.makeText(getContext(), "Failed2", Toast.LENGTH_SHORT).show();
-
                                     }
                                 });
+                            } else {
+                                Log.i("FORM", "INCORRECT FORM");
                             }
                         }
                     })
@@ -233,8 +235,8 @@ public class ChildInfoFragment extends Fragment {
             public void onResponse(Call call, Response response) {
                 if (response.isSuccessful()) {
                     parent = (Parent) response.body();
-                    initSpinner(parent.getChildren());
-                    initCategories(parent.getChildren());
+                    initSpinner();
+                    initCategories();
                 } else {
                     Toast.makeText(getContext(), "Call failed", Toast.LENGTH_SHORT).show();
                     Log.i("LOGIN", "FAIL: " + response.message());
@@ -248,10 +250,37 @@ public class ChildInfoFragment extends Fragment {
                 call.cancel();
             }
         });
+
+        ImageButton addCat = getView().findViewById(R.id.imageButton_childinfo_add_category);
+        addCat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                final View mView = getActivity().getLayoutInflater().inflate(R.layout.childinfo_category_add, null);
+
+                final EditText name = mView.findViewById(R.id.editText_category_add_name);
+
+                builder.setView(mView)
+                        .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(final DialogInterface dialogInterface, int i) {
+                                parent.getChildren()[selectedChild].addCategory(name.getText().toString());
+                                initCategories();
+                                saveChanges();
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                            }
+                        }).show();
+            }
+        });
     }
 
-    private void initSpinner(final Child[] children) {
-        ArrayAdapter<String> childAdapter = new ArrayAdapter<>(getContext(), R.layout.support_simple_spinner_dropdown_item, getChildNames(children));
+    private void initSpinner() {
+        ArrayAdapter<String> childAdapter = new ArrayAdapter<>(getContext(), R.layout.support_simple_spinner_dropdown_item, getChildNames());
         Spinner s = getView().findViewById(R.id.spinner_child);
         s.setAdapter(childAdapter);
 
@@ -259,7 +288,7 @@ public class ChildInfoFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 selectedChild = i;
-                initCategories(children);
+                initCategories();
             }
 
             @Override
@@ -269,11 +298,13 @@ public class ChildInfoFragment extends Fragment {
         });
     }
 
-    private void initCategories(Child[] children) {
+    private void initCategories() {
+        final Child[] children = parent.getChildren();
+
         ViewGroup categoryLayout = getView().findViewById(R.id.linearLayout_childinfo_child);
         categoryLayout.removeAllViews();
-        Child selectedChild = children[this.selectedChild];
-        Category[] categories = selectedChild.getCategory();
+        final Child selectedChild = children[this.selectedChild];
+        List<Category> categories = selectedChild.getCategory();
 
         for (final Category c : categories) {
             CardView cat = (CardView) getActivity().getLayoutInflater().inflate(R.layout.childinfo_category, null);
@@ -288,11 +319,22 @@ public class ChildInfoFragment extends Fragment {
 
                     Bundle bundle = new Bundle();
                     bundle.putString("category", ObjectSerializer.serialize2(c));
+                    bundle.putString("child", ObjectSerializer.serialize2(selectedChild));
                     fragment.setArguments(bundle);
 
                     FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
                     ft.replace(R.id.content_main, fragment, "CURRENT_FRAGMENT");
                     ft.commit();
+                }
+            });
+
+            ImageButton buttonRemove = cat.findViewById(R.id.imageButton_category_remove);
+            buttonRemove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    selectedChild.removeCategory(c);
+                    saveChanges();
+                    initCategories();
                 }
             });
 
@@ -316,7 +358,9 @@ public class ChildInfoFragment extends Fragment {
         }
     }
 
-    private ArrayList<String> getChildNames(Child[] children) {
+    private ArrayList<String> getChildNames() {
+        Child[] children = parent.getChildren();
+
         ArrayList<String> names = new ArrayList<>();
 
         for (int i = 0; i < children.length; i++) {
@@ -325,5 +369,24 @@ public class ChildInfoFragment extends Fragment {
         }
 
         return names;
+    }
+
+    private void saveChanges() {
+        Call call = RetrofitClient.getClient().create(APIInterface.class).updateChild(parent.getChildren()[selectedChild]);
+        call.enqueue(new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) {
+                if(response.isSuccessful()){
+                    Log.i("SAVE", "Save succesful");
+                } else {
+                    Toast.makeText(getContext(), "Cannot find child", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call call, Throwable t) {
+                Toast.makeText(getContext(), "Cannot connect to server", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

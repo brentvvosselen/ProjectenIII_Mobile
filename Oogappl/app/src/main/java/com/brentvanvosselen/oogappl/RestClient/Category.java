@@ -1,11 +1,17 @@
 package com.brentvanvosselen.oogappl.RestClient;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Category implements Serializable {
     private String name;
     private List<Info> info;
+
+    public Category(String name) {
+        this.name = name;
+        this.info = new ArrayList<>();
+    }
 
     public void addInfo(String name, String value) {
         info.add(new Info(name, value));

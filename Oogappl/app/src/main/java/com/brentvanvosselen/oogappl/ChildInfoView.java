@@ -23,6 +23,8 @@ import com.brentvanvosselen.oogappl.RestClient.Info;
 import com.brentvanvosselen.oogappl.RestClient.Parent;
 import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -85,7 +87,7 @@ public class ChildInfoView extends ScrollView {
 
         final int index = selectedChild;
 
-        Category[] cats = children[index].getCategory();
+        List<Category> cats = children[index].getCategory();
 
         if (cats == null) {
             Log.i("CATEGORY", "IS EMPTY");
