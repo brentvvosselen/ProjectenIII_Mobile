@@ -141,6 +141,7 @@ public class ChildInfoFragment extends Fragment {
                     .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(final DialogInterface dialogInterface, int i) {
+                            boolean correctform = false;
                             //parse date
                             SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
                             Date birthdate = new Date();
@@ -150,48 +151,62 @@ public class ChildInfoFragment extends Fragment {
                                 e.printStackTrace();
                             }
                             //create new child
-                            final Child child = new Child(vEdittextFirstname.getText().toString(), vEdittextLastname.getText().toString(), vEdittextGender.getText().toString(), birthdate);
+                            String firstname = vEdittextFirstname.getText().toString();
+                            String lastname = vEdittextLastname.getText().toString();
+                            if(firstname.trim().equals("") || firstname.trim().length() < 3 ){
+                                vEdittextFirstname.setError("De voornaam moet minstens 3 karakters bevatten");
+                                correctform = false;
+                            }
+                            if(lastname.trim().equals("") || lastname.trim().length() < 3 ){
+                                vEdittextLastname.setError("De achternaam moet minstens 3 karakters bevatten");
+                                correctform = false;
+                            }
+
+
+                            final Child child = new Child(firstname, lastname, vEdittextGender.getText().toString(), birthdate);
                             //get user from localstorage
                             SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
                             User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser", null));
-                            //create call to save child
-                            Call callUser = RetrofitClient.getClient().create(APIInterface.class).getParentByEmail(currentUser.getEmail());
-                            callUser.enqueue(new Callback() {
-                                @Override
-                                public void onResponse(Call call, Response response) {
-                                    if (response.isSuccessful()) {
-                                        Parent parent = (Parent) response.body();
-                                        Call callChild = RetrofitClient.getClient().create(APIInterface.class).addChild(parent.getId(), child);
-                                        callChild.enqueue(new Callback() {
-                                            @Override
-                                            public void onResponse(Call call, Response response) {
-                                                if (response.isSuccessful()) {
-                                                    Toast.makeText(getContext(), "New child created", Toast.LENGTH_SHORT).show();
-                                                } else {
-                                                    Toast.makeText(getContext(), "Not saved", Toast.LENGTH_SHORT).show();
+                            //create call to save child if correctform
+                            if(correctform) {
+                                Call callUser = RetrofitClient.getClient().create(APIInterface.class).getParentByEmail(currentUser.getEmail());
+                                callUser.enqueue(new Callback() {
+                                    @Override
+                                    public void onResponse(Call call, Response response) {
+                                        if (response.isSuccessful()) {
+                                            Parent parent = (Parent) response.body();
+                                            Call callChild = RetrofitClient.getClient().create(APIInterface.class).addChild(parent.getId(), child);
+                                            callChild.enqueue(new Callback() {
+                                                @Override
+                                                public void onResponse(Call call, Response response) {
+                                                    if (response.isSuccessful()) {
+                                                        Toast.makeText(getContext(), "New child created", Toast.LENGTH_SHORT).show();
+                                                    } else {
+                                                        Toast.makeText(getContext(), "Not saved", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                    dialogInterface.dismiss();
+                                                    initFragment();
                                                 }
-                                                dialogInterface.dismiss();
-                                                initFragment();
-                                            }
 
-                                            @Override
-                                            public void onFailure(Call call, Throwable t) {
-                                                Toast.makeText(getContext(), "Failed1", Toast.LENGTH_SHORT).show();
-                                                dialogInterface.dismiss();
-                                                initFragment();
-                                            }
-                                        });
-                                    } else {
-                                        Toast.makeText(getContext(), "Not saved", Toast.LENGTH_SHORT).show();
+                                                @Override
+                                                public void onFailure(Call call, Throwable t) {
+                                                    Toast.makeText(getContext(), "Failed1", Toast.LENGTH_SHORT).show();
+                                                    dialogInterface.dismiss();
+                                                    initFragment();
+                                                }
+                                            });
+                                        } else {
+                                            Toast.makeText(getContext(), "Not saved", Toast.LENGTH_SHORT).show();
+                                        }
                                     }
-                                }
 
-                                @Override
-                                public void onFailure(Call call, Throwable t) {
-                                    Toast.makeText(getContext(), "Failed2", Toast.LENGTH_SHORT).show();
+                                    @Override
+                                    public void onFailure(Call call, Throwable t) {
+                                        Toast.makeText(getContext(), "Failed2", Toast.LENGTH_SHORT).show();
 
-                                }
-                            });
+                                    }
+                                });
+                            }
                         }
                     })
                     .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
