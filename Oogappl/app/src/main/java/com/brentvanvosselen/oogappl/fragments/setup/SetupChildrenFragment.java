@@ -59,11 +59,25 @@ public class SetupChildrenFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 List<Child> children = new ArrayList<>();
+                boolean correctForm = true;
                 for(int i = 0; i< main.getChildCount(); i++){
                     EditText vEdittextGender = main.getChildAt(i).findViewById(R.id.edittext_setup_child_gender);
                     EditText vEdittextFirstname = main.getChildAt(i).findViewById(R.id.edittext_setup_child_firstname);
                     EditText vEdittextLastname = main.getChildAt(i).findViewById(R.id.edittext_setup_child_lastname);
                     EditText vEdittextBirthdate = main.getChildAt(i).findViewById(R.id.edittext_setup_child_birthdate);
+
+                    String gender = vEdittextGender.getText().toString();
+                    String firstname = vEdittextFirstname.getText().toString();
+                    String lastname = vEdittextLastname.getText().toString();
+
+                    if(firstname.trim().equals("") || firstname.trim().length() < 3 ){
+                        vEdittextFirstname.setError("De voornaam moet minstens 3 karakters bevatten");
+                        correctForm = false;
+                    }
+                    if(lastname.trim().equals("") || lastname.trim().length() < 3 ){
+                        vEdittextLastname.setError("De achternaam moet minstens 3 karakters bevatten");
+                        correctForm = false;
+                    }
 
                     SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
                     Date birthdate = new Date();
@@ -75,8 +89,11 @@ public class SetupChildrenFragment extends Fragment {
                     children.add(new Child(vEdittextFirstname.getText().toString(),vEdittextLastname.getText().toString(),vEdittextGender.getText().toString(),birthdate));
                 }
 
-                OnEndSelected mCallback = (OnEndSelected) getActivity();
-                mCallback.onEndSetup(children);
+                if(correctForm){
+                    OnEndSelected mCallback = (OnEndSelected) getActivity();
+                    mCallback.onEndSetup(children);
+                }
+
 
 
             }
