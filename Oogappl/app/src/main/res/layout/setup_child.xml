@@ -33,7 +33,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <EditText
+           <!-- <EditText
                 android:id="@+id/edittext_setup_child_gender"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -42,7 +42,13 @@
                 android:fontFamily="sans-serif-light"
                 android:padding="15dp"
                 android:hint="@string/gender"
-                android:background="@drawable/edittext_bottom_border"/>
+                android:background="@drawable/edittext_bottom_border"/>-->
+
+
+            <Spinner
+                android:id="@+id/spinner_setup_child_gender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
             <EditText
                 android:id="@+id/edittext_setup_child_firstname"
