@@ -34,8 +34,28 @@ public class SetupOtherParentFragment extends Fragment {
         vButtonNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                OnParentNextSelected mCallback = (OnParentNextSelected) getActivity();
-                mCallback.onNextSelect(vEditTextEmail.getText().toString(),vEditTextFirstname.getText().toString(),vEditTextLastname.getText().toString());
+                boolean correctform = true;
+                String email = vEditTextEmail.getText().toString();
+                String firstname = vEditTextFirstname.getText().toString();
+                String lastname = vEditTextLastname.getText().toString();
+                if(firstname.trim().equals("") || firstname.trim().length() < 3 ){
+                    vEditTextFirstname.setError("De voornaam moet minstens 3 karakters bevatten");
+                    correctform = false;
+                }
+                if(lastname.trim().equals("") || lastname.trim().length() < 3 ){
+                    vEditTextLastname.setError("De achternaam moet minstens 3 karakters bevatten");
+                    correctform = false;
+                }
+                if(!email.matches("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}")){
+                    vEditTextEmail.setError("Dit is geen geldig email-adres");
+                    correctform = false;
+                }
+
+                if(correctform){
+                    OnParentNextSelected mCallback = (OnParentNextSelected) getActivity();
+                    mCallback.onNextSelect(email,firstname,lastname);
+                }
+
             }
         });
     }
