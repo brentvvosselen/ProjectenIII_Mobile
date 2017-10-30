@@ -48,7 +48,8 @@
             <Spinner
                 android:id="@+id/spinner_setup_child_gender"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"/>
 
             <EditText
                 android:id="@+id/edittext_setup_child_firstname"

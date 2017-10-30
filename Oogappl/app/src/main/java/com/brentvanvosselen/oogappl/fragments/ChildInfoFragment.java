@@ -53,6 +53,7 @@ import retrofit2.Response;
 public class ChildInfoFragment extends Fragment {
 
     final String DATE_FORMAT = "dd/MM/yyyy";
+    final String[] GENDERS = {"MAN","VROUW"};
 
     private Parent parent;
     private int selectedChild;
@@ -107,9 +108,14 @@ public class ChildInfoFragment extends Fragment {
             //inflate custom dialog
             final View mView = inflater.inflate(R.layout.dialog_add_child, null);
 
-            final EditText vEdittextGender = mView.findViewById(R.id.edittext_add_child_gender);
+            //final EditText vEdittextGender = mView.findViewById(R.id.edittext_add_child_gender);
+            final Spinner vSpinnerGender = mView.findViewById(R.id.spinner_add_child_gender);
             final EditText vEdittextFirstname = mView.findViewById(R.id.edittext_add_child_firstname);
             final EditText vEdittextLastname = mView.findViewById(R.id.edittext_add_child_lastname);
+
+            //setup spinner
+            ArrayAdapter<String> genderAdapter = new ArrayAdapter<String>(getContext(),R.layout.support_simple_spinner_dropdown_item,GENDERS);
+            vSpinnerGender.setAdapter(genderAdapter);
 
             vEdittextBirthdate = mView.findViewById(R.id.edittext_add_child_birthdate);
             final Calendar myCalendar = Calendar.getInstance();
@@ -141,7 +147,7 @@ public class ChildInfoFragment extends Fragment {
                     .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(final DialogInterface dialogInterface, int i) {
-                            boolean correctform = false;
+                            boolean correctform = true;
                             //parse date
                             SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
                             Date birthdate = new Date();
@@ -150,6 +156,17 @@ public class ChildInfoFragment extends Fragment {
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
+
+                            String gender = vSpinnerGender.getSelectedItem().toString();
+                            switch(gender){
+                                case "MAN":
+                                    gender = "M";
+                                    break;
+                                case "VROUW":
+                                    gender = "F";
+                                    break;
+                            }
+
                             //create new child
                             String firstname = vEdittextFirstname.getText().toString();
                             String lastname = vEdittextLastname.getText().toString();
@@ -163,7 +180,9 @@ public class ChildInfoFragment extends Fragment {
                             }
 
 
-                            final Child child = new Child(firstname, lastname, vEdittextGender.getText().toString(), birthdate);
+
+
+                            final Child child = new Child(firstname, lastname, gender, birthdate);
                             //get user from localstorage
                             SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
                             User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser", null));
@@ -206,6 +225,8 @@ public class ChildInfoFragment extends Fragment {
 
                                     }
                                 });
+                            }else{
+                                Toast.makeText(getContext(),"Kan niet toevoegen: ongeldige gegevens", Toast.LENGTH_SHORT).show();
                             }
                         }
                     })
