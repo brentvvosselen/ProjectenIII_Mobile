@@ -3,13 +3,11 @@ package com.brentvanvosselen.oogappl.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.brentvanvosselen.oogappl.ObjectSerializer;
+import com.brentvanvosselen.oogappl.util.ObjectSerializer;
 import com.brentvanvosselen.oogappl.R;
 import com.brentvanvosselen.oogappl.RestClient.Category;
 

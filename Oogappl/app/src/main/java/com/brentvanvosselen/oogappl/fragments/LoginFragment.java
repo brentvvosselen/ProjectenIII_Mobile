@@ -18,15 +18,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.brentvanvosselen.oogappl.ObjectSerializer;
+import com.brentvanvosselen.oogappl.util.ObjectSerializer;
 import com.brentvanvosselen.oogappl.activities.MainActivity;
 import com.brentvanvosselen.oogappl.R;
 import com.brentvanvosselen.oogappl.RestClient.APIInterface;
 import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
 import com.brentvanvosselen.oogappl.RestClient.User;
-
-import java.io.IOException;
-import java.io.Serializable;
 
 import retrofit2.Call;
 import retrofit2.Callback;

@@ -61,11 +61,22 @@ public class ProfileFragment extends Fragment {
             public void onResponse(Call call, Response response) {
                 if(response.isSuccessful()){
                     Parent parent = (Parent) response.body();
-                    vTextViewEmail.setText(parent.getEmail());
+                    vTextViewEmail.setText((parent.getEmail() == null)?"":parent.getEmail());
                     vTextViewFirstname.setText(parent.getFirstname() + " " + parent.getLastname());
+                    if((parent.getAddressStreet() == null  || parent.getAddressStreet().isEmpty()) && (parent.getAddressNumber() == null || parent.getAddressNumber().isEmpty()) && (parent.getAddressPostalcode() == null || parent.getAddressPostalcode().isEmpty()) && (parent.getAddressCity() == null || parent.getAddressCity().isEmpty())){
+                        vTextViewAddress.setVisibility(View.GONE);
+                    }
                     vTextViewAddress.setText(parent.getAddressStreet() + " " + parent.getAddressNumber() + "\n" + parent.getAddressPostalcode() + " " + parent.getAddressCity());
-                    vTextViewTelephone.setText(parent.getTelephoneNumber());
-                    vTextViewWork.setText(parent.getWorkName() + "\n" + parent.getWorkNumber());
+                    if(parent.getTelephoneNumber() == null || parent.getTelephoneNumber().isEmpty()){
+                        vTextViewTelephone.setVisibility(View.GONE);
+                    }else{
+
+                        vTextViewTelephone.setText("Telefoonnummer: " + parent.getTelephoneNumber());
+                    }
+                    if((parent.getWorkName() == null || parent.getWorkName().isEmpty()) && (parent.getWorkNumber() == null || parent.getWorkNumber().isEmpty())){
+                        vTextViewWork.setVisibility(View.GONE);
+                    }
+                    vTextViewWork.setText("Werkgegevens: " + parent.getWorkName() + "\n" + parent.getWorkNumber());
                     if(parent.getType() != null){
                         switch (parent.getType()){
                             case "M": vTextViewType.setText(R.string.mother);
