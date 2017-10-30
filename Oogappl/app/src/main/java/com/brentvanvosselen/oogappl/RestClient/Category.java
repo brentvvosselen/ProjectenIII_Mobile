@@ -26,4 +26,8 @@ public class Category implements Serializable {
             }
         }
     }
+
+    public void remove(Info i) {
+        info.remove(i);
+    }
 }
