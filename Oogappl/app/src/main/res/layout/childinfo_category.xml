@@ -12,38 +12,49 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="16dp"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/textView_catName"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="TextView"
-                android:textColor="@color/blue_mid"
-                android:textSize="18sp" />
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                android:fontFamily="sans-serif-light"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="0dp" />
 
             <ImageButton
                 android:id="@+id/imageButton_category_edit"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="24sp"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
                 android:background="@android:color/transparent"
                 android:cropToPadding="true"
                 android:scaleType="fitXY"
-                app:srcCompat="@drawable/ic_edit" />
+                app:srcCompat="@drawable/ic_edit"
+                android:layout_marginRight="16dp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="0dp" />
 
-        </LinearLayout>
+        </android.support.constraint.ConstraintLayout>
 
         <LinearLayout
             android:id="@+id/linearLayout_catItems"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="16dp"
             android:orientation="vertical"></LinearLayout>
     </LinearLayout>
 </android.support.v7.widget.CardView>

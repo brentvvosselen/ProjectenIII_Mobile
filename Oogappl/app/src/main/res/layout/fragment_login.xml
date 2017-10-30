@@ -18,7 +18,7 @@
         android:layout_marginTop="48dp"
         android:fontFamily="sans-serif-light"
         android:text="OOGAPPL."
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/white"
         android:textSize="48dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -104,7 +104,7 @@
         android:layout_marginTop="16dp"
         android:text="@string/create_new_account"
         android:textAlignment="center"
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/white"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button_login" />
