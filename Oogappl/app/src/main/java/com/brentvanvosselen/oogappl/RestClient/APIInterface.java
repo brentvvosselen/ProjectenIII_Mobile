@@ -26,25 +26,28 @@ public interface APIInterface {
     Call<Parent> createParent(@Body Parent p);
 
     @POST("/api/signup")
-    Call<SuccesMessage> createUser(@Body User u);
+    Call<User> createUser(@Body User u);
 
     @POST("/api/login")
-    Call<SuccesMessage> loginUser(@Body User u);
+    Call<Parent> loginUser(@Body User u);
 
     @GET("/api/parents/{email}")
     Call<Parent> getParentByEmail(@Path("email") String email);
 
     @POST("/api/parents/edit")
-    Call<SuccesMessage> saveProfile(@Body Parent p);
+    Call<Parent> saveProfile(@Body Parent p);
 
     @POST("/api/children/update")
     Call<Child> saveChild(@Body Child c);
 
     @POST("/api/setup")
-    Call<SuccesMessage> completeSetup(@Body SetupValues s);
+    Call<Parent> completeSetup(@Body SetupValues s);
 
     @POST("/api/child/{id}")
-    Call<SuccesMessage> addChild(@Path("id") String id, @Body Child child);
+    Call<Child> addChild(@Path("id") String id, @Body Child child);
+
+    @POST("/api/children/update")
+    Call<Child> updateChild(@Body Child child);
 
 
     /*

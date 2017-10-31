@@ -54,5 +54,9 @@
 
     <!--childinfo-->
     <string name="add_child">Voeg een kind toe:</string>
+    <string name="add_child_info">Voeg een item toe:</string>
+    <string name="add_category">Voeg een categorie toe:</string>
+    <string name="name">Naam</string>
+    <string name="value">Waarde</string>
 
 </resources>

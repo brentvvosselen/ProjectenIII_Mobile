@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Child implements Serializable {
 
@@ -19,7 +20,7 @@ public class Child implements Serializable {
     @SerializedName("birthdate")
     private Date birthdate;
     @SerializedName("categories")
-    private Category[] category;
+    private List<Category> category;
 
     public String getFirstname() {
         return firstname;
@@ -29,7 +30,7 @@ public class Child implements Serializable {
         return lastname;
     }
 
-    public Category[] getCategory() {
+    public List<Category> getCategory() {
         return this.category;
     }
 
@@ -42,13 +43,29 @@ public class Child implements Serializable {
 
     public ArrayList<String> getCategoryNames() {
         ArrayList<String> names = new ArrayList<>();
-        for (int i = 0; i < this.category.length; i++) {
-            names.add(category[i].getName());
+        for (int i = 0; i < this.category.size(); i++) {
+            names.add(category.get(i).getName());
         }
         return names;
     }
 
     public void addInfo(int catIndex, String name, String value) {
-        this.category[catIndex].addInfo(name, value);
+        this.category.get(catIndex).addInfo(name, value);
+    }
+
+    public void updateCategory(Category category) {
+        for(int i = 0; i < this.category.size(); i++) {
+            if(this.category.get(i).getName().equals(category.getName())) {
+                this.category.set(i, category);
+            }
+        }
+    }
+
+    public void addCategory(String name) {
+        this.category.add(new Category(name));
+    }
+
+    public void removeCategory(Category c) {
+        this.category.remove(c);
     }
 }
