@@ -179,14 +179,11 @@ public class ChildInfoFragment extends Fragment {
                                 correctform = false;
                             }
 
-<<<<<<< HEAD
-                            final Child child = new Child(firstname, lastname, vEdittextGender.getText().toString(), birthdate);
-=======
+                            //final Child child = new Child(firstname, lastname, gender, birthdate);
 
 
 
                             final Child child = new Child(firstname, lastname, gender, birthdate);
->>>>>>> f936751c6953591eca774b249d0752d361114d91
                             //get user from localstorage
                             SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
                             User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser", null));
@@ -230,13 +227,11 @@ public class ChildInfoFragment extends Fragment {
                                         Toast.makeText(getContext(), "Failed2", Toast.LENGTH_SHORT).show();
                                     }
                                 });
-<<<<<<< HEAD
-                            } else {
+                            }
+                            /*else {
                                 Log.i("FORM", "INCORRECT FORM");
-=======
-                            }else{
+                            }*/ else{
                                 Toast.makeText(getContext(),"Kan niet toevoegen: ongeldige gegevens", Toast.LENGTH_SHORT).show();
->>>>>>> f936751c6953591eca774b249d0752d361114d91
                             }
                         }
                     })
