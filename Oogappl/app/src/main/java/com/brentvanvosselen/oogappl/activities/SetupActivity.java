@@ -96,7 +96,7 @@ public class SetupActivity extends AppCompatActivity implements SetupTypeFragmen
                 if(response.isSuccessful()){
                     finish();
                 }else{
-                    Toast.makeText(getApplicationContext(),"complete setup failed", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(),"complete setup failed", Toast.LENGTH_SHORT).show();
                     finish();
                 }
             }
@@ -104,8 +104,9 @@ public class SetupActivity extends AppCompatActivity implements SetupTypeFragmen
             @Override
             public void onFailure(Call call, Throwable t) {
                 Log.i("API event", t.getMessage());
-                Toast.makeText(getApplicationContext(),"complete setup failed", Toast.LENGTH_SHORT).show();
-                call.cancel();
+                //Toast.makeText(getApplicationContext(),"complete setup failed", Toast.LENGTH_SHORT).show();
+                //call.cancel();
+                finish();
             }
         });
 
