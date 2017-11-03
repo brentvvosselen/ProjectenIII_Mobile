@@ -8,5 +8,7 @@
 
     <color name="light_gray_border">#E5E5E5</color>
     <color name="blue_mid">#48A9DD</color>
+    <color name="blue_mid_opacity">#a048a9dd</color>
     <color name="pink_mid">#FF5375</color>
+    <color name="text_gray">#6B6B6B</color>
 </resources>
