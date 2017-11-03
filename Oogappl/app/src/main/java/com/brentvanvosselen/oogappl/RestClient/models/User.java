@@ -1,4 +1,4 @@
-package com.brentvanvosselen.oogappl.RestClient;
+package com.brentvanvosselen.oogappl.RestClient.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;

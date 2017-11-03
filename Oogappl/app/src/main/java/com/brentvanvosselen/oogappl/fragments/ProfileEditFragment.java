@@ -16,7 +16,7 @@ import android.widget.Toast;
 import com.brentvanvosselen.oogappl.activities.MainActivity;
 import com.brentvanvosselen.oogappl.R;
 import com.brentvanvosselen.oogappl.RestClient.APIInterface;
-import com.brentvanvosselen.oogappl.RestClient.Parent;
+import com.brentvanvosselen.oogappl.RestClient.models.Parent;
 import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
 
 import retrofit2.Call;

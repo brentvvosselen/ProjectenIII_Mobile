@@ -3,15 +3,11 @@ package com.brentvanvosselen.oogappl;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.TextView;
 
-import com.brentvanvosselen.oogappl.RestClient.Category;
-import com.brentvanvosselen.oogappl.RestClient.Child;
-import com.brentvanvosselen.oogappl.RestClient.Info;
+import com.brentvanvosselen.oogappl.RestClient.models.Category;
 
 public class ChildInfoItem extends GridLayout {
 

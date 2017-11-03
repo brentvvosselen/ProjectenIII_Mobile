@@ -31,13 +31,13 @@ import android.widget.Toast;
 
 import com.brentvanvosselen.oogappl.util.ObjectSerializer;
 import com.brentvanvosselen.oogappl.RestClient.APIInterface;
-import com.brentvanvosselen.oogappl.RestClient.Category;
-import com.brentvanvosselen.oogappl.RestClient.Child;
-import com.brentvanvosselen.oogappl.RestClient.Info;
-import com.brentvanvosselen.oogappl.RestClient.Parent;
+import com.brentvanvosselen.oogappl.RestClient.models.Category;
+import com.brentvanvosselen.oogappl.RestClient.models.Child;
+import com.brentvanvosselen.oogappl.RestClient.models.Info;
+import com.brentvanvosselen.oogappl.RestClient.models.Parent;
 import com.brentvanvosselen.oogappl.R;
 import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
-import com.brentvanvosselen.oogappl.RestClient.User;
+import com.brentvanvosselen.oogappl.RestClient.models.User;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

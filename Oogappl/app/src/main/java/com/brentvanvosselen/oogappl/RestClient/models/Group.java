@@ -1,5 +1,6 @@
-package com.brentvanvosselen.oogappl.RestClient;
+package com.brentvanvosselen.oogappl.RestClient.models;
 
+import com.brentvanvosselen.oogappl.RestClient.models.Child;
 import com.google.gson.annotations.SerializedName;
 
 public class Group {

@@ -1,12 +1,9 @@
 package com.brentvanvosselen.oogappl.fragments;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.util.Log;
@@ -20,18 +17,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.brentvanvosselen.oogappl.RestClient.APIInterface;
-import com.brentvanvosselen.oogappl.RestClient.Child;
-import com.brentvanvosselen.oogappl.RestClient.Info;
-import com.brentvanvosselen.oogappl.RestClient.Parent;
+import com.brentvanvosselen.oogappl.RestClient.models.Child;
+import com.brentvanvosselen.oogappl.RestClient.models.Info;
 import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
-import com.brentvanvosselen.oogappl.RestClient.User;
 import com.brentvanvosselen.oogappl.util.ObjectSerializer;
 import com.brentvanvosselen.oogappl.R;
-import com.brentvanvosselen.oogappl.RestClient.Category;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import com.brentvanvosselen.oogappl.RestClient.models.Category;
 
 import retrofit2.Call;
 import retrofit2.Callback;

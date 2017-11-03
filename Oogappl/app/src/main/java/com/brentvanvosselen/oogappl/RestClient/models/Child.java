@@ -1,5 +1,6 @@
-package com.brentvanvosselen.oogappl.RestClient;
+package com.brentvanvosselen.oogappl.RestClient.models;
 
+import com.brentvanvosselen.oogappl.RestClient.models.Category;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;

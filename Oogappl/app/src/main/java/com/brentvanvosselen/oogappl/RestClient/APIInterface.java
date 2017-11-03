@@ -1,5 +1,10 @@
 package com.brentvanvosselen.oogappl.RestClient;
 
+import com.brentvanvosselen.oogappl.RestClient.models.Child;
+import com.brentvanvosselen.oogappl.RestClient.models.Parent;
+import com.brentvanvosselen.oogappl.RestClient.models.SetupValues;
+import com.brentvanvosselen.oogappl.RestClient.models.User;
+
 import java.util.List;
 
 import retrofit2.Call;

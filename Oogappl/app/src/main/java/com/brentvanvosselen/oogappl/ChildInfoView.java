@@ -1,7 +1,6 @@
 package com.brentvanvosselen.oogappl;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -17,10 +16,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.brentvanvosselen.oogappl.RestClient.APIInterface;
-import com.brentvanvosselen.oogappl.RestClient.Category;
-import com.brentvanvosselen.oogappl.RestClient.Child;
-import com.brentvanvosselen.oogappl.RestClient.Info;
-import com.brentvanvosselen.oogappl.RestClient.Parent;
+import com.brentvanvosselen.oogappl.RestClient.models.Category;
+import com.brentvanvosselen.oogappl.RestClient.models.Child;
+import com.brentvanvosselen.oogappl.RestClient.models.Info;
+import com.brentvanvosselen.oogappl.RestClient.models.Parent;
 import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
 
 import java.util.List;
