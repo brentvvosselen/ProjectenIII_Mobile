@@ -31,7 +31,7 @@ import android.widget.Toast;
 
 import com.brentvanvosselen.oogappl.util.ObjectSerializer;
 import com.brentvanvosselen.oogappl.RestClient.APIInterface;
-import com.brentvanvosselen.oogappl.RestClient.Category;
+import com.brentvanvosselen.oogappl.RestClient.ChildinfoCategory;
 import com.brentvanvosselen.oogappl.RestClient.Child;
 import com.brentvanvosselen.oogappl.RestClient.Info;
 import com.brentvanvosselen.oogappl.RestClient.Parent;
@@ -328,9 +328,9 @@ public class ChildInfoFragment extends Fragment {
         ViewGroup categoryLayout = getView().findViewById(R.id.linearLayout_childinfo_child);
         categoryLayout.removeAllViews();
         final Child selectedChild = children[this.selectedChild];
-        List<Category> categories = selectedChild.getCategory();
+        List<ChildinfoCategory> categories = selectedChild.getCategory();
 
-        for (final Category c : categories) {
+        for (final ChildinfoCategory c : categories) {
             CardView cat = (CardView) getActivity().getLayoutInflater().inflate(R.layout.childinfo_category, null);
             TextView title = cat.findViewById(R.id.textView_catName);
             title.setText(c.getName());
@@ -368,7 +368,7 @@ public class ChildInfoFragment extends Fragment {
         }
     }
 
-    private void initItems(CardView cat, Category c) {
+    private void initItems(CardView cat, ChildinfoCategory c) {
         List<Info> items = c.getInfo();
         ViewGroup categoryItems = cat.findViewById(R.id.linearLayout_catItems);
 

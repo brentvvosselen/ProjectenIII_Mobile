@@ -49,6 +49,9 @@ public interface APIInterface {
     @POST("/api/children/update")
     Call<Child> updateChild(@Body Child child);
 
+    @GET("/api/calendar/getall/{email}")
+    Call<List<Event>> getEvents(@Path("email") String email);
+
 
     /*
     Voorbeeld van API call

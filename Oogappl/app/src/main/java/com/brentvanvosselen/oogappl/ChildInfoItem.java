@@ -3,27 +3,23 @@ package com.brentvanvosselen.oogappl;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.TextView;
 
-import com.brentvanvosselen.oogappl.RestClient.Category;
-import com.brentvanvosselen.oogappl.RestClient.Child;
-import com.brentvanvosselen.oogappl.RestClient.Info;
+import com.brentvanvosselen.oogappl.RestClient.ChildinfoCategory;
 
 public class ChildInfoItem extends GridLayout {
 
     private String name;
     private String value;
-    private Category category;
+    private ChildinfoCategory category;
 
     public ChildInfoItem(Context context, String name, String value) {
         this(context, name, value, false, null);
     }
 
-    public ChildInfoItem(Context context, String name, String value, boolean editable, Category category) {
+    public ChildInfoItem(Context context, String name, String value, boolean editable, ChildinfoCategory category) {
         super(context);
         this.name = name;
         this.value = value;

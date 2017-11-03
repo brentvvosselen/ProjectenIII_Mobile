@@ -1,39 +1,31 @@
 package com.brentvanvosselen.oogappl.RestClient;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import com.google.gson.annotations.SerializedName;
 
-public class Category implements Serializable {
-    private String name;
-    private List<Info> info;
+/**
+ * Created by brentvanvosselen on 03/11/2017.
+ */
 
-    public Category(String name) {
-        this.name = name;
-        this.info = new ArrayList<>();
+public class Category {
+
+    @SerializedName("_id")
+    private String id;
+    @SerializedName("type")
+    private String type;
+    @SerializedName("color")
+    private String color;
+
+    public Category(String id, String type, String color) {
+        this.id = id;
+        this.type = type;
+        this.color = color;
     }
 
-    public void addInfo(String name, String value) {
-        info.add(new Info(name, value));
+    public String getType() {
+        return type;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public List<Info> getInfo() {
-        return info;
-    }
-
-    public void changeInfo(String name, String value) {
-        for(Info i : this.info) {
-            if (i.getName().equals(name)) {
-                i.setValue(value);
-            }
-        }
-    }
-
-    public void remove(Info i) {
-        info.remove(i);
+    public String getColor() {
+        return color;
     }
 }

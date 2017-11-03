@@ -20,7 +20,7 @@ public class Child implements Serializable {
     @SerializedName("birthdate")
     private Date birthdate;
     @SerializedName("categories")
-    private List<Category> category;
+    private List<ChildinfoCategory> category;
 
     public String getFirstname() {
         return firstname;
@@ -30,7 +30,7 @@ public class Child implements Serializable {
         return lastname;
     }
 
-    public List<Category> getCategory() {
+    public List<ChildinfoCategory> getCategory() {
         return this.category;
     }
 
@@ -53,7 +53,7 @@ public class Child implements Serializable {
         this.category.get(catIndex).addInfo(name, value);
     }
 
-    public void updateCategory(Category category) {
+    public void updateCategory(ChildinfoCategory category) {
         for(int i = 0; i < this.category.size(); i++) {
             if(this.category.get(i).getName().equals(category.getName())) {
                 this.category.set(i, category);
@@ -62,10 +62,10 @@ public class Child implements Serializable {
     }
 
     public void addCategory(String name) {
-        this.category.add(new Category(name));
+        this.category.add(new ChildinfoCategory(name));
     }
 
-    public void removeCategory(Category c) {
+    public void removeCategory(ChildinfoCategory c) {
         this.category.remove(c);
     }
 }

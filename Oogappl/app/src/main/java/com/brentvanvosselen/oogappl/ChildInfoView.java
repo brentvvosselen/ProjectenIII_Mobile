@@ -1,7 +1,6 @@
 package com.brentvanvosselen.oogappl;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -17,7 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.brentvanvosselen.oogappl.RestClient.APIInterface;
-import com.brentvanvosselen.oogappl.RestClient.Category;
+import com.brentvanvosselen.oogappl.RestClient.ChildinfoCategory;
 import com.brentvanvosselen.oogappl.RestClient.Child;
 import com.brentvanvosselen.oogappl.RestClient.Info;
 import com.brentvanvosselen.oogappl.RestClient.Parent;
@@ -87,12 +86,12 @@ public class ChildInfoView extends ScrollView {
 
         final int index = selectedChild;
 
-        List<Category> cats = children[index].getCategory();
+        List<ChildinfoCategory> cats = children[index].getCategory();
 
         if (cats == null) {
             Log.i("CATEGORY", "IS EMPTY");
         } else {
-            for (Category c : cats) {
+            for (ChildinfoCategory c : cats) {
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
                 params.leftMargin = 16;
                 params.rightMargin = 16;
@@ -124,7 +123,7 @@ public class ChildInfoView extends ScrollView {
         */
     }
 
-    private void updateCard(final Category c, final CardView card, final boolean editable) {
+    private void updateCard(final ChildinfoCategory c, final CardView card, final boolean editable) {
         card.removeAllViews();
         LinearLayout cardLinear = new LinearLayout(getContext());
         cardLinear.setOrientation(LinearLayout.VERTICAL);
