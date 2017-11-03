@@ -60,4 +60,7 @@
     <string name="name">Naam</string>
     <string name="value">Waarde</string>
 
+    <!--calendar-->
+    <string name="next_item">Volgende item</string>
+
 </resources>

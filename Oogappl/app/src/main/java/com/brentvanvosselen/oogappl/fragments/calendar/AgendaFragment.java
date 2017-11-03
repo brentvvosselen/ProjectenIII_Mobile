@@ -46,7 +46,9 @@ public class AgendaFragment extends Fragment {
 
 
     private CompactCalendarView vCalendarView;
-    private TextView vTextViewCurrentMonth;
+    private TextView vTextViewCurrentMonth,vTextViewNextItem;
+    private ImageButton vButtonPrev;
+    private ImageButton vButtonNext;
 
     private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
 
@@ -63,10 +65,11 @@ public class AgendaFragment extends Fragment {
 
         View content = getView();
         vTextViewCurrentMonth = content.findViewById(R.id.textview_calendar_monthyear);
+        vTextViewNextItem = content.findViewById(R.id.textview_calendar_nextitem);
         vCalendarView = content.findViewById(R.id.calendarview_calendar);
         vCalendarView.setDayColumnNames(new String[]{"M","D","W","D","V","Z","Z"});
 
-        ImageButton vButtonPrev = content.findViewById(R.id.imagebutton_calendar_month_back);
+        vButtonPrev = content.findViewById(R.id.imagebutton_calendar_month_back);
         vButtonPrev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -75,7 +78,7 @@ public class AgendaFragment extends Fragment {
             }
         });
 
-        ImageButton vButtonNext = content.findViewById(R.id.imagebutton_calendar_month_forward);
+        vButtonNext = content.findViewById(R.id.imagebutton_calendar_month_forward);
         vButtonNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
