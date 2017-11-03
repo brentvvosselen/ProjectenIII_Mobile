@@ -1,4 +1,4 @@
-package com.brentvanvosselen.oogappl.fragments.main;
+package com.brentvanvosselen.oogappl.fragments.calendar;
 
 
 import android.content.Context;
@@ -48,7 +48,11 @@ public class AgendaFragment extends Fragment {
     private CompactCalendarView vCalendarView;
     private TextView vTextViewCurrentMonth;
 
-    private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("MMM - yyyy", Locale.getDefault());
+    private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
+
+    public interface OnCalendarItemSelected{
+        public void onDateSelected(Date date);
+    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -85,6 +89,8 @@ public class AgendaFragment extends Fragment {
             @Override
             public void onDayClick(Date dateClicked) {
                 Log.i("EVENT",dateClicked.toString());
+                OnCalendarItemSelected mCallback = (OnCalendarItemSelected) getActivity();
+                mCallback.onDateSelected(dateClicked);
             }
 
             @Override
@@ -158,10 +164,4 @@ public class AgendaFragment extends Fragment {
 
     }
 
-    private void setToMidnight(Calendar calendar) {
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-    }
 }

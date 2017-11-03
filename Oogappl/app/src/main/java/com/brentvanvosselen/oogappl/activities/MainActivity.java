@@ -29,20 +29,22 @@ import com.brentvanvosselen.oogappl.RestClient.models.Parent;
 import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
 import com.brentvanvosselen.oogappl.R;
 import com.brentvanvosselen.oogappl.RestClient.models.User;
-import com.brentvanvosselen.oogappl.fragments.main.AgendaFragment;
+import com.brentvanvosselen.oogappl.fragments.calendar.AgendaDayFragment;
+import com.brentvanvosselen.oogappl.fragments.calendar.AgendaFragment;
 import com.brentvanvosselen.oogappl.fragments.main.ChildInfoFragment;
 import com.brentvanvosselen.oogappl.fragments.main.FinanceFragment;
 import com.brentvanvosselen.oogappl.fragments.main.HomeFragment;
 import com.brentvanvosselen.oogappl.fragments.main.ProfileFragment;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, AgendaFragment.OnCalendarItemSelected {
 
     // private Boolean loggedIn = false;
     private User currentUser;
@@ -255,5 +257,13 @@ public class MainActivity extends AppCompatActivity
 
     public String getUserEmail(){
         return currentUser.getEmail();
+    }
+
+    @Override
+    public void onDateSelected(Date date) {
+        Fragment dayFragment = AgendaDayFragment.newInstance(date);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content_main,dayFragment);
+        ft.commit();
     }
 }
