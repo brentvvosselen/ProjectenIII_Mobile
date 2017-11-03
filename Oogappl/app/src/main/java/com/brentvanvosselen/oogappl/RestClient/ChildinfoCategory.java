@@ -1,5 +1,7 @@
 package com.brentvanvosselen.oogappl.RestClient;
 
+import com.brentvanvosselen.oogappl.RestClient.models.Info;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

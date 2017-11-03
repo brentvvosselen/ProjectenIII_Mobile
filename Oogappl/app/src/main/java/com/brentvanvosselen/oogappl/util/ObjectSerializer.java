@@ -1,9 +1,6 @@
 package com.brentvanvosselen.oogappl.util;
 
 import android.util.Base64;
-import android.util.Log;
-
-import com.brentvanvosselen.oogappl.RestClient.User;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

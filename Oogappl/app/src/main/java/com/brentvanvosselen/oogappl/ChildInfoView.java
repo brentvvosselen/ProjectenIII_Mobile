@@ -16,10 +16,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.brentvanvosselen.oogappl.RestClient.APIInterface;
+<<<<<<< HEAD
 import com.brentvanvosselen.oogappl.RestClient.ChildinfoCategory;
 import com.brentvanvosselen.oogappl.RestClient.Child;
 import com.brentvanvosselen.oogappl.RestClient.Info;
 import com.brentvanvosselen.oogappl.RestClient.Parent;
+=======
+import com.brentvanvosselen.oogappl.RestClient.models.Category;
+import com.brentvanvosselen.oogappl.RestClient.models.Child;
+import com.brentvanvosselen.oogappl.RestClient.models.Info;
+import com.brentvanvosselen.oogappl.RestClient.models.Parent;
+>>>>>>> c404d82ee1e6d4b3f1c75bcf54c42e5590a7f985
 import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
 
 import java.util.List;

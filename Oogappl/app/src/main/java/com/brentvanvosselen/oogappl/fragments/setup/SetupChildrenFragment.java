@@ -17,7 +17,7 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 
 import com.brentvanvosselen.oogappl.R;
-import com.brentvanvosselen.oogappl.RestClient.Child;
+import com.brentvanvosselen.oogappl.RestClient.models.Child;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -35,8 +35,8 @@ public class SetupChildrenFragment extends Fragment {
     final String DATE_FORMAT = "dd/MM/yyyy";
     final String[] GENDERS = {"MAN","VROUW"};
 
-    public interface OnEndSelected{
-        public void onEndSetup(List<Child> children);
+    public interface OnChildrenSelected {
+        public void onChildrenSelected(List<Child> children);
     }
 
     @Override
@@ -143,8 +143,8 @@ public class SetupChildrenFragment extends Fragment {
                 }
 
                 if(correctForm){
-                    OnEndSelected mCallback = (OnEndSelected) getActivity();
-                    mCallback.onEndSetup(children);
+                    OnChildrenSelected mCallback = (OnChildrenSelected) getActivity();
+                    mCallback.onChildrenSelected(children);
                 }
 
 

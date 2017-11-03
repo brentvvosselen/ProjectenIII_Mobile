@@ -6,8 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.brentvanvosselen.oogappl.R;
-import com.brentvanvosselen.oogappl.fragments.LoginFragment;
-import com.brentvanvosselen.oogappl.fragments.RegisterFragment;
+import com.brentvanvosselen.oogappl.fragments.login.LoginFragment;
+import com.brentvanvosselen.oogappl.fragments.login.RegisterFragment;
 
 public class LoginActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.brentvanvosselen.oogappl.fragments;
+package com.brentvanvosselen.oogappl.fragments.login;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -16,7 +16,7 @@ import android.widget.Toast;
 import com.brentvanvosselen.oogappl.R;
 import com.brentvanvosselen.oogappl.RestClient.APIInterface;
 import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
-import com.brentvanvosselen.oogappl.RestClient.User;
+import com.brentvanvosselen.oogappl.RestClient.models.User;
 
 import retrofit2.Call;
 import retrofit2.Callback;

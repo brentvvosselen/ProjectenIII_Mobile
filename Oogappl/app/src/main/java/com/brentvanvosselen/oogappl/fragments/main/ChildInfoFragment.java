@@ -1,4 +1,4 @@
-package com.brentvanvosselen.oogappl.fragments;
+package com.brentvanvosselen.oogappl.fragments.main;
 
 
 import android.app.AlertDialog;
@@ -31,13 +31,20 @@ import android.widget.Toast;
 
 import com.brentvanvosselen.oogappl.util.ObjectSerializer;
 import com.brentvanvosselen.oogappl.RestClient.APIInterface;
+<<<<<<< HEAD:Oogappl/app/src/main/java/com/brentvanvosselen/oogappl/fragments/ChildInfoFragment.java
 import com.brentvanvosselen.oogappl.RestClient.ChildinfoCategory;
 import com.brentvanvosselen.oogappl.RestClient.Child;
 import com.brentvanvosselen.oogappl.RestClient.Info;
 import com.brentvanvosselen.oogappl.RestClient.Parent;
+=======
+import com.brentvanvosselen.oogappl.RestClient.models.Category;
+import com.brentvanvosselen.oogappl.RestClient.models.Child;
+import com.brentvanvosselen.oogappl.RestClient.models.Info;
+import com.brentvanvosselen.oogappl.RestClient.models.Parent;
+>>>>>>> c404d82ee1e6d4b3f1c75bcf54c42e5590a7f985:Oogappl/app/src/main/java/com/brentvanvosselen/oogappl/fragments/main/ChildInfoFragment.java
 import com.brentvanvosselen.oogappl.R;
 import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
-import com.brentvanvosselen.oogappl.RestClient.User;
+import com.brentvanvosselen.oogappl.RestClient.models.User;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

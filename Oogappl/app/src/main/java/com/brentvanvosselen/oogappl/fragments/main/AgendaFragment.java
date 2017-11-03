@@ -1,4 +1,4 @@
-package com.brentvanvosselen.oogappl.fragments;
+package com.brentvanvosselen.oogappl.fragments.main;
 
 
 import android.content.Context;

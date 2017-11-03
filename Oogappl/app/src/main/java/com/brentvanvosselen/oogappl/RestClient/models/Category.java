@@ -1,4 +1,4 @@
-package com.brentvanvosselen.oogappl.RestClient;
+package com.brentvanvosselen.oogappl.RestClient.models;
 
 import com.google.gson.annotations.SerializedName;
 

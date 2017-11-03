@@ -1,4 +1,4 @@
-package com.brentvanvosselen.oogappl.fragments;
+package com.brentvanvosselen.oogappl.fragments.main;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -17,12 +17,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.brentvanvosselen.oogappl.RestClient.APIInterface;
-import com.brentvanvosselen.oogappl.RestClient.Child;
-import com.brentvanvosselen.oogappl.RestClient.Info;
 import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
 import com.brentvanvosselen.oogappl.util.ObjectSerializer;
 import com.brentvanvosselen.oogappl.R;
 import com.brentvanvosselen.oogappl.RestClient.ChildinfoCategory;
+import com.brentvanvosselen.oogappl.RestClient.models.Child;
+import com.brentvanvosselen.oogappl.RestClient.models.Info;
+import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
+import com.brentvanvosselen.oogappl.util.ObjectSerializer;
+import com.brentvanvosselen.oogappl.R;
+import com.brentvanvosselen.oogappl.RestClient.models.Category;
+
 
 import retrofit2.Call;
 import retrofit2.Callback;

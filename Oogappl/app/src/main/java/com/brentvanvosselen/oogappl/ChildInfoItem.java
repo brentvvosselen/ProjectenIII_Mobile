@@ -7,7 +7,11 @@ import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.TextView;
 
+<<<<<<< HEAD
 import com.brentvanvosselen.oogappl.RestClient.ChildinfoCategory;
+=======
+import com.brentvanvosselen.oogappl.RestClient.models.Category;
+>>>>>>> c404d82ee1e6d4b3f1c75bcf54c42e5590a7f985
 
 public class ChildInfoItem extends GridLayout {
 

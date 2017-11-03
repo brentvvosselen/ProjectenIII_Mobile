@@ -1,4 +1,4 @@
-package com.brentvanvosselen.oogappl.fragments;
+package com.brentvanvosselen.oogappl.fragments.main;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,14 +11,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.brentvanvosselen.oogappl.activities.MainActivity;
 import com.brentvanvosselen.oogappl.R;
 import com.brentvanvosselen.oogappl.RestClient.APIInterface;
-import com.brentvanvosselen.oogappl.RestClient.Parent;
+import com.brentvanvosselen.oogappl.RestClient.models.Parent;
 import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
 
 import retrofit2.Call;
