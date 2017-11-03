@@ -1,4 +1,4 @@
-package com.brentvanvosselen.oogappl.fragments;
+package com.brentvanvosselen.oogappl.fragments.main;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;

@@ -10,7 +10,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.brentvanvosselen.oogappl.RestClient.models.FinancialType;
-import com.brentvanvosselen.oogappl.fragments.FinanceFragment;
 import com.brentvanvosselen.oogappl.fragments.setup.SetupFinancialFragment;
 import com.brentvanvosselen.oogappl.util.ObjectSerializer;
 import com.brentvanvosselen.oogappl.R;

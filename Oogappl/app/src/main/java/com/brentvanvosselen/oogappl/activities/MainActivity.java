@@ -29,11 +29,11 @@ import com.brentvanvosselen.oogappl.RestClient.models.Parent;
 import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
 import com.brentvanvosselen.oogappl.R;
 import com.brentvanvosselen.oogappl.RestClient.models.User;
-import com.brentvanvosselen.oogappl.fragments.AgendaFragment;
-import com.brentvanvosselen.oogappl.fragments.ChildInfoFragment;
-import com.brentvanvosselen.oogappl.fragments.FinanceFragment;
-import com.brentvanvosselen.oogappl.fragments.HomeFragment;
-import com.brentvanvosselen.oogappl.fragments.ProfileFragment;
+import com.brentvanvosselen.oogappl.fragments.main.AgendaFragment;
+import com.brentvanvosselen.oogappl.fragments.main.ChildInfoFragment;
+import com.brentvanvosselen.oogappl.fragments.main.FinanceFragment;
+import com.brentvanvosselen.oogappl.fragments.main.HomeFragment;
+import com.brentvanvosselen.oogappl.fragments.main.ProfileFragment;
 
 import java.util.ArrayList;
 
