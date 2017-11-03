@@ -18,8 +18,8 @@ import android.widget.Toast;
 
 import com.brentvanvosselen.oogappl.R;
 import com.brentvanvosselen.oogappl.RestClient.APIInterface;
-import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
-import com.brentvanvosselen.oogappl.RestClient.User;
+import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;;
+import com.brentvanvosselen.oogappl.RestClient.models.User;
 import com.brentvanvosselen.oogappl.util.ObjectSerializer;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
