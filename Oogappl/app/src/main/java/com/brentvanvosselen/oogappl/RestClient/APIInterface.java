@@ -6,6 +6,7 @@ import com.brentvanvosselen.oogappl.RestClient.models.Parent;
 import com.brentvanvosselen.oogappl.RestClient.models.SetupValues;
 import com.brentvanvosselen.oogappl.RestClient.models.User;
 
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -63,6 +64,9 @@ public interface APIInterface {
 
     @GET("/api/calendar/event/{id}")
     Call<Event> getEvent(@Path("id") String id);
+
+    @GET("/api/calendar/event/date/{email}/{date}")
+    Call<List<Event>> getEventsFromDate(@Path("email")String email, @Path("date")Date date);
 
 
     /*
