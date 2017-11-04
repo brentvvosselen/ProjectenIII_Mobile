@@ -120,33 +120,41 @@ public class AgendaDayFragment extends Fragment{
 
 
     private void renderLayout(){
-        for (final Event e: events) {
-
-            LayoutInflater inflater = getActivity().getLayoutInflater();
+        if(events.size() == 0){
+            TextView noEventsLabel = new TextView(getContext());
+            noEventsLabel.setText("No events");
             ViewGroup main = getView().findViewById(R.id.linearlayout_calendar_day_items);
+            main.addView(noEventsLabel);
+        }else{
+            for (final Event e: events) {
+
+                LayoutInflater inflater = getActivity().getLayoutInflater();
+                ViewGroup main = getView().findViewById(R.id.linearlayout_calendar_day_items);
 
 
-            View eventView = inflater.inflate(R.layout.calendar_day_item,null);
+                View eventView = inflater.inflate(R.layout.calendar_day_item,null);
 
-            TextView vTextViewTitle = eventView.findViewById(R.id.textview_calendar_day_item_title);
-            TextView vTextViewTime = eventView.findViewById(R.id.textview_calendar_day_item_time);
-            TextView vTextViewDate = eventView.findViewById(R.id.textview_calendar_day_item_date);
-            ImageView vImageViewCategory = eventView.findViewById(R.id.imageview_calendar_day_item_color);
+                TextView vTextViewTitle = eventView.findViewById(R.id.textview_calendar_day_item_title);
+                TextView vTextViewTime = eventView.findViewById(R.id.textview_calendar_day_item_time);
+                TextView vTextViewDate = eventView.findViewById(R.id.textview_calendar_day_item_date);
+                ImageView vImageViewCategory = eventView.findViewById(R.id.imageview_calendar_day_item_color);
 
-            vTextViewTitle.setText(e.getTitle());
-            vTextViewTime.setText(dateFormatForTime.format(e.getDatetime()));
-            vTextViewDate.setText(dateFormatForDay.format(e.getDatetime()));
-            vImageViewCategory.setBackgroundColor(Color.parseColor(e.getCategory().getColor()));
+                vTextViewTitle.setText(e.getTitle());
+                vTextViewTime.setText(dateFormatForTime.format(e.getDatetime()));
+                vTextViewDate.setText(dateFormatForDay.format(e.getDatetime()));
+                vImageViewCategory.setBackgroundColor(Color.parseColor(e.getCategory().getColor()));
 
-            eventView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    AgendaFragment.OnCalendarItemSelected mCallback = (AgendaFragment.OnCalendarItemSelected) getActivity();
-                    mCallback.onItemSelected(e.getId());
-                }
-            });
+                eventView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        AgendaFragment.OnCalendarItemSelected mCallback = (AgendaFragment.OnCalendarItemSelected) getActivity();
+                        mCallback.onItemSelected(e.getId());
+                    }
+                });
 
-            main.addView(eventView);
+                main.addView(eventView);
+            }
         }
+
     }
 }
