@@ -328,44 +328,47 @@ public class ChildInfoFragment extends Fragment {
 
         ViewGroup categoryLayout = getView().findViewById(R.id.linearLayout_childinfo_child);
         categoryLayout.removeAllViews();
-        final Child selectedChild = children[this.selectedChild];
-        List<ChildinfoCategory> categories = selectedChild.getCategory();
 
-        for (final ChildinfoCategory c : categories) {
-            CardView cat = (CardView) getActivity().getLayoutInflater().inflate(R.layout.childinfo_category, null);
-            TextView title = cat.findViewById(R.id.textView_catName);
-            title.setText(c.getName());
+        if(children.length > 0) {
+            final Child selectedChild = children[this.selectedChild];
+            List<ChildinfoCategory> categories = selectedChild.getCategory();
 
-            ImageButton buttonEdit = cat.findViewById(R.id.imageButton_category_edit);
-            buttonEdit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    ChildInfoEditFragment fragment = new ChildInfoEditFragment();
+            for (final ChildinfoCategory c : categories) {
+                CardView cat = (CardView) getActivity().getLayoutInflater().inflate(R.layout.childinfo_category, null);
+                TextView title = cat.findViewById(R.id.textView_catName);
+                title.setText(c.getName());
 
-                    Bundle bundle = new Bundle();
-                    bundle.putString("category", ObjectSerializer.serialize2(c));
-                    bundle.putString("child", ObjectSerializer.serialize2(selectedChild));
-                    fragment.setArguments(bundle);
+                ImageButton buttonEdit = cat.findViewById(R.id.imageButton_category_edit);
+                buttonEdit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ChildInfoEditFragment fragment = new ChildInfoEditFragment();
 
-                    FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                    ft.replace(R.id.content_main, fragment, "CURRENT_FRAGMENT");
-                    ft.commit();
-                }
-            });
+                        Bundle bundle = new Bundle();
+                        bundle.putString("category", ObjectSerializer.serialize2(c));
+                        bundle.putString("child", ObjectSerializer.serialize2(selectedChild));
+                        fragment.setArguments(bundle);
 
-            ImageButton buttonRemove = cat.findViewById(R.id.imageButton_category_remove);
-            buttonRemove.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    selectedChild.removeCategory(c);
-                    saveChanges();
-                    initCategories();
-                }
-            });
+                        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                        ft.replace(R.id.content_main, fragment, "CURRENT_FRAGMENT");
+                        ft.commit();
+                    }
+                });
 
-            categoryLayout.addView(cat);
+                ImageButton buttonRemove = cat.findViewById(R.id.imageButton_category_remove);
+                buttonRemove.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        selectedChild.removeCategory(c);
+                        saveChanges();
+                        initCategories();
+                    }
+                });
 
-            initItems(cat, c);
+                categoryLayout.addView(cat);
+
+                initItems(cat, c);
+            }
         }
     }
 

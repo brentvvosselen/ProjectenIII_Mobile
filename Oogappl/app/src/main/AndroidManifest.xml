@@ -26,15 +26,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".activities.SetupActivity"
             android:label="@string/setup"
             android:theme="@style/AppTheme.NoActionBar">
-
         </activity>
-        <activity android:name=".activities.LoginActivity">
 
-        </activity>
+        <activity android:name=".activities.LoginActivity"/>
+
+        <activity android:name=".activities.FinanceSetupActivity"
+            android:label="@string/setup"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

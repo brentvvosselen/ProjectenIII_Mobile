@@ -46,7 +46,7 @@ public interface APIInterface {
     Call<Child> saveChild(@Body Child c);
 
     @POST("/api/setup")
-    Call<Parent> completeSetup(@Body SetupValues s);
+    Call<String> completeSetup(@Body SetupValues s);
 
     @POST("/api/child/{id}")
     Call<Child> addChild(@Path("id") String id, @Body Child child);

@@ -74,9 +74,6 @@ public class HomeFragment extends Fragment {
                 Log.i("API:", "could not find parent (home-setup)");
             }
         });
-
-
-
     }
 
     @Nullable
@@ -85,20 +82,26 @@ public class HomeFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_home,container,false);
     }
 
-
     @Override
     public void onResume() {
         super.onResume();
+
+        CardView vCardSetup = getView().findViewById(R.id.card_home_setup);
+        vCardSetup.setVisibility(View.INVISIBLE);
+
         //Indien de gebruiker de setup nog niet doorlopen heeft, krijgt hij dit kaartje te zien
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
         User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
+
         Call call = RetrofitClient.getClient().create(APIInterface.class).getParentByEmail(currentUser.getEmail());
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
                 if(response.isSuccessful()){
                     parent = (Parent) response.body();
+                    Log.i("TEST", "Done1: " + parent.hasDoneSetup());
                     if(!parent.hasDoneSetup()){
+                        Log.i("TEST", "Done2: " + parent.hasDoneSetup());
                         CardView vCardSetup = getView().findViewById(R.id.card_home_setup);
                         vCardSetup.setVisibility(View.VISIBLE);
                     }

@@ -9,8 +9,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.brentvanvosselen.oogappl.RestClient.models.FinancialType;
-import com.brentvanvosselen.oogappl.fragments.setup.SetupFinancialFragment;
 import com.brentvanvosselen.oogappl.util.ObjectSerializer;
 import com.brentvanvosselen.oogappl.R;
 import com.brentvanvosselen.oogappl.RestClient.APIInterface;
@@ -31,15 +29,13 @@ import retrofit2.Response;
 public class SetupActivity extends AppCompatActivity implements
         SetupTypeFragment.OnTypeSelected,
         SetupOtherParentFragment.OnParentNextSelected,
-        SetupChildrenFragment.OnChildrenSelected,
-        SetupFinancialFragment.OnFinancialSelected {
+        SetupChildrenFragment.OnChildrenSelected {
 
     private APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
 
     private char type;
     private String otherEmail, otherFirstname, otherLastname;
     private List<Child> children;
-    private FinancialType financialType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,15 +84,6 @@ public class SetupActivity extends AppCompatActivity implements
     @Override
     public void onChildrenSelected(List<Child> children) {
         this.children = children;
-
-        Fragment financialFragment = new SetupFinancialFragment();
-        displayScreen(financialFragment, R.id.content_setup);
-    }
-
-    @Override
-    public void onFinancialSelected(FinancialType type) {
-        this.financialType = type;
-        Log.i("SETUP", "END SETUP: " + type.toString());
         sendInfo();
     }
 
@@ -128,7 +115,6 @@ public class SetupActivity extends AppCompatActivity implements
                 Log.i("API event", t.getMessage());
                 Toast.makeText(getApplicationContext(),"Cannot connet to server", Toast.LENGTH_SHORT).show();
                 call.cancel();
-                finish();
             }
         });
     }
