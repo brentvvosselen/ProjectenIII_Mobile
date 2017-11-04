@@ -7,12 +7,13 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,10 +51,19 @@ public class AgendaFragment extends Fragment {
     private ImageButton vButtonPrev;
     private ImageButton vButtonNext;
 
+    //next event
+    private TextView vTextViewNextTitle, vTextViewNextTime, vTextViewNextDate;
+    private ImageView vImageViewNextCategory;
+
     private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
+    private SimpleDateFormat dateFormatForTime = new SimpleDateFormat("HH:mm",Locale.getDefault());
+    private SimpleDateFormat dateFormatForDay = new SimpleDateFormat("dd MMMM",Locale.getDefault());
+
+    private String nextItemId = "";
 
     public interface OnCalendarItemSelected{
         public void onDateSelected(Date date);
+        public void onItemSelected(String id);
     }
 
     @Override
@@ -102,6 +112,47 @@ public class AgendaFragment extends Fragment {
             }
         });
 
+        vTextViewNextTitle = content.findViewById(R.id.textview_calendar_next_title);
+        vTextViewNextTime = content.findViewById(R.id.textview_calendar_next_time);
+        vTextViewNextDate = content.findViewById(R.id.textview_calendar_next_date);
+        vImageViewNextCategory = content.findViewById(R.id.imageview_calendar_next_color);
+
+        CardView vCardViewNext = content.findViewById(R.id.cardview_calendar_next);
+        vCardViewNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                OnCalendarItemSelected mCallback = (OnCalendarItemSelected) getActivity();
+                mCallback.onItemSelected(nextItemId);
+            }
+        });
+
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
+        User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
+
+        Call nextItemCall = apiInterface.getNextEvent(currentUser.getEmail());
+        nextItemCall.enqueue(new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) {
+                if(response.isSuccessful()){
+                    com.brentvanvosselen.oogappl.RestClient.models.Event event = (com.brentvanvosselen.oogappl.RestClient.models.Event) response.body();
+                    vTextViewNextTitle.setText(event.getTitle());
+                    vTextViewNextTime.setText(dateFormatForTime.format(event.getDatetime()));
+                    vTextViewNextDate.setText(dateFormatForDay.format(event.getDatetime()));
+                    vImageViewNextCategory.setBackgroundColor(Color.parseColor(event.getCategory().getColor()));
+                    nextItemId = event.getId();
+
+                }else{
+                    Toast.makeText(getContext(),"not succesful",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call call, Throwable t) {
+                Toast.makeText(getContext(),"call failed",Toast.LENGTH_SHORT).show();
+                call.cancel();
+            }
+        });
+
         addEventsToCalendar();
 
         updateCurrentMonth();
@@ -137,9 +188,9 @@ public class AgendaFragment extends Fragment {
             @Override
             public void onResponse(Call call, Response response) {
                 if(response.isSuccessful()){
-                    List<com.brentvanvosselen.oogappl.RestClient.Event> events = (List<com.brentvanvosselen.oogappl.RestClient.Event>) response.body();
+                    List<com.brentvanvosselen.oogappl.RestClient.models.Event> events = (List<com.brentvanvosselen.oogappl.RestClient.models.Event>) response.body();
                     List<Event> parsedEvents = new ArrayList<Event>();
-                    for(com.brentvanvosselen.oogappl.RestClient.Event event: events){
+                    for(com.brentvanvosselen.oogappl.RestClient.models.Event event: events){
                         int color = Color.parseColor(event.getCategory().getColor());
                         mCalendar.setTime(event.getDatetime());
                         long timeInMIllis = mCalendar.getTimeInMillis();

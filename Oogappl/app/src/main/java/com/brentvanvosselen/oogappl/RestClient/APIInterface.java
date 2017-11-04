@@ -1,6 +1,7 @@
 package com.brentvanvosselen.oogappl.RestClient;
 
 import com.brentvanvosselen.oogappl.RestClient.models.Child;
+import com.brentvanvosselen.oogappl.RestClient.models.Event;
 import com.brentvanvosselen.oogappl.RestClient.models.Parent;
 import com.brentvanvosselen.oogappl.RestClient.models.SetupValues;
 import com.brentvanvosselen.oogappl.RestClient.models.User;
@@ -56,6 +57,12 @@ public interface APIInterface {
 
     @GET("/api/calendar/getall/{email}")
     Call<List<Event>> getEvents(@Path("email") String email);
+
+    @GET("/api/calendar/event/next/{email}")
+    Call<Event> getNextEvent(@Path("email") String email);
+
+    @GET("/api/calendar/event/{id}")
+    Call<Event> getEvent(@Path("id") String id);
 
 
     /*

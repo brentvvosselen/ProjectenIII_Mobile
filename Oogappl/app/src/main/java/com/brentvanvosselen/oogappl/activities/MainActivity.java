@@ -31,6 +31,7 @@ import com.brentvanvosselen.oogappl.R;
 import com.brentvanvosselen.oogappl.RestClient.models.User;
 import com.brentvanvosselen.oogappl.fragments.calendar.AgendaDayFragment;
 import com.brentvanvosselen.oogappl.fragments.calendar.AgendaFragment;
+import com.brentvanvosselen.oogappl.fragments.calendar.AgendaItemFragment;
 import com.brentvanvosselen.oogappl.fragments.main.ChildInfoFragment;
 import com.brentvanvosselen.oogappl.fragments.main.FinanceFragment;
 import com.brentvanvosselen.oogappl.fragments.main.HomeFragment;
@@ -264,6 +265,14 @@ public class MainActivity extends AppCompatActivity
         Fragment dayFragment = AgendaDayFragment.newInstance(date);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.content_main,dayFragment);
+        ft.commit();
+    }
+
+    @Override
+    public void onItemSelected(String id) {
+        Fragment agendaItemFragment = AgendaItemFragment.newInstance(id);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content_main,agendaItemFragment);
         ft.commit();
     }
 }

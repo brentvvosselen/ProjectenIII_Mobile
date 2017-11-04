@@ -1,4 +1,4 @@
-package com.brentvanvosselen.oogappl.RestClient;
+package com.brentvanvosselen.oogappl.RestClient.models;
 
 import com.brentvanvosselen.oogappl.RestClient.models.Category;
 import com.google.gson.annotations.SerializedName;
@@ -40,5 +40,13 @@ public class Event {
 
     public Category getCategory() {
         return category;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }
