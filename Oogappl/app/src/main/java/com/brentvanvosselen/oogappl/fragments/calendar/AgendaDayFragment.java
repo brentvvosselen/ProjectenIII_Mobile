@@ -89,6 +89,7 @@ public class AgendaDayFragment extends Fragment{
             public void onResponse(Call call, Response response) {
                 if(response.isSuccessful()){
                     events = (List<Event>) response.body();
+
                     renderLayout();
 
                 }else{
@@ -119,9 +120,12 @@ public class AgendaDayFragment extends Fragment{
 
 
     private void renderLayout(){
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        ViewGroup main = getView().findViewById(R.id.linearlayout_calendar_day_items);
-        for (Event e: events) {
+        for (final Event e: events) {
+
+            LayoutInflater inflater = getActivity().getLayoutInflater();
+            ViewGroup main = getView().findViewById(R.id.linearlayout_calendar_day_items);
+
+
             View eventView = inflater.inflate(R.layout.calendar_day_item,null);
 
             TextView vTextViewTitle = eventView.findViewById(R.id.textview_calendar_day_item_title);
@@ -133,6 +137,14 @@ public class AgendaDayFragment extends Fragment{
             vTextViewTime.setText(dateFormatForTime.format(e.getDatetime()));
             vTextViewDate.setText(dateFormatForDay.format(e.getDatetime()));
             vImageViewCategory.setBackgroundColor(Color.parseColor(e.getCategory().getColor()));
+
+            eventView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    AgendaFragment.OnCalendarItemSelected mCallback = (AgendaFragment.OnCalendarItemSelected) getActivity();
+                    mCallback.onItemSelected(e.getId());
+                }
+            });
 
             main.addView(eventView);
         }
