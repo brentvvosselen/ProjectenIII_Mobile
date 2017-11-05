@@ -10,18 +10,30 @@ import com.brentvanvosselen.oogappl.R;
 import com.brentvanvosselen.oogappl.RestClient.APIInterface;
 import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
 import com.brentvanvosselen.oogappl.RestClient.models.FinancialType;
+import com.brentvanvosselen.oogappl.RestClient.models.OnderhoudsbijdrageType;
 import com.brentvanvosselen.oogappl.fragments.financeSetup.SetupFinancialFragment;
 import com.brentvanvosselen.oogappl.fragments.financeSetup.SetupKindrekeningFragment;
 import com.brentvanvosselen.oogappl.fragments.financeSetup.SetupOnderhoudsbijdrageFragment;
+import com.brentvanvosselen.oogappl.fragments.financeSetup.SetupOnderhoudsbijdragePercentageFragment;
 import com.brentvanvosselen.oogappl.fragments.setup.SetupTypeFragment;
 
 
 public class FinanceSetupActivity extends AppCompatActivity implements
-    SetupFinancialFragment.OnFinancialSelected {
+    SetupFinancialFragment.OnFinancialSelected,
+    SetupKindrekeningFragment.OnKindrekeningSelected,
+    SetupOnderhoudsbijdrageFragment.OnOnderhoudsbijdrageSelect,
+    SetupOnderhoudsbijdragePercentageFragment.OnOnderhoudsbijdragepercentageSelect {
 
     private APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
 
     private FinancialType financialType;
+
+    // Info kindrekening
+    private int kindRekeningMaxBedrag;
+
+    // Info onderhoudsbijdrage
+    private OnderhoudsbijdrageType onderhoudsType;
+    private int onderhoudsBijdragePercentage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,15 +57,32 @@ public class FinanceSetupActivity extends AppCompatActivity implements
 
         Fragment nextFragment = null;
 
-        if(type == FinancialType.ONDERHOUDSBIJDRAGE) {
+        if(financialType == FinancialType.ONDERHOUDSBIJDRAGE) {
             nextFragment = new SetupOnderhoudsbijdrageFragment();
-        } else if (type == FinancialType.KINDREKENING) {
+        } else if (financialType == FinancialType.KINDREKENING) {
             nextFragment = new SetupKindrekeningFragment();
         }
 
         displayScreen(nextFragment, R.id.content_setup);
+    }
 
+    @Override
+    public void onKindrekeningSelected(int bedrag) {
+        this.kindRekeningMaxBedrag = bedrag;
         sendInfo();
+    }
+
+    @Override
+    public void onOnderhoudsbijdrageSelect(OnderhoudsbijdrageType type) {
+        onderhoudsType = type;
+
+        Fragment setupFinancialFragment = new SetupOnderhoudsbijdragePercentageFragment();
+        displayScreen(setupFinancialFragment, R.id.content_setup);
+    }
+
+    @Override
+    public void onOnderhoudsbijdragepercentageSelec(int percentage) {
+        this.onderhoudsBijdragePercentage = percentage;
     }
 
     private void sendInfo() {

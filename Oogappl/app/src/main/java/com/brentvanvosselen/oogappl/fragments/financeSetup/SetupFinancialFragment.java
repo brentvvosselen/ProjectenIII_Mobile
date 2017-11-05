@@ -17,7 +17,7 @@ import com.brentvanvosselen.oogappl.RestClient.models.FinancialType;
 public class SetupFinancialFragment extends Fragment {
 
     public interface OnFinancialSelected {
-        public void onFinancialSelected(FinancialType type);
+        void onFinancialSelected(FinancialType type);
     }
 
     @Override
