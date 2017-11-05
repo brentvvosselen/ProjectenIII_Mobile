@@ -134,6 +134,8 @@ public class AgendaDayFragment extends Fragment{
             vTextViewDate.setText(dateFormatForDay.format(e.getDatetime()));
             vImageViewCategory.setBackgroundColor(Color.parseColor(e.getCategory().getColor()));
 
+            Log.i("VIEW", "ADDED ");
+
             main.addView(eventView);
         }
     }

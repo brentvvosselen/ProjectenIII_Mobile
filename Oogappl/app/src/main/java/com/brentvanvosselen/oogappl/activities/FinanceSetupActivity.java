@@ -11,6 +11,8 @@ import com.brentvanvosselen.oogappl.RestClient.APIInterface;
 import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
 import com.brentvanvosselen.oogappl.RestClient.models.FinancialType;
 import com.brentvanvosselen.oogappl.fragments.financeSetup.SetupFinancialFragment;
+import com.brentvanvosselen.oogappl.fragments.financeSetup.SetupKindrekeningFragment;
+import com.brentvanvosselen.oogappl.fragments.financeSetup.SetupOnderhoudsbijdrageFragment;
 import com.brentvanvosselen.oogappl.fragments.setup.SetupTypeFragment;
 
 
@@ -41,13 +43,15 @@ public class FinanceSetupActivity extends AppCompatActivity implements
     public void onFinancialSelected(FinancialType type) {
         this.financialType = type;
 
-        Fragment nextFragment;
+        Fragment nextFragment = null;
 
         if(type == FinancialType.ONDERHOUDSBIJDRAGE) {
-            
+            nextFragment = new SetupOnderhoudsbijdrageFragment();
         } else if (type == FinancialType.KINDREKENING) {
-
+            nextFragment = new SetupKindrekeningFragment();
         }
+
+        displayScreen(nextFragment, R.id.content_setup);
 
         sendInfo();
     }

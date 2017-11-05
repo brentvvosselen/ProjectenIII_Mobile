@@ -65,6 +65,7 @@
     <!--setup finance-->
     <string name="setup_financial_description">Kies de financiele overeenkomst...</string>
     <string name="kindRekening">Kindrekening</string>
+    <string name="maxBedrag">Max bedrag</string>
     <string name="onderhoudsbijdrage">Onderhoudsbijdrage</string>
 
 </resources>

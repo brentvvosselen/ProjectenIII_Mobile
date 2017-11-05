@@ -16,8 +16,6 @@ import com.brentvanvosselen.oogappl.RestClient.models.FinancialType;
 
 public class SetupFinancialFragment extends Fragment {
 
-    private String[] types = {"Onderhoudsbijdrage", "Kindrekening"};
-
     public interface OnFinancialSelected {
         public void onFinancialSelected(FinancialType type);
     }
@@ -26,24 +24,21 @@ public class SetupFinancialFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ArrayAdapter<String> finTypes = new ArrayAdapter<>(getContext(), R.layout.support_simple_spinner_dropdown_item, types);
-        final Spinner finSpinner = getView().findViewById(R.id.spinner_financial_type);
-        finSpinner.setAdapter(finTypes);
+        final OnFinancialSelected mCallback = (OnFinancialSelected) getActivity();
 
-        Button pickFinancial = getView().findViewById(R.id.button_financial_type);
-        pickFinancial.setOnClickListener(new View.OnClickListener() {
+        Button kindrekening = getView().findViewById(R.id.button_finance_kindrekening);
+        kindrekening.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                OnFinancialSelected mCallback = (OnFinancialSelected) getActivity();
-                String type = (String) finSpinner.getSelectedItem();
+                mCallback.onFinancialSelected(FinancialType.KINDREKENING);
+            }
+        });
 
-                if(type.equals(types[0])) {
-                    mCallback.onFinancialSelected(FinancialType.ONDERHOUDSBIJDRAGE);
-                } else if (type.equals(types[1])) {
-                    mCallback.onFinancialSelected(FinancialType.ONDERHOUDSBIJDRAGE);
-                } else {
-                    Toast.makeText(getContext(), "Something went wrong...", Toast.LENGTH_SHORT).show();
-                }
+        Button onderhoudsbijdrage = getView().findViewById(R.id.button_finance_onderhoudersbijdrage);
+        onderhoudsbijdrage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mCallback.onFinancialSelected(FinancialType.ONDERHOUDSBIJDRAGE);
             }
         });
     }
