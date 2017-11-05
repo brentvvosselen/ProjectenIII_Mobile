@@ -1,5 +1,6 @@
 package com.brentvanvosselen.oogappl.RestClient;
 
+import com.brentvanvosselen.oogappl.RestClient.models.Category;
 import com.brentvanvosselen.oogappl.RestClient.models.Child;
 import com.brentvanvosselen.oogappl.RestClient.models.Event;
 import com.brentvanvosselen.oogappl.RestClient.models.Parent;
@@ -68,6 +69,11 @@ public interface APIInterface {
     @GET("/api/calendar/event/date/{email}/{date}")
     Call<List<Event>> getEventsFromDate(@Path("email")String email, @Path("date")Date date);
 
+    @GET("/api/category/{email}")
+    Call<List<Category>> getCategoriesFromUser(@Path("email")String email);
+
+    @POST("/api/category/add/{email}")
+    Call<String> addCategory(@Path("email") String email, @Body Category category);
 
     /*
     Voorbeeld van API call

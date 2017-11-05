@@ -10,6 +10,9 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -64,6 +67,7 @@ public class AgendaFragment extends Fragment {
     public interface OnCalendarItemSelected{
         public void onDateSelected(Date date);
         public void onItemSelected(String id);
+        public void onAddItemSelected();
     }
 
     @Override
@@ -163,7 +167,27 @@ public class AgendaFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_agenda,container,false);
 
+    }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_add,menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.action_add){
+            OnCalendarItemSelected mCallback = (OnCalendarItemSelected)getActivity();
+            mCallback.onAddItemSelected();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void updateCurrentMonth(){

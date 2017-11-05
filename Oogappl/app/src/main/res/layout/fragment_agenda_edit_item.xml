@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <EditText
+                android:id="@+id/edittext_edit_event_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:ems="10"
+                android:hint="title"
+                android:inputType="textPersonName"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/edittext_edit_event_startDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:ems="10"
+                android:hint="startdate"
+                android:inputType="datetime"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edittext_edit_event_title" />
+
+            <com.mikhaellopez.circularimageview.CircularImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/imageview_edit_event_category"
+                android:layout_width="40dp"
+                android:layout_height="41dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:contentDescription="Profile picture"
+                android:paddingTop="@dimen/nav_header_vertical_spacing"
+                app:civ_border="true"
+                app:civ_border_color="#6B6B6B"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textview_edit_event_endDate"
+                android:layout_marginStart="16dp" />
+
+            <EditText
+                android:id="@+id/textview_edit_event_endDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:ems="10"
+                android:hint="enddate"
+                android:inputType="datetime"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edittext_edit_event_startDate" />
+
+            <Spinner
+                android:id="@+id/spinner_edit_event_category"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                app:layout_constraintTop_toBottomOf="@+id/textview_edit_event_endDate"
+                app:layout_constraintLeft_toRightOf="@+id/imageview_edit_event_category"
+                android:layout_marginLeft="24dp" />
+
+            <EditText
+                android:id="@+id/edittext_edit_event_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:ems="10"
+                android:hint="description"
+                android:inputType="textMultiLine"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageview_edit_event_category" />
+
+
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
+</android.support.constraint.ConstraintLayout>

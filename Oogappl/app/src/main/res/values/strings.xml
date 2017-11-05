@@ -9,6 +9,8 @@
     <string name="save">Opslaan</string>
     <string name="add">Voeg Toe</string>
     <string name="cancel">Terug</string>
+    <string name="color">Kleur</string>
+    <string name="choose_color">Kies een kleur</string>
 
     <!--navigation drawer-->
     <string name="home">Start</string>
@@ -61,6 +63,9 @@
 
     <!--calendar-->
     <string name="next_item">Volgende item</string>
+    <string name="add_item">Voeg item toe</string>
+    <string name="new_category">Nieuwe categorie</string>
+
 
     <!--setup finance-->
     <string name="setup_financial_description">Kies de financiele overeenkomst...</string>

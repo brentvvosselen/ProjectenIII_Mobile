@@ -29,6 +29,7 @@ import com.brentvanvosselen.oogappl.RestClient.models.Parent;
 import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
 import com.brentvanvosselen.oogappl.R;
 import com.brentvanvosselen.oogappl.RestClient.models.User;
+import com.brentvanvosselen.oogappl.fragments.calendar.AgendaEditItemFragment;
 import com.brentvanvosselen.oogappl.fragments.calendar.AgendaDayFragment;
 import com.brentvanvosselen.oogappl.fragments.calendar.AgendaFragment;
 import com.brentvanvosselen.oogappl.fragments.calendar.AgendaItemFragment;
@@ -273,6 +274,15 @@ public class MainActivity extends AppCompatActivity
         Fragment agendaItemFragment = AgendaItemFragment.newInstance(id);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.content_main,agendaItemFragment);
+        ft.commit();
+    }
+
+    @Override
+    public void onAddItemSelected() {
+        Fragment agendaAddItemFragment = new AgendaEditItemFragment();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content_main,agendaAddItemFragment);
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         ft.commit();
     }
 }

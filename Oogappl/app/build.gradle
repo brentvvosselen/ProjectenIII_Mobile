@@ -46,5 +46,8 @@ dependencies {
     compile 'com.mikhaellopez:circularimageview:3.0.2'
     //calendar view
     compile 'com.github.sundeepk:compact-calendar-view:2.0.2.2'
+    //colorpicker
+    compile 'com.github.QuadFlask:colorpicker:0.0.13'
+
     testCompile 'junit:junit:4.12'
 }
