@@ -4,7 +4,9 @@ import com.brentvanvosselen.oogappl.RestClient.models.Child;
 import com.brentvanvosselen.oogappl.RestClient.models.Group;
 import com.google.gson.annotations.SerializedName;
 
-public class Parent {
+import java.io.Serializable;
+
+public class Parent implements Serializable {
 
     /*
     * Object die wordt ontvangen/doorgegeven via API call
@@ -122,13 +124,11 @@ public class Parent {
         return workNumber;
     }
 
-    public boolean hasDoneSetup(){ return doneSetup;}
-
     public String getType(){ return type; }
 
     public Child[] getChildren() { return this.group.getChildren(); }
 
-    public void setChildren(Child[] children) {
-        this.group.setChildren(children);
-    }
+    public Group getGroup() { return this.group; }
+
+    public boolean hasDoneSetup(){ return doneSetup;}
 }

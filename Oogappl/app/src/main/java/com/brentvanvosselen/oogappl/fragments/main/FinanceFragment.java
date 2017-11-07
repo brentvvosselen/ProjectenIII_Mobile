@@ -48,6 +48,7 @@ public class FinanceFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), FinanceSetupActivity.class);
+                intent.putExtra("parent", ObjectSerializer.serialize2(parent));
                 startActivity(intent);
             }
         });
