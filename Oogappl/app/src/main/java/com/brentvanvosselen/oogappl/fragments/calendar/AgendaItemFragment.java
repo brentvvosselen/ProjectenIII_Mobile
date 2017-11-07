@@ -10,6 +10,9 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -42,6 +45,9 @@ public class AgendaItemFragment extends Fragment{
 
     private SimpleDateFormat dateFormatForTime = new SimpleDateFormat("HH:mm",Locale.getDefault());
     private SimpleDateFormat dateFormatForDate = new SimpleDateFormat("EEEE, dd MMMM yyyy",Locale.getDefault());
+
+
+
 
     public static AgendaItemFragment newInstance(String s){
         AgendaItemFragment fragment = new AgendaItemFragment();
@@ -106,6 +112,26 @@ public class AgendaItemFragment extends Fragment{
         Log.i("item",itemId);
 
         return inflater.inflate(R.layout.fragment_agenda_item,container,false);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_edit,menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.action_edit){
+            Log.i("action","edit item");
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
