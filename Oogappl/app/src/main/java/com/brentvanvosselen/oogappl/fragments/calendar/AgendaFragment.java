@@ -39,10 +39,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * Created by brentvanvosselen on 03/10/2017.
- */
-
 public class AgendaFragment extends Fragment {
 
     private APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);

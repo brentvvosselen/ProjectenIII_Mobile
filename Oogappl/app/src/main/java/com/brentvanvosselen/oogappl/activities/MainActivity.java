@@ -1,7 +1,9 @@
 package com.brentvanvosselen.oogappl.activities;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -21,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -37,9 +40,11 @@ import com.brentvanvosselen.oogappl.fragments.main.ChildInfoFragment;
 import com.brentvanvosselen.oogappl.fragments.main.FinanceFragment;
 import com.brentvanvosselen.oogappl.fragments.main.HomeFragment;
 import com.brentvanvosselen.oogappl.fragments.main.ProfileFragment;
+import com.brentvanvosselen.oogappl.util.ObjectSerializer;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -63,16 +68,20 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent intent = getIntent();
-        currentUser = intent.getParcelableExtra("currentUser");
+        final SharedPreferences sharedPrefs = this.getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
+        // sharedPrefs.edit().remove("currentUser").commit();
+
+        String serialized = sharedPrefs.getString("currentUser", null);
+
+        if(serialized != null) {
+            currentUser = ObjectSerializer.deserialize2(serialized);
+        }
 
         if(currentUser == null) {
-            Intent loginIntent = new Intent(this, LoginActivity.class);
-            startActivity(loginIntent);
+            goToLogin();
         }else{
             //navigate to the home fragment
             displaySelectedScreen(R.id.nav_home);
-
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -99,6 +108,15 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 displaySelectedScreen(R.id.profile_imageview);
+            }
+        });
+
+        ImageButton logout = headerView.findViewById(R.id.imageButton_logout);
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sharedPrefs.edit().remove("currentUser").commit();
+                goToLogin();
             }
         });
 
@@ -134,9 +152,6 @@ public class MainActivity extends AppCompatActivity
                 }
             });
         }
-
-
-
     }
 
     @Override
@@ -284,5 +299,10 @@ public class MainActivity extends AppCompatActivity
         ft.replace(R.id.content_main,agendaAddItemFragment);
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         ft.commit();
+    }
+
+    private void goToLogin() {
+        Intent loginIntent = new Intent(this, LoginActivity.class);
+        startActivity(loginIntent);
     }
 }

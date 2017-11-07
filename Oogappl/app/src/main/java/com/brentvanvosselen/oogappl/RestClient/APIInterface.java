@@ -3,6 +3,7 @@ package com.brentvanvosselen.oogappl.RestClient;
 import com.brentvanvosselen.oogappl.RestClient.models.Category;
 import com.brentvanvosselen.oogappl.RestClient.models.Child;
 import com.brentvanvosselen.oogappl.RestClient.models.Event;
+import com.brentvanvosselen.oogappl.RestClient.models.Group;
 import com.brentvanvosselen.oogappl.RestClient.models.Parent;
 import com.brentvanvosselen.oogappl.RestClient.models.SetupValues;
 import com.brentvanvosselen.oogappl.RestClient.models.User;
@@ -74,6 +75,9 @@ public interface APIInterface {
 
     @POST("/api/category/add/{email}")
     Call<String> addCategory(@Path("email") String email, @Body Category category);
+
+    @POST("/api/finance")
+    Call<Group> addFinanceInfo(@Body Group group);
 
     /*
     Voorbeeld van API call
