@@ -15,8 +15,7 @@ public class Category {
     @SerializedName("color")
     private String color;
 
-    public Category(String id, String type, String color) {
-        this.id = id;
+    public Category(String type, String color) {
         this.type = type;
         this.color = color;
     }

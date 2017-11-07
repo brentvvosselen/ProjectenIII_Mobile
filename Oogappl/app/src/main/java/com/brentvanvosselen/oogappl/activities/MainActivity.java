@@ -46,7 +46,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, AgendaFragment.OnCalendarItemSelected {
+        implements NavigationView.OnNavigationItemSelectedListener, AgendaFragment.OnCalendarItemSelected{
 
     // private Boolean loggedIn = false;
     private User currentUser;
@@ -285,4 +285,5 @@ public class MainActivity extends AppCompatActivity
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         ft.commit();
     }
+
 }

@@ -75,6 +75,9 @@ public interface APIInterface {
     @POST("/api/category/add/{email}")
     Call<String> addCategory(@Path("email") String email, @Body Category category);
 
+    @POST("/api/calendar/event/add/{email}")
+    Call<String> addEvent(@Path("email") String email, @Body Event event);
+
     /*
     Voorbeeld van API call
 

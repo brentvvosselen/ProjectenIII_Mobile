@@ -22,8 +22,7 @@ public class Event {
     @SerializedName("category")
     private Category category;
 
-    public Event(String id, String title, Date datetime, String description, Category category) {
-        this.id = id;
+    public Event(String title, Date datetime, String description, Category category) {
         this.title = title;
         this.datetime = datetime;
         this.description = description;
