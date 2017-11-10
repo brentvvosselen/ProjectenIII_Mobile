@@ -1,5 +1,7 @@
 package com.brentvanvosselen.oogappl.RestClient.models;
 
+import android.util.Log;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -11,7 +13,7 @@ public class Group implements Serializable {
     private String id;
     @SerializedName("children")
     private Child[] children;
-    @SerializedName("fintype")
+    @SerializedName("finance")
     @Expose
     private FinInfo finType;
 
@@ -35,5 +37,30 @@ public class Group implements Serializable {
 
     public void setFinType(FinInfo info) {
         this.finType = info;
+    }
+
+    public boolean parentHasAccepted(Parent p) {
+        if(finType == null) {
+            Log.i("CURRENT", "FINTYPE NULL");
+            return false;
+        }
+
+        return finType.parentHasAccepted(p);
+    }
+
+    public boolean bothParentsAccepted() {
+        if(finType == null) {
+            return false;
+        }
+
+        return finType.bothParentsAccepted();
+    }
+
+    public boolean otherParentHasAccepted(Parent p) {
+        if(finType == null) {
+            return false;
+        }
+
+        return finType.otherParentHasAccepted(p);
     }
 }

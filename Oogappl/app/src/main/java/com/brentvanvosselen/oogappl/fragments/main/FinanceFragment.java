@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.brentvanvosselen.oogappl.R;
 import com.brentvanvosselen.oogappl.RestClient.APIInterface;
 import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
+import com.brentvanvosselen.oogappl.RestClient.models.FinInfo;
 import com.brentvanvosselen.oogappl.RestClient.models.Parent;
 import com.brentvanvosselen.oogappl.RestClient.models.User;
 import com.brentvanvosselen.oogappl.activities.FinanceSetupActivity;
@@ -27,10 +28,6 @@ import com.brentvanvosselen.oogappl.util.ObjectSerializer;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-/**
- * Created by brentvanvosselen on 03/10/2017.
- */
 
 public class FinanceFragment extends Fragment {
 
@@ -43,6 +40,68 @@ public class FinanceFragment extends Fragment {
         TextView title = getActivity().findViewById(getResources().getIdentifier("action_bar_title", "id", getActivity().getPackageName()));
         title.setText(R.string.finance);
 
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
+        User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
+        Call call = RetrofitClient.getClient().create(APIInterface.class).getParentByEmail(currentUser.getEmail());
+        call.enqueue(new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) {
+                if(response.isSuccessful()){
+                    parent = (Parent) response.body();
+
+                    if(parent.getGroup().bothParentsAccepted()) {
+                        // Beide parents hebben de financien geaccepteerd
+                        bothAccepted();
+                        Log.i("TYPE", "BOTH");
+
+                    } else if(parent.getGroup().parentHasAccepted(parent)) {
+                        // Ene parent heeft setup doorlopen, andere nog niet
+                        currentAccepted();
+                        Log.i("TYPE", "CURRENT");
+
+                    } else if(parent.getGroup().otherParentHasAccepted(parent)) {
+                        // Andere parent heeft setup doorlopen, huidige nog niet
+                        otherAccepted();
+                        Log.i("TYPE", "OTHER");
+
+                    } else if(parent.hasDoneSetup()){
+                        //Indien de gebruiker de financien setup nog niet doorlopen heeft, krijgt hij dit kaartje te zien
+                        noneAccepted();
+                        Log.i("TYPE", "NONE");
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call call, Throwable t) {
+                Toast.makeText(getContext(), "Could not find parent", Toast.LENGTH_SHORT).show();
+                Log.i("API:", "could not find parent (finance-setup)");
+            }
+        });
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_finance,container,false);
+    }
+
+    private void bothAccepted() {
+
+    }
+
+    private void currentAccepted() {
+
+    }
+
+    private void otherAccepted() {
+
+    }
+
+    private void noneAccepted() {
+        CardView vCardSetup = getView().findViewById(R.id.card_finance_setup);
+        vCardSetup.setVisibility(View.VISIBLE);
+
         Button vButtonSetup = getView().findViewById(R.id.button_finance_setup);
         vButtonSetup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,34 +111,5 @@ public class FinanceFragment extends Fragment {
                 startActivity(intent);
             }
         });
-
-        //Indien de gebruiker de setup nog niet doorlopen heeft, krijgt hij dit kaartje te zien
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
-        User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
-        Call call = RetrofitClient.getClient().create(APIInterface.class).getParentByEmail(currentUser.getEmail());
-        call.enqueue(new Callback() {
-            @Override
-            public void onResponse(Call call, Response response) {
-                if(response.isSuccessful()){
-                    parent = (Parent) response.body();
-                    if(parent.hasDoneSetup()){
-                        CardView vCardSetup = getView().findViewById(R.id.card_home_setup);
-                        vCardSetup.setVisibility(View.VISIBLE);
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call call, Throwable t) {
-                Toast.makeText(getContext(), "Could not find parent", Toast.LENGTH_SHORT).show();
-                Log.i("API:", "could not find parent (home-setup)");
-            }
-        });
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_finance,container,false);
     }
 }

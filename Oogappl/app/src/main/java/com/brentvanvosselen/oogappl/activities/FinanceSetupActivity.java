@@ -91,7 +91,7 @@ public class FinanceSetupActivity extends AppCompatActivity implements
 
         sendInfo();
 
-        // goToMain();
+        goToMain();
     }
 
     @Override
@@ -107,7 +107,7 @@ public class FinanceSetupActivity extends AppCompatActivity implements
         this.onderhoudsBijdragePercentage = percentage;
         sendInfo();
 
-        // goToMain();
+        goToMain();
     }
 
     private void sendInfo() {

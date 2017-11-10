@@ -35,6 +35,35 @@ public class FinInfo implements Serializable{
         this.onderhoudsbijdrage = new Onderhoudsbijdrage(p, gerechtigde, percentage);
     }
 
+    public boolean parentHasAccepted(Parent p) {
+        for(String id : accepted) {
+            if(p.getId().equals(id)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean bothParentsAccepted() {
+        for(String id: accepted) {
+            if(id == null) {
+                return false;
+            }
+        }
+        return accepted.length == 2;
+    }
+
+    public boolean otherParentHasAccepted(Parent p) {
+        for(String id: accepted) {
+            if(id != null && !p.getId().equals(id)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private class Kindrekening implements Serializable {
         @SerializedName("maxBedrag")
         private int maxBedrag;
