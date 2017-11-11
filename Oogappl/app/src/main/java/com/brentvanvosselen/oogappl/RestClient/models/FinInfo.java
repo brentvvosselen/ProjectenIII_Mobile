@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public class FinInfo implements Serializable{
+public class FinInfo implements Serializable {
 
     @SerializedName("fintype")
     private String type;
@@ -33,6 +33,18 @@ public class FinInfo implements Serializable{
     public FinInfo(Parent p, boolean gerechtigde, int percentage) {
         this("onderhoudsbijdrage", p);
         this.onderhoudsbijdrage = new Onderhoudsbijdrage(p, gerechtigde, percentage);
+    }
+
+    public String getType() {
+        return this.type;
+    }
+
+    public Kindrekening getKindrekening() {
+        return this.kindrekening;
+    }
+
+    public Onderhoudsbijdrage getOnderhoudsbijdrage() {
+        return this.onderhoudsbijdrage;
     }
 
     public boolean parentHasAccepted(Parent p) {
@@ -64,16 +76,20 @@ public class FinInfo implements Serializable{
         return false;
     }
 
-    private class Kindrekening implements Serializable {
+    public class Kindrekening implements Serializable {
         @SerializedName("maxBedrag")
         private int maxBedrag;
 
         public Kindrekening(int maxBedrag) {
             this.maxBedrag = maxBedrag;
         }
+
+        public int getMaxBedrag() {
+            return this.maxBedrag;
+        }
     }
 
-    private class Onderhoudsbijdrage implements Serializable {
+    public class Onderhoudsbijdrage implements Serializable {
         @SerializedName("onderhoudsgerechtigde")
         private String onderhoudsgerechtigde;
         @SerializedName("onderhoudsplichtige")
@@ -89,6 +105,10 @@ public class FinInfo implements Serializable{
             }
 
             this.percentage = percentage;
+        }
+
+        public int getPercentage() {
+            return this.percentage;
         }
     }
 }

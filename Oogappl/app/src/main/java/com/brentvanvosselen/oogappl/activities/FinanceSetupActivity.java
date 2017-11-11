@@ -15,6 +15,7 @@ import com.brentvanvosselen.oogappl.RestClient.models.FinancialType;
 import com.brentvanvosselen.oogappl.RestClient.models.Group;
 import com.brentvanvosselen.oogappl.RestClient.models.OnderhoudsbijdrageType;
 import com.brentvanvosselen.oogappl.RestClient.models.Parent;
+import com.brentvanvosselen.oogappl.fragments.financeSetup.SetupAcceptFinancialFragment;
 import com.brentvanvosselen.oogappl.fragments.financeSetup.SetupFinancialFragment;
 import com.brentvanvosselen.oogappl.fragments.financeSetup.SetupKindrekeningFragment;
 import com.brentvanvosselen.oogappl.fragments.financeSetup.SetupOnderhoudsbijdrageFragment;
@@ -31,12 +32,12 @@ public class FinanceSetupActivity extends AppCompatActivity implements
     SetupFinancialFragment.OnFinancialSelected,
     SetupKindrekeningFragment.OnKindrekeningSelected,
     SetupOnderhoudsbijdrageFragment.OnOnderhoudsbijdrageSelect,
-    SetupOnderhoudsbijdragePercentageFragment.OnOnderhoudsbijdragepercentageSelect {
+    SetupOnderhoudsbijdragePercentageFragment.OnOnderhoudsbijdragepercentageSelect,
+    SetupAcceptFinancialFragment.OnAcceptFinancial {
 
     private APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
 
     private Parent parent;
-
     private FinancialType financialType;
 
     // Info kindrekening
@@ -54,9 +55,22 @@ public class FinanceSetupActivity extends AppCompatActivity implements
         Intent intent = this.getIntent();
         parent = ObjectSerializer.deserialize2(intent.getStringExtra("parent"));
 
-        //start type fragment
-        Fragment setupFinancialFragment = new SetupFinancialFragment();
-        displayScreen(setupFinancialFragment, R.id.content_setup, false);
+        // aangeven of andere parent de setup al doorlopen (en aanvaard) heeft
+        boolean accepted = intent.getBooleanExtra("accepted", false);
+
+        if(accepted) {
+            // Andere ouder heeft de setup al doorlopen, start accept fragment
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("fintype", parent.getGroup().getFinType());
+            Fragment setupAcceptFragment = new SetupAcceptFinancialFragment();
+            setupAcceptFragment.setArguments(bundle);
+            displayScreen(setupAcceptFragment, R.id.content_setup, false);
+
+        } else {
+            //start nieuwe setup (type fragment) wanneer geen van beide ouders al doorlopen heeft
+            Fragment setupFinancialFragment = new SetupFinancialFragment();
+            displayScreen(setupFinancialFragment, R.id.content_setup, false);
+        }
     }
 
     private void displayScreen(Fragment fragment, int id, boolean addToBackstack){
@@ -144,5 +158,32 @@ public class FinanceSetupActivity extends AppCompatActivity implements
     private void goToMain() {
         Intent mainIntent = new Intent(this, MainActivity.class);
         startActivity(mainIntent);
+    }
+
+    @Override
+    public void onAcceptFinancial(boolean accept) {
+        if(accept) {
+            Call call = apiInterface.acceptFinanceInfo(parent);
+            call.enqueue(new Callback() {
+                @Override
+                public void onResponse(Call call, Response response) {
+                    if(response.isSuccessful()) {
+                        Log.i("SUCCESFULL", "" + response.body());
+                        goToMain();
+                    } else {
+                        Log.i("UNSUCCESFULL", "BAD RESPONSE");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call call, Throwable t) {
+                    Log.i("UNSUCCESFULL", "FAIL");
+                }
+            });
+        } else {
+            // Start nieuwe setup
+            Fragment setupFinancialFragment = new SetupFinancialFragment();
+            displayScreen(setupFinancialFragment, R.id.content_setup, false);
+        }
     }
 }
