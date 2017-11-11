@@ -66,8 +66,10 @@ public class AgendaDayFragment extends Fragment{
         super.onViewCreated(view, savedInstanceState);
 
         TextView title = getActivity().findViewById(getResources().getIdentifier("action_bar_title", "id", getActivity().getPackageName()));
+        title.setText(R.string.overview);
+
         mCalendar.setTime(dateShown);
-        DateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
+        DateFormat dateFormat = new SimpleDateFormat("dd MMMM", Locale.getDefault());
         dateString = dateFormat.format(dateShown);
 
         SimpleDateFormat dayofWeekFormat = new SimpleDateFormat("EEEE",Locale.getDefault());
@@ -76,9 +78,9 @@ public class AgendaDayFragment extends Fragment{
         vTextViewDate = getView().findViewById(R.id.textview_calendar_day_date);
         vTextViewDayOfWeek = getView().findViewById(R.id.textview_calendar_day_dayOfWeek);
 
-        title.setText(dateString);
+
         vTextViewDate.setText(dateString);
-        vTextViewDayOfWeek.setText(dayOfWeekString + ",");
+        vTextViewDayOfWeek.setText(dayOfWeekString);
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
         User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));

@@ -7,6 +7,8 @@
     <color name="black">#000000</color>
 
     <color name="light_gray_border">#E5E5E5</color>
+    <color name="dim_gray_text">#ABABAB</color>
+    <color name="dark_gray_text">#505050</color>
     <color name="blue_mid">#48a9dd</color>
     <color name="blue_mid_opacity">#a048a9dd</color>
     <color name="pink_mid">#ff5375</color>

@@ -66,6 +66,8 @@
     <string name="add_item">Voeg item toe</string>
     <string name="edit_item">Wijzig item</string>
     <string name="new_category">Nieuwe categorie</string>
+    <string name="upcoming_events">Aankomende evenementen</string>
+    <string name="overview">Overzicht</string>
 
 
     <!--setup finance-->
