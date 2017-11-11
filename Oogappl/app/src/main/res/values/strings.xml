@@ -64,6 +64,7 @@
     <!--calendar-->
     <string name="next_item">Volgende item</string>
     <string name="add_item">Voeg item toe</string>
+    <string name="edit_item">Wijzig item</string>
     <string name="new_category">Nieuwe categorie</string>
 
 

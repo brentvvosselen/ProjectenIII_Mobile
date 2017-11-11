@@ -129,7 +129,8 @@ public class AgendaItemFragment extends Fragment{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.action_edit){
-            Log.i("action","edit item");
+            AgendaFragment.OnCalendarItemSelected mCallback = (AgendaFragment.OnCalendarItemSelected)getActivity();
+            mCallback.onItemEdit(itemId);
         }
         return super.onOptionsItemSelected(item);
     }

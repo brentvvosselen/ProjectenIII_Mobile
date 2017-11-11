@@ -3,13 +3,14 @@ package com.brentvanvosselen.oogappl.RestClient.models;
 import com.brentvanvosselen.oogappl.RestClient.models.Category;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by brentvanvosselen on 03/11/2017.
  */
 
-public class Event {
+public class Event{
 
     @SerializedName("_id")
     private String id;
