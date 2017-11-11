@@ -77,8 +77,8 @@ public class AgendaItemFragment extends Fragment{
                     Event event = (Event) response.body();
                     vTextViewCategory.setText(event.getCategory().getType());
                     //vImageViewCategory.setBackgroundColor(Color.parseColor(event.getCategory().getColor()));
-                    vTextViewTime.setText(dateFormatForTime.format(event.getDatetime()));
-                    vTextViewDate.setText(dateFormatForDate.format(event.getDatetime()));
+                    vTextViewTime.setText(dateFormatForTime.format(event.getStart()));
+                    vTextViewDate.setText(dateFormatForDate.format(event.getStart()));
                     vTextViewDescription.setText(event.getDescription());
 
                     ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();

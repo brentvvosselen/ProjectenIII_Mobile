@@ -120,9 +120,17 @@ public class AgendaDayFragment extends Fragment{
 
     private void renderLayout(){
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        ViewGroup main = getView().findViewById(R.id.linearlayout_calendar_day_items);
-        for (Event e: events) {
+        final ViewGroup main = getView().findViewById(R.id.linearlayout_calendar_day_items);
+        for (final Event e: events) {
             View eventView = inflater.inflate(R.layout.calendar_day_item,null);
+
+            eventView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    AgendaFragment.OnCalendarItemSelected mCallback = (AgendaFragment.OnCalendarItemSelected)getActivity();
+                    mCallback.onItemSelected(e.getId());
+                }
+            });
 
             TextView vTextViewTitle = eventView.findViewById(R.id.textview_calendar_day_item_title);
             TextView vTextViewTime = eventView.findViewById(R.id.textview_calendar_day_item_time);
@@ -130,8 +138,8 @@ public class AgendaDayFragment extends Fragment{
             ImageView vImageViewCategory = eventView.findViewById(R.id.imageview_calendar_day_item_color);
 
             vTextViewTitle.setText(e.getTitle());
-            vTextViewTime.setText(dateFormatForTime.format(e.getDatetime()));
-            vTextViewDate.setText(dateFormatForDay.format(e.getDatetime()));
+            vTextViewTime.setText(dateFormatForTime.format(e.getStart()));
+            vTextViewDate.setText(dateFormatForDay.format(e.getStart()));
             vImageViewCategory.setBackgroundColor(Color.parseColor(e.getCategory().getColor()));
 
             Log.i("VIEW", "ADDED ");

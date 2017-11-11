@@ -109,41 +109,43 @@ public class AgendaEditItemFragment extends Fragment {
         fillSpinner();
 
         //get event
-        Call itemCall = apiInterface.getEvent(itemId);
-        itemCall.enqueue(new Callback() {
-            @Override
-            public void onResponse(Call call, Response response) {
-                if(response.isSuccessful()){
-                    Event e = (Event) response.body();
-                    title.setText(R.string.edit_item);
+        if(itemId != null){
+            Call itemCall = apiInterface.getEvent(itemId);
+            itemCall.enqueue(new Callback() {
+                @Override
+                public void onResponse(Call call, Response response) {
+                    if(response.isSuccessful()){
+                        Event e = (Event) response.body();
+                        title.setText(R.string.edit_item);
 
 
-                    vEdittextTitle.setText(e.getTitle());
-                    vEdittextDescription.setText(e.getDescription());
-                    SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
-                    SimpleDateFormat timeFormat = new SimpleDateFormat(TIME_FORMAT);
-                    vEdittextStartDate.setText(dateFormat.format(e.getDatetime()));
-                    vEdittextStartTime.setText(timeFormat.format(e.getDatetime()));
-                    int categoryIndex = -1;
-                    for(int i = 0 ; i<categories.size();i++){
-                        if(categories.get(i).getType().equals(e.getCategory().getType()))
-                            categoryIndex = i;
+                        vEdittextTitle.setText(e.getTitle());
+                        vEdittextDescription.setText(e.getDescription());
+                        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+                        SimpleDateFormat timeFormat = new SimpleDateFormat(TIME_FORMAT);
+                        vEdittextStartDate.setText(dateFormat.format(e.getStart()));
+                        vEdittextStartTime.setText(timeFormat.format(e.getStart()));
+                        vEdittextEndDate.setText(dateFormat.format(e.getEnd()));
+                        vEdittextEndTime.setText(timeFormat.format(e.getEnd()));
+                        vButtonSave.setText(R.string.save);
+                        int categoryIndex = -1;
+                        for(int i = 0 ; i<categories.size();i++){
+                            if(categories.get(i).getType().equals(e.getCategory().getType()))
+                                categoryIndex = i;
+                        }
+                        vSpinnerCategory.setSelection(categoryIndex);
+                    }else{
+                        Toast.makeText(getContext(),"Could not retrieve event",Toast.LENGTH_SHORT).show();
                     }
-                    vSpinnerCategory.setSelection(categoryIndex);
-                }else{
-                    Toast.makeText(getContext(),"Could not retrieve event",Toast.LENGTH_SHORT).show();
                 }
-            }
 
-            @Override
-            public void onFailure(Call call, Throwable t) {
-                Toast.makeText(getContext(),"Could not connect to the server",Toast.LENGTH_SHORT).show();
-                call.cancel();
-            }
-        });
-
-
-
+                @Override
+                public void onFailure(Call call, Throwable t) {
+                    Toast.makeText(getContext(),"Could not connect to the server",Toast.LENGTH_SHORT).show();
+                    call.cancel();
+                }
+            });
+        }
 
         vEdittextTitle = getView().findViewById(R.id.edittext_edit_event_title);
         vEdittextDescription = getView().findViewById(R.id.edittext_edit_event_description);
@@ -381,9 +383,26 @@ public class AgendaEditItemFragment extends Fragment {
                     e.printStackTrace();
                 }
 
-                Event newEvent = new Event(title,start,description,category);
+                Event newEvent = new Event(title,start,end,description,category);
                 if(itemId != null){
                     //edit event
+                    Call editEventCall = apiInterface.editEvent(itemId,newEvent);
+                    editEventCall.enqueue(new Callback() {
+                        @Override
+                        public void onResponse(Call call, Response response) {
+                            if(response.isSuccessful()){
+                                Toast.makeText(getContext(),"event gewijzigd",Toast.LENGTH_SHORT).show();
+                                getActivity().onBackPressed();
+                            }else{
+                                Toast.makeText(getContext(),"event niet gewijzigd",Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call call, Throwable t) {
+                            Toast.makeText(getContext(),"Kon niet verbinden met server",Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }else{
                     //add event
                     Call addEventCall = apiInterface.addEvent(currentUser.getEmail(),newEvent);
@@ -391,9 +410,11 @@ public class AgendaEditItemFragment extends Fragment {
                         @Override
                         public void onResponse(Call call, Response response) {
                             if(response.isSuccessful()){
-                                Toast.makeText(getContext(),"Categorie toegevoegd",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(),"event toegevoegd",Toast.LENGTH_SHORT).show();
+                                getActivity().onBackPressed();
+
                             }else{
-                                Toast.makeText(getContext(),"Categorie niet toegevoegd",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(),"event niet toegevoegd",Toast.LENGTH_SHORT).show();
                             }
                         }
 

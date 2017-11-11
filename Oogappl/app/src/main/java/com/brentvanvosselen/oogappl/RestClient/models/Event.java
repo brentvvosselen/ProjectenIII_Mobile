@@ -16,26 +16,34 @@ public class Event{
     private String id;
     @SerializedName("title")
     private String title;
-    @SerializedName("datetime")
-    private Date datetime;
+    @SerializedName("start")
+    private Date start;
+    @SerializedName("end")
+    private Date end;
     @SerializedName("description")
     private String description;
-    @SerializedName("category")
+    @SerializedName("categoryid")
     private Category category;
 
-    public Event(String title, Date datetime, String description, Category category) {
+
+    public Event(String title, Date start, Date end, String description, Category category) {
         this.title = title;
-        this.datetime = datetime;
+        this.start = start;
+        this.end = end;
         this.description = description;
         this.category = category;
     }
 
-    public String getId() {
-        return id;
+    public Date getStart() {
+        return start;
     }
 
-    public Date getDatetime() {
-        return datetime;
+    public Date getEnd() {
+        return end;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public Category getCategory() {

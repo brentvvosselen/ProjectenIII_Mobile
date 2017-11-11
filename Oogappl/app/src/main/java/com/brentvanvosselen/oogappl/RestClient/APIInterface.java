@@ -15,6 +15,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface APIInterface {
@@ -78,6 +79,9 @@ public interface APIInterface {
 
     @POST("/api/calendar/event/add/{email}")
     Call<String> addEvent(@Path("email") String email, @Body Event event);
+
+    @PUT("/api/calendar/event/edit/{id}")
+    Call<String> editEvent(@Path("id")String id, @Body Event event);
 
     @POST("/api/finance")
     Call<Group> addFinanceInfo(@Body Group group);

@@ -137,8 +137,8 @@ public class AgendaFragment extends Fragment {
                 if(response.isSuccessful()){
                     com.brentvanvosselen.oogappl.RestClient.models.Event event = (com.brentvanvosselen.oogappl.RestClient.models.Event) response.body();
                     vTextViewNextTitle.setText(event.getTitle());
-                    vTextViewNextTime.setText(dateFormatForTime.format(event.getDatetime()));
-                    vTextViewNextDate.setText(dateFormatForDay.format(event.getDatetime()));
+                    vTextViewNextTime.setText(dateFormatForTime.format(event.getStart()));
+                    vTextViewNextDate.setText(dateFormatForDay.format(event.getStart()));
                     vImageViewNextCategory.setBackgroundColor(Color.parseColor(event.getCategory().getColor()));
                     nextItemId = event.getId();
 
@@ -193,11 +193,6 @@ public class AgendaFragment extends Fragment {
 
     private void addEventsToCalendar(){
         Calendar c = Calendar.getInstance();
-        c.setTime(new Date());
-        c.set(2017,10,3);
-        Log.i("date",String.valueOf(c.getTimeInMillis()));
-
-
 
         //get current user
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
@@ -213,12 +208,18 @@ public class AgendaFragment extends Fragment {
                     List<Event> parsedEvents = new ArrayList<Event>();
                     for(com.brentvanvosselen.oogappl.RestClient.models.Event event: events){
                         int color = Color.parseColor(event.getCategory().getColor());
-                        mCalendar.setTime(event.getDatetime());
-                        long timeInMIllis = mCalendar.getTimeInMillis();
-                        Log.i("time",String.valueOf(timeInMIllis));
-                        String id = event.getId();
-                        Event e = new Event(color,timeInMIllis,id);
-                        parsedEvents.add(e);
+                        Date date = new Date(event.getStart().getYear(),event.getStart().getMonth(),event.getStart().getDate());
+                        while(!date.after(event.getEnd())){
+                            mCalendar.setTime(date);
+                            long timeInMIllis = mCalendar.getTimeInMillis();
+                            Log.i("time",String.valueOf(timeInMIllis));
+                            String id = event.getId();
+                            Event e = new Event(color,timeInMIllis,id);
+                            parsedEvents.add(e);
+                            mCalendar.add(Calendar.DATE,1);
+                            date = mCalendar.getTime();
+                        }
+
                     }
 
 
