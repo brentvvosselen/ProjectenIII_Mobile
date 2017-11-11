@@ -64,6 +64,7 @@ public class AgendaFragment extends Fragment {
         public void onDateSelected(Date date);
         public void onItemSelected(String id);
         public void onAddItemSelected();
+        public void onItemEdit(String eventId);
     }
 
     @Override

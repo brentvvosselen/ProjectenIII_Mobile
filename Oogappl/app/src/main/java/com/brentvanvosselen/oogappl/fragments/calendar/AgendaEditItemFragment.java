@@ -11,6 +11,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -64,6 +66,9 @@ public class AgendaEditItemFragment extends Fragment {
     final String TIME_FORMAT = "HH:mm";
     final String DATE_TIME_FORMAT = "dd/MM/yyyy HH:mm";
 
+    //use this variable to edit an event, if this is null you want to create an event
+    private String itemId = null;
+
     APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
 
     EditText vEdittextTitle, vEdittextDescription, vEdittextStartDate, vEdittextEndDate, vEdittextStartTime, vEdittextEndTime;
@@ -76,6 +81,17 @@ public class AgendaEditItemFragment extends Fragment {
     String currentColor = "#2CA49D";
 
 
+    //method to create a new instance and fill the currentEvent
+    //you only need to use this if you want to edit an event
+    public static AgendaEditItemFragment newInstance(String eventId){
+        AgendaEditItemFragment fragment = new AgendaEditItemFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("event",eventId);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+
 
 
 
@@ -85,8 +101,49 @@ public class AgendaEditItemFragment extends Fragment {
 
         final Calendar myCalendar = Calendar.getInstance();
 
-        TextView title = getActivity().findViewById(getResources().getIdentifier("action_bar_title", "id", getActivity().getPackageName()));
+        //set title
+        final TextView title = getActivity().findViewById(getResources().getIdentifier("action_bar_title", "id", getActivity().getPackageName()));
         title.setText(R.string.add_item);
+
+        //make a call for the categories and fill the adapter
+        fillSpinner();
+
+        //get event
+        Call itemCall = apiInterface.getEvent(itemId);
+        itemCall.enqueue(new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) {
+                if(response.isSuccessful()){
+                    Event e = (Event) response.body();
+                    title.setText(R.string.edit_item);
+
+
+                    vEdittextTitle.setText(e.getTitle());
+                    vEdittextDescription.setText(e.getDescription());
+                    SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+                    SimpleDateFormat timeFormat = new SimpleDateFormat(TIME_FORMAT);
+                    vEdittextStartDate.setText(dateFormat.format(e.getDatetime()));
+                    vEdittextStartTime.setText(timeFormat.format(e.getDatetime()));
+                    int categoryIndex = -1;
+                    for(int i = 0 ; i<categories.size();i++){
+                        if(categories.get(i).getType().equals(e.getCategory().getType()))
+                            categoryIndex = i;
+                    }
+                    vSpinnerCategory.setSelection(categoryIndex);
+                }else{
+                    Toast.makeText(getContext(),"Could not retrieve event",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call call, Throwable t) {
+                Toast.makeText(getContext(),"Could not connect to the server",Toast.LENGTH_SHORT).show();
+                call.cancel();
+            }
+        });
+
+
+
 
         vEdittextTitle = getView().findViewById(R.id.edittext_edit_event_title);
         vEdittextDescription = getView().findViewById(R.id.edittext_edit_event_description);
@@ -103,8 +160,6 @@ public class AgendaEditItemFragment extends Fragment {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
         final User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
 
-        //make a call for the categories and fill the adapter
-        fillSpinner();
 
         vSpinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -196,6 +251,7 @@ public class AgendaEditItemFragment extends Fragment {
             }
         });
 
+
         final DatePickerDialog.OnDateSetListener dateStartListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
@@ -210,6 +266,13 @@ public class AgendaEditItemFragment extends Fragment {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
+                    //set date of textfield in datepicker
+                    SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
+                    try {
+                        myCalendar.setTime(format.parse(vEdittextStartDate.getText().toString()));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                     DatePickerDialog dialog = new DatePickerDialog(getContext(),dateStartListener,myCalendar.get(Calendar.YEAR),myCalendar.get(Calendar.MONTH),myCalendar.get(Calendar.DAY_OF_MONTH));
                     dialog.getDatePicker().setMinDate(new Date().getTime());
                     dialog.show();
@@ -232,6 +295,13 @@ public class AgendaEditItemFragment extends Fragment {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
+                    //set date of textfield in datepicker
+                    SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
+                    try {
+                        myCalendar.setTime(format.parse(vEdittextEndDate.getText().toString()));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                     DatePickerDialog dialog = new DatePickerDialog(getContext(),dateEndListener,myCalendar.get(Calendar.YEAR),myCalendar.get(Calendar.MONTH),myCalendar.get(Calendar.DAY_OF_WEEK));
                     dialog.getDatePicker().setMinDate(new Date().getTime());
                     dialog.show();
@@ -253,6 +323,13 @@ public class AgendaEditItemFragment extends Fragment {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
+                    //set date of textfield in datepicker
+                    SimpleDateFormat format = new SimpleDateFormat(TIME_FORMAT);
+                    try {
+                        myCalendar.setTime(format.parse(vEdittextStartTime.getText().toString()));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                     TimePickerDialog dialog = new TimePickerDialog(getContext(),timeStartListener,myCalendar.get(Calendar.HOUR_OF_DAY),myCalendar.get(Calendar.MINUTE),true);
                     dialog.show();
                 }
@@ -273,6 +350,13 @@ public class AgendaEditItemFragment extends Fragment {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
+                    //set date of textfield in datepicker
+                    SimpleDateFormat format = new SimpleDateFormat(TIME_FORMAT);
+                    try {
+                        myCalendar.setTime(format.parse(vEdittextEndTime.getText().toString()));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                     TimePickerDialog dialog = new TimePickerDialog(getContext(),timeEndListener,myCalendar.get(Calendar.HOUR_OF_DAY),myCalendar.get(Calendar.MINUTE),true);
                     dialog.show();
                 }
@@ -298,23 +382,28 @@ public class AgendaEditItemFragment extends Fragment {
                 }
 
                 Event newEvent = new Event(title,start,description,category);
-
-                Call addEventCall = apiInterface.addEvent(currentUser.getEmail(),newEvent);
-                addEventCall.enqueue(new Callback() {
-                    @Override
-                    public void onResponse(Call call, Response response) {
-                        if(response.isSuccessful()){
-                            Toast.makeText(getContext(),"Categorie toegevoegd",Toast.LENGTH_SHORT).show();
-                        }else{
-                            Toast.makeText(getContext(),"Categorie niet toegevoegd",Toast.LENGTH_SHORT).show();
+                if(itemId != null){
+                    //edit event
+                }else{
+                    //add event
+                    Call addEventCall = apiInterface.addEvent(currentUser.getEmail(),newEvent);
+                    addEventCall.enqueue(new Callback() {
+                        @Override
+                        public void onResponse(Call call, Response response) {
+                            if(response.isSuccessful()){
+                                Toast.makeText(getContext(),"Categorie toegevoegd",Toast.LENGTH_SHORT).show();
+                            }else{
+                                Toast.makeText(getContext(),"Categorie niet toegevoegd",Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call call, Throwable t) {
-                        Toast.makeText(getContext(),"Kon niet verbinden met server",Toast.LENGTH_SHORT).show();
-                    }
-                });
+                        @Override
+                        public void onFailure(Call call, Throwable t) {
+                            Toast.makeText(getContext(),"Kon niet verbinden met server",Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+
 
             }
         });
@@ -327,6 +416,16 @@ public class AgendaEditItemFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        //get event from arguments
+        try{
+            itemId = (String)getArguments().getSerializable("event");
+         }catch(NullPointerException ex){
+            Log.i("event","none");
+        }catch(Exception e){
+            Log.i("event","none");
+        }
+
         return inflater.inflate(R.layout.fragment_agenda_edit_item,container,false);
     }
 

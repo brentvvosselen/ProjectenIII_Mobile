@@ -2,11 +2,13 @@ package com.brentvanvosselen.oogappl.RestClient.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Created by brentvanvosselen on 03/11/2017.
  */
 
-public class Category {
+public class Category{
 
     @SerializedName("_id")
     private String id;

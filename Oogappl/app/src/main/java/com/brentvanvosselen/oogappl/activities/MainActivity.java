@@ -280,6 +280,7 @@ public class MainActivity extends AppCompatActivity
     public void onDateSelected(Date date) {
         Fragment dayFragment = AgendaDayFragment.newInstance(date);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.addToBackStack("view_day");
         ft.replace(R.id.content_main,dayFragment);
         ft.commit();
     }
@@ -288,6 +289,7 @@ public class MainActivity extends AppCompatActivity
     public void onItemSelected(String id) {
         Fragment agendaItemFragment = AgendaItemFragment.newInstance(id);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.addToBackStack("view_event");
         ft.replace(R.id.content_main,agendaItemFragment);
         ft.commit();
     }
@@ -297,6 +299,17 @@ public class MainActivity extends AppCompatActivity
         Fragment agendaAddItemFragment = new AgendaEditItemFragment();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.content_main,agendaAddItemFragment);
+        ft.addToBackStack("add_event");
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        ft.commit();
+    }
+
+    @Override
+    public void onItemEdit(String eventId) {
+        Fragment agendaEditItemFragment = AgendaEditItemFragment.newInstance(eventId);
+        FragmentTransaction ft  = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content_main, agendaEditItemFragment);
+        ft.addToBackStack("edit_event");
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         ft.commit();
     }
