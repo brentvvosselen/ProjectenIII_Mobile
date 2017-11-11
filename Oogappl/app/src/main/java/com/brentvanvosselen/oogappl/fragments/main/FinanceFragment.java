@@ -32,6 +32,8 @@ import retrofit2.Response;
 public class FinanceFragment extends Fragment {
 
     private Parent parent;
+    private CardView vCardSetup;
+
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -39,6 +41,8 @@ public class FinanceFragment extends Fragment {
 
         TextView title = getActivity().findViewById(getResources().getIdentifier("action_bar_title", "id", getActivity().getPackageName()));
         title.setText(R.string.finance);
+
+        vCardSetup = getView().findViewById(R.id.card_finance_setup);
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
         User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
@@ -87,19 +91,14 @@ public class FinanceFragment extends Fragment {
     }
 
     private void bothAccepted() {
-
+        vCardSetup.setVisibility(View.GONE);
     }
 
     private void currentAccepted() {
-
+        vCardSetup.setVisibility(View.VISIBLE);
     }
 
     private void otherAccepted() {
-
-    }
-
-    private void noneAccepted() {
-        CardView vCardSetup = getView().findViewById(R.id.card_finance_setup);
         vCardSetup.setVisibility(View.VISIBLE);
 
         Button vButtonSetup = getView().findViewById(R.id.button_finance_setup);
@@ -108,6 +107,22 @@ public class FinanceFragment extends Fragment {
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), FinanceSetupActivity.class);
                 intent.putExtra("parent", ObjectSerializer.serialize2(parent));
+                intent.putExtra("accepted", true);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void noneAccepted() {
+        vCardSetup.setVisibility(View.VISIBLE);
+
+        Button vButtonSetup = getView().findViewById(R.id.button_finance_setup);
+        vButtonSetup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), FinanceSetupActivity.class);
+                intent.putExtra("parent", ObjectSerializer.serialize2(parent));
+                intent.putExtra("accepted", false);
                 startActivity(intent);
             }
         });

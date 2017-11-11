@@ -86,6 +86,9 @@ public interface APIInterface {
     @POST("/api/finance")
     Call<Group> addFinanceInfo(@Body Group group);
 
+    @POST("/api/finance/accept")
+    Call<String> acceptFinanceInfo(@Body Parent parent);
+
     /*
     Voorbeeld van API call
 

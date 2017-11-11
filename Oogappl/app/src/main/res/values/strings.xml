@@ -73,13 +73,19 @@
     <string name="kindRekening">Kindrekening</string>
     <string name="use_max">Wij gebruiken max bedrag</string>
     <string name="max_bedrag">Max bedrag</string>
+    <string name="geen_max_bedrag">Geen max bedrag</string>
     <string name="max_bedrag_error">Max bedrag is verplicht</string>
     <string name="onderhoudsbijdrage">Onderhoudsbijdrage</string>
     <string name="onderhoudsbijdrage_type">Ik ben de...</string>
     <string name="onderhoudsplichtigde">Onderhoudsplichtigde</string>
     <string name="onderhoudsgerechtigde">Onderhoudsgerechtige</string>
     <string name="bijdrage_percentage">Bijdragepercentage onderhoudsplichtigde</string>
+    <string name="bijdrage_percentage_kort">Bijdragepercentage</string>
     <string name="percentage">Percentage</string>
     <string name="percentage_error">Percentage is verplicht</string>
     <string name="percentage_min_max">Percentage moet tussen 0 en 100 liggen</string>
+    <string name="titel_accepteer_financien">Controleer gegevens</string>
+    <string name="type_overeenkomst">Type overeenkomst:</string>
+    <string name="aanvaarden">Aanvaarden</string>
+    <string name="niet_aanvaarden">Aanpassen</string>
 </resources>
