@@ -20,8 +20,7 @@
     <style name="navigation_drawer_style">
         <item name="android:textSize">14sp</item>
         <item name="android:textAllCaps">true</item>
-        <item name="android:letterSpacing">0.2</item>
-        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:fontFamily">@font/poppins_medium</item>
     </style>
 
     <style name="AppTheme.CustomTheme">
