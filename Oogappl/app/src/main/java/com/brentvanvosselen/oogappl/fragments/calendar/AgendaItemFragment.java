@@ -63,7 +63,6 @@ public class AgendaItemFragment extends Fragment{
 
         View content = getView();
 
-        vTextViewCategory = content.findViewById(R.id.textview_calendar_item_category);
         vTextViewStartDate = content.findViewById(R.id.textview_calendar_item_start_date);
         vTextViewStartTime = content.findViewById(R.id.textview_calendar_item_start_time);
         vTextViewStartMonth = content.findViewById(R.id.textview_calendar_item_start_month);
@@ -81,8 +80,7 @@ public class AgendaItemFragment extends Fragment{
             public void onResponse(Call call, Response response) {
                 if(response.isSuccessful()){
                     Event event = (Event) response.body();
-                    vTextViewCategory.setText(event.getCategory().getType());
-                    //vImageViewCategory.setBackgroundColor(Color.parseColor(event.getCategory().getColor()));
+
                     vTextViewStartTime.setText(dateFormatForTime.format(event.getStart()));
                     vTextViewStartDate.setText(dateFormatForDate.format(event.getStart()));
                     vTextViewStartMonth.setText(dateFormatForMonth.format(event.getStart()));
@@ -101,7 +99,7 @@ public class AgendaItemFragment extends Fragment{
                     actionBar.setBackgroundDrawable(color);
                     //actionbar tekst
                     TextView title = getActivity().findViewById(getResources().getIdentifier("action_bar_title", "id", getActivity().getPackageName()));
-                    title.setText(event.getTitle());
+                    title.setText(event.getCategory().getType());
 
                 }else{
                     Toast.makeText(getContext(),"Could not retrieve event",Toast.LENGTH_SHORT).show();

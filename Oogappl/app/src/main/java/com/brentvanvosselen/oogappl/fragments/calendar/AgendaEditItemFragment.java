@@ -108,6 +108,11 @@ public class AgendaEditItemFragment extends Fragment {
         //make a call for the categories and fill the adapter
         fillSpinner();
 
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         //get event
         if(itemId != null){
             Call itemCall = apiInterface.getEvent(itemId);
@@ -150,7 +155,7 @@ public class AgendaEditItemFragment extends Fragment {
         vEdittextTitle = getView().findViewById(R.id.edittext_edit_event_title);
         vEdittextDescription = getView().findViewById(R.id.edittext_edit_event_description);
         vEdittextStartDate = getView().findViewById(R.id.edittext_edit_event_startDate);
-        vEdittextEndDate = getView().findViewById(R.id.textview_edit_event_endDate);
+        vEdittextEndDate = getView().findViewById(R.id.edittext_edit_event_endDate);
         vImageViewCategory = getView().findViewById(R.id.imageview_edit_event_category);
         vSpinnerCategory = getView().findViewById(R.id.spinner_edit_event_category);
         vButtonSave = getView().findViewById(R.id.button_edit_event_save);
@@ -370,6 +375,9 @@ public class AgendaEditItemFragment extends Fragment {
         vButtonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                boolean correctForm = true;
+
+
                 String title = vEdittextTitle.getText().toString();
                 String description = vEdittextDescription.getText().toString();
                 Category category = categories.get(vSpinnerCategory.getSelectedItemPosition());
@@ -381,7 +389,26 @@ public class AgendaEditItemFragment extends Fragment {
                     end = dateFormat.parse(vEdittextEndDate.getText().toString() + " " + vEdittextEndTime.getText().toString());
                 } catch (ParseException e) {
                     e.printStackTrace();
+                    Toast.makeText(getContext(),"Start en einde van evenement moet ingevuld zijn!",Toast.LENGTH_SHORT).show();
+                    correctForm = false;
                 }
+
+
+                if(title.isEmpty() || title == null){
+                    correctForm = false;
+                    vEdittextTitle.setError("De titel mag niet leeg zijn");
+                }
+                if(category == null){
+                    correctForm = false;
+                }
+                if(start == null || end == null){
+                    correctForm = false;
+                }else if(start.after(end)){
+                    correctForm = false;
+                }
+
+                if(correctForm){
+
 
                 Event newEvent = new Event(title,start,end,description,category);
                 if(itemId != null){
@@ -424,7 +451,9 @@ public class AgendaEditItemFragment extends Fragment {
                         }
                     });
                 }
-
+                }else{
+                    Log.i("FORM","not correct");
+                }
 
             }
         });
@@ -467,7 +496,7 @@ public class AgendaEditItemFragment extends Fragment {
                         categorynames.add(c.getType());
                     }
                     categorynames.add(getResources().getString(R.string.new_category));
-                    ArrayAdapter<String> categoryAdapter = new ArrayAdapter<String>(getContext(),R.layout.support_simple_spinner_dropdown_item,categorynames);
+                    ArrayAdapter<String> categoryAdapter = new ArrayAdapter<String>(getContext(),R.layout.custom_spinner_item,categorynames);
                     vSpinnerCategory.setAdapter(categoryAdapter);
                 }else{
                     Toast.makeText(getContext(),"Could not retrieve categories",Toast.LENGTH_SHORT).show();
