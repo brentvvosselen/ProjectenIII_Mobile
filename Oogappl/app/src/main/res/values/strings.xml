@@ -11,6 +11,12 @@
     <string name="cancel">Terug</string>
     <string name="color">Kleur</string>
     <string name="choose_color">Kies een kleur</string>
+    <string name="geen_verbinding">Kan server niet bereiken</string>
+    <string name="title">Titel</string>
+    <string name="description">Beschrijving</string>
+    <string name="Amount">Bedrag</string>
+    <string name="Date">Datum</string>
+    <string name="Category">Categorie</string>
 
     <!--navigation drawer-->
     <string name="home">Start</string>
@@ -90,4 +96,6 @@
     <string name="type_overeenkomst">Type overeenkomst:</string>
     <string name="aanvaarden">Aanvaarden</string>
     <string name="niet_aanvaarden">Aanpassen</string>
+    <string name="add_cost">Voeg een kost toe:</string>
+    <string name="add_cost_category">Voeg een categorie toe:</string>
 </resources>
