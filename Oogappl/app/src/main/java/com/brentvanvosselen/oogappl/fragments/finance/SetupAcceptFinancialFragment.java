@@ -43,7 +43,7 @@ public class SetupAcceptFinancialFragment extends Fragment {
             } else {
                 int maxBedrag = kindrekening.getMaxBedrag();
                 if(maxBedrag > 0) {
-                    infoValue.setText(maxBedrag);
+                    infoValue.setText(Double.toString(maxBedrag));
                 }
             }
 

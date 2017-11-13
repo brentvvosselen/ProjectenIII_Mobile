@@ -40,12 +40,12 @@ public class AgendaItemFragment extends Fragment{
     private String itemId;
     private APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
 
-    private TextView vTextViewDate, vTextViewTime, vTextViewCategory,vTextViewDescription;
+    private TextView vTextViewStartDate,vTextViewStartMonth, vTextViewStartTime,vTextViewEndDate,vTextViewEndMonth, vTextViewEndTime, vTextViewCategory,vTextViewDescription, vTextViewTitle;
     private ImageView vImageViewCategory;
 
     private SimpleDateFormat dateFormatForTime = new SimpleDateFormat("HH:mm",Locale.getDefault());
-    private SimpleDateFormat dateFormatForDate = new SimpleDateFormat("EEEE, dd MMMM yyyy",Locale.getDefault());
-
+    private SimpleDateFormat dateFormatForDate = new SimpleDateFormat("dd",Locale.getDefault());
+    private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("EEEE",Locale.getDefault());
 
 
 
@@ -63,11 +63,16 @@ public class AgendaItemFragment extends Fragment{
 
         View content = getView();
 
-        vTextViewCategory = content.findViewById(R.id.textview_calendar_item_category);
-        vTextViewDate = content.findViewById(R.id.textview_calendar_item_date);
-        vTextViewTime = content.findViewById(R.id.textview_calendar_item_time);
+        vTextViewStartDate = content.findViewById(R.id.textview_calendar_item_start_date);
+        vTextViewStartTime = content.findViewById(R.id.textview_calendar_item_start_time);
+        vTextViewStartMonth = content.findViewById(R.id.textview_calendar_item_start_month);
+
+        vTextViewEndDate = content.findViewById(R.id.textview_calendar_item_end_date);
+        vTextViewEndTime = content.findViewById(R.id.textview_calendar_item_end_time);
+        vTextViewEndMonth = content.findViewById(R.id.textview_calendar_item_end_month);
+
         vTextViewDescription = content.findViewById(R.id.textview_calendar_item_description);
-        vImageViewCategory = content.findViewById(R.id.imageview_calendar_item_color);
+        vTextViewTitle = content.findViewById(R.id.textview_calendar_item_title);
 
         Call itemCall = apiInterface.getEvent(itemId);
         itemCall.enqueue(new Callback() {
@@ -75,11 +80,17 @@ public class AgendaItemFragment extends Fragment{
             public void onResponse(Call call, Response response) {
                 if(response.isSuccessful()){
                     Event event = (Event) response.body();
-                    vTextViewCategory.setText(event.getCategory().getType());
-                    //vImageViewCategory.setBackgroundColor(Color.parseColor(event.getCategory().getColor()));
-                    vTextViewTime.setText(dateFormatForTime.format(event.getStart()));
-                    vTextViewDate.setText(dateFormatForDate.format(event.getStart()));
+
+                    vTextViewStartTime.setText(dateFormatForTime.format(event.getStart()));
+                    vTextViewStartDate.setText(dateFormatForDate.format(event.getStart()));
+                    vTextViewStartMonth.setText(dateFormatForMonth.format(event.getStart()));
+
+                    vTextViewEndTime.setText(dateFormatForTime.format(event.getEnd()));
+                    vTextViewEndDate.setText(dateFormatForDate.format(event.getEnd()));
+                    vTextViewEndMonth.setText(dateFormatForMonth.format(event.getEnd()));
+
                     vTextViewDescription.setText(event.getDescription());
+                    vTextViewTitle.setText(event.getTitle());
 
                     ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
 
@@ -88,7 +99,7 @@ public class AgendaItemFragment extends Fragment{
                     actionBar.setBackgroundDrawable(color);
                     //actionbar tekst
                     TextView title = getActivity().findViewById(getResources().getIdentifier("action_bar_title", "id", getActivity().getPackageName()));
-                    title.setText(event.getTitle());
+                    title.setText(event.getCategory().getType());
 
                 }else{
                     Toast.makeText(getContext(),"Could not retrieve event",Toast.LENGTH_SHORT).show();

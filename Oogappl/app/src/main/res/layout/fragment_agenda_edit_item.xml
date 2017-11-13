@@ -21,144 +21,226 @@
             android:layout_height="match_parent">
 
 
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/poppins_medium"
+                android:text="Wijzig"
+                android:textAllCaps="true"
+                android:textColor="@color/dark_gray_text"
+                android:textSize="36dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
+            <TextView
+                android:id="@+id/textview_edit_event_label_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/poppins_medium"
+                android:text="Titel"
+                android:textColor="@color/dim_gray_text"
+                app:layout_constraintStart_toStartOf="@+id/edittext_edit_event_title"
+                app:layout_constraintTop_toBottomOf="@+id/textView" />
 
             <EditText
                 android:id="@+id/edittext_edit_event_title"
+                android:layout_width="0dp"
+                android:layout_height="25dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:background="@drawable/edittext_form"
+                android:ems="10"
+                android:fontFamily="@font/poppins_medium"
+                android:inputType="textPersonName"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textview_edit_event_label_title" />
+
+            <TextView
+                android:id="@+id/textview_edit_event_label_startdate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:ems="10"
-                android:hint="title"
-                android:inputType="textPersonName"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/poppins_medium"
+                android:text="Startdatum"
+                android:textColor="@color/dim_gray_text"
+                app:layout_constraintStart_toStartOf="@+id/edittext_edit_event_startDate"
+                app:layout_constraintTop_toBottomOf="@+id/edittext_edit_event_title" />
+
+            <TextView
+                android:id="@+id/textview_edit_event_label_starttime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/poppins_medium"
+                android:text="Starttijd"
+                android:textColor="@color/dim_gray_text"
+                app:layout_constraintStart_toStartOf="@+id/edittext_edit_event_startTime"
+                app:layout_constraintTop_toBottomOf="@+id/edittext_edit_event_title" />
 
             <EditText
                 android:id="@+id/edittext_edit_event_startDate"
-                android:layout_width="0dp"
+                android:layout_width="153dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:background="@drawable/edittext_form"
                 android:clickable="true"
                 android:editable="false"
                 android:ems="10"
-                android:hint="startdate"
+                android:fontFamily="@font/poppins_medium"
                 android:inputType="datetime"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edittext_edit_event_title" />
+                app:layout_constraintStart_toStartOf="@+id/edittext_edit_event_title"
+                app:layout_constraintTop_toBottomOf="@+id/textview_edit_event_label_startdate" />
 
             <EditText
                 android:id="@+id/edittext_edit_event_startTime"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="16dp"
-                android:ems="10"
-                android:hint="startTime"
-                android:inputType="datetime"
+                android:layout_marginStart="16dp"
+                android:background="@drawable/edittext_form"
                 android:clickable="true"
                 android:editable="false"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintLeft_toRightOf="@+id/edittext_edit_event_startDate"
-                app:layout_constraintRight_toRightOf="parent"
-                android:layout_marginTop="16dp"
-                app:layout_constraintTop_toBottomOf="@+id/edittext_edit_event_title" />
+                android:ems="10"
+                android:fontFamily="@font/poppins_medium"
+                android:inputType="datetime"
+                app:layout_constraintEnd_toEndOf="@+id/edittext_edit_event_title"
+                app:layout_constraintStart_toEndOf="@+id/edittext_edit_event_startDate"
+                app:layout_constraintTop_toBottomOf="@+id/textview_edit_event_label_starttime" />
 
-
-
-
-            <EditText
-                android:id="@+id/textview_edit_event_endDate"
+            <TextView
+                android:id="@+id/textview_edit_event_label_enddate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:ems="10"
-                android:hint="enddate"
-                android:inputType="datetime"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/poppins_medium"
+                android:text="Einddatum"
+                android:textColor="@color/dim_gray_text"
+                app:layout_constraintStart_toStartOf="@+id/edittext_edit_event_endDate"
+                app:layout_constraintTop_toBottomOf="@+id/edittext_edit_event_startDate" />
+
+            <TextView
+                android:id="@+id/textview_edit_event_label_endtime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/poppins_medium"
+                android:text="Eindtijd"
+                android:textColor="@color/dim_gray_text"
+                app:layout_constraintStart_toStartOf="@+id/edittext_edit_event_endTime"
+                app:layout_constraintTop_toBottomOf="@+id/edittext_edit_event_startTime" />
+
+            <EditText
+                android:id="@+id/edittext_edit_event_endDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_form"
                 android:clickable="true"
                 android:editable="false"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edittext_edit_event_startDate" />
+                android:ems="10"
+                android:fontFamily="@font/poppins_medium"
+                android:inputType="datetime"
+                app:layout_constraintEnd_toEndOf="@+id/edittext_edit_event_startDate"
+                app:layout_constraintStart_toStartOf="@+id/edittext_edit_event_startDate"
+                app:layout_constraintTop_toBottomOf="@+id/textview_edit_event_label_enddate" />
 
 
             <EditText
                 android:id="@+id/edittext_edit_event_endTime"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="15dp"
-                android:ems="10"
-                android:hint="endTime"
-                android:inputType="datetime"
+                android:background="@drawable/edittext_form"
                 android:clickable="true"
                 android:editable="false"
+                android:ems="10"
+                android:fontFamily="@font/poppins_medium"
+                android:inputType="datetime"
+                app:layout_constraintEnd_toEndOf="@+id/edittext_edit_event_startTime"
                 app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintLeft_toRightOf="@+id/textview_edit_event_endDate"
+                app:layout_constraintLeft_toRightOf="@+id/edittext_edit_event_endDate"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edittext_edit_event_startTime" />
+                app:layout_constraintStart_toStartOf="@+id/edittext_edit_event_startTime"
+                app:layout_constraintTop_toBottomOf="@+id/textview_edit_event_label_endtime" />
+
+            <TextView
+                android:id="@+id/textview_edit_event_label_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/poppins_medium"
+                android:text="Categorie"
+                android:textColor="@color/dim_gray_text"
+                app:layout_constraintStart_toStartOf="@+id/imageview_edit_event_category"
+                app:layout_constraintTop_toBottomOf="@+id/edittext_edit_event_endDate" />
 
 
             <com.mikhaellopez.circularimageview.CircularImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/imageview_edit_event_category"
                 android:layout_width="40dp"
                 android:layout_height="41dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp"
                 android:contentDescription="Profile picture"
                 android:paddingTop="@dimen/nav_header_vertical_spacing"
                 app:civ_border="true"
                 app:civ_border_color="#6B6B6B"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textview_edit_event_endDate"
-                android:layout_marginStart="16dp" />
+                app:civ_border_width="2dp"
+                app:layout_constraintStart_toStartOf="@+id/edittext_edit_event_endDate"
+                app:layout_constraintTop_toBottomOf="@+id/textview_edit_event_label_category" />
 
 
             <Spinner
                 android:id="@+id/spinner_edit_event_category"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                app:layout_constraintTop_toBottomOf="@+id/textview_edit_event_endDate"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/poppins_medium"
                 app:layout_constraintLeft_toRightOf="@+id/imageview_edit_event_category"
-                android:layout_marginLeft="24dp" />
+                app:layout_constraintTop_toBottomOf="@+id/textview_edit_event_label_category" />
+
+            <TextView
+                android:id="@+id/textview_edit_event_label_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/poppins_medium"
+                android:text="Beschrijving"
+                android:textColor="@color/dim_gray_text"
+                app:layout_constraintStart_toStartOf="@+id/edittext_edit_event_description"
+                app:layout_constraintTop_toBottomOf="@+id/imageview_edit_event_category" />
 
             <EditText
                 android:id="@+id/edittext_edit_event_description"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:background="@drawable/edittext_form"
                 android:ems="10"
-                android:hint="description"
+                android:fontFamily="@font/poppins_medium"
                 android:inputType="textMultiLine"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageview_edit_event_category" />
+                app:layout_constraintEnd_toEndOf="@+id/edittext_edit_event_endTime"
+                app:layout_constraintStart_toStartOf="@+id/imageview_edit_event_category"
+                app:layout_constraintTop_toBottomOf="@+id/textview_edit_event_label_description" />
 
             <Button
                 android:id="@+id/button_edit_event_save"
-                android:textColor="@color/blue_mid"
-                android:textStyle="bold"
-                android:elevation="2dp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="16dp"
-                android:background="@drawable/button_white_square_big"
+                android:background="@drawable/button_blue_square_big"
                 android:text="@string/add"
+                android:textColor="@color/white"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/edittext_edit_event_description" />
+
+
 
 
         </android.support.constraint.ConstraintLayout>

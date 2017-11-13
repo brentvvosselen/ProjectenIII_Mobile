@@ -187,7 +187,7 @@ public class FinanceFragment extends Fragment {
 
             ((TextView) costCard.findViewById(R.id.textView_card_cost_title)).setText(c.getTitle());
             ((TextView) costCard.findViewById(R.id.textView_card_cost_date)).setText(dateFormat.format(c.getDate()));
-            ((TextView) costCard.findViewById(R.id.textView_card_cost_amount)).setText("€" + String.valueOf(c.getAmount()));
+            ((TextView) costCard.findViewById(R.id.textView_card_cost_amount)).setText("€ " + String.valueOf(c.getAmount()));
             ((TextView) costCard.findViewById(R.id.textView_card_cost_description)).setText(c.getDescription());
 
             container.addView(costCard);
@@ -374,7 +374,6 @@ public class FinanceFragment extends Fragment {
                 Log.i("FOUT", t.getMessage());
 
                 costs.add(c);
-                Log.i("RESPONSE", c.getTitle());
 
                 call.cancel();
             }
