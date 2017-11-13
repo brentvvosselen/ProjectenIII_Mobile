@@ -65,6 +65,7 @@ public class AgendaFragment extends Fragment {
         public void onItemSelected(String id);
         public void onAddItemSelected();
         public void onItemEdit(String eventId);
+        public void onItemDeleted();
     }
 
     @Override
@@ -118,7 +119,7 @@ public class AgendaFragment extends Fragment {
         vTextViewNextDate = content.findViewById(R.id.textview_calendar_next_date);
         vImageViewNextCategory = content.findViewById(R.id.imageview_calendar_next_color);
 
-        CardView vCardViewNext = content.findViewById(R.id.cardview_calendar_next);
+        final CardView vCardViewNext = content.findViewById(R.id.cardview_calendar_next);
         vCardViewNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -149,7 +150,9 @@ public class AgendaFragment extends Fragment {
 
             @Override
             public void onFailure(Call call, Throwable t) {
-                Toast.makeText(getContext(),"call failed",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(),"call failed",Toast.LENGTH_SHORT).show();
+                vCardViewNext.setVisibility(View.GONE);
+                vTextViewNextItem.setText(R.string.no_next_event);
                 call.cancel();
             }
         });
@@ -226,7 +229,7 @@ public class AgendaFragment extends Fragment {
                     vCalendarView.addEvents(parsedEvents);
 
                 }else{
-                    Toast.makeText(getContext(),"events could not be retrieved",Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getContext(),"events could not be retrieved",Toast.LENGTH_SHORT).show();
                 }
             }
 

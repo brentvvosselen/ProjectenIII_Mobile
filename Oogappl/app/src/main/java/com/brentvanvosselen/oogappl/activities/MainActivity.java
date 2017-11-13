@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -312,6 +313,14 @@ public class MainActivity extends AppCompatActivity
         ft.addToBackStack("edit_event");
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         ft.commit();
+    }
+
+    @Override
+    public void onItemDeleted() {
+        FragmentManager fm = getSupportFragmentManager();
+        fm.popBackStack();
+        fm.popBackStack();
+        displaySelectedScreen(R.id.nav_agenda);
     }
 
     private void goToLogin() {

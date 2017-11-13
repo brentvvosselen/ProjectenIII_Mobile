@@ -15,6 +15,9 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -477,6 +480,46 @@ public class AgendaEditItemFragment extends Fragment {
         }
 
         return inflater.inflate(R.layout.fragment_agenda_edit_item,container,false);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_delete,menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.action_delete){
+            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
+            final User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
+
+            Call deleteEvent = apiInterface.deleteEvent(currentUser.getEmail(),itemId);
+            deleteEvent.enqueue(new Callback() {
+                @Override
+                public void onResponse(Call call, Response response) {
+                    if(response.isSuccessful()){
+                        Toast.makeText(getContext(),"Evenement verwijderd",Toast.LENGTH_SHORT).show();
+                        AgendaFragment.OnCalendarItemSelected mCallback = (AgendaFragment.OnCalendarItemSelected)getActivity();
+                        mCallback.onItemDeleted();
+                    }else{
+                        Toast.makeText(getContext(),"Evenement niet verwijderd",Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call call, Throwable t) {
+                    call.cancel();
+                    Toast.makeText(getContext(),"Evenement niet verwijderd",Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+        return true;
     }
 
     private void fillSpinner(){
