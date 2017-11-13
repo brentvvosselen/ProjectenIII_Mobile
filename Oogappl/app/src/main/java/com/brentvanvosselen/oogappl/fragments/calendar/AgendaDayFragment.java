@@ -45,7 +45,7 @@ public class AgendaDayFragment extends Fragment{
     private String dateString;
     private String dayOfWeekString;
 
-    private TextView vTextViewDate, vTextViewDayOfWeek;
+    private TextView vTextViewDate, vTextViewDayOfWeek, vTextViewUpcoming;
 
     private SimpleDateFormat dateFormatForTime = new SimpleDateFormat("HH:mm",Locale.getDefault());
     private SimpleDateFormat dateFormatForDay = new SimpleDateFormat("dd MMMM",Locale.getDefault());
@@ -77,6 +77,7 @@ public class AgendaDayFragment extends Fragment{
 
         vTextViewDate = getView().findViewById(R.id.textview_calendar_day_date);
         vTextViewDayOfWeek = getView().findViewById(R.id.textview_calendar_day_dayOfWeek);
+        vTextViewUpcoming = getView().findViewById(R.id.textview_calendar_day_upcoming);
 
 
         vTextViewDate.setText(dateString);
@@ -92,6 +93,8 @@ public class AgendaDayFragment extends Fragment{
                 if(response.isSuccessful()){
                     events = (List<Event>) response.body();
                     renderLayout();
+                    if(events.size() == 0)
+                        vTextViewUpcoming.setText(R.string.no_events);
 
                 }else{
                     Toast.makeText(getContext(),"Could not retrieve items from " + dateString,Toast.LENGTH_SHORT).show();

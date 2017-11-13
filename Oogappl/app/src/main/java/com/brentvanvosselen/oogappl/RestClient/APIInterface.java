@@ -15,6 +15,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -91,6 +92,7 @@ public interface APIInterface {
     @POST("/api/finance/accept")
     Call<String> acceptFinanceInfo(@Body Parent parent);
 
+<<<<<<< HEAD
     @GET("/api/costs/{email}")
     Call<List<Cost>> getAllCosts(@Path("email") String email);
 
@@ -103,6 +105,10 @@ public interface APIInterface {
     @POST("/api/costs/addCategory/{email}")
     Call<CostCategory> addCategory(@Path("email") String email, @Body CostCategory category);
 
+=======
+    @DELETE("/api/event/delete/{email}/{id}")
+    Call<String> deleteEvent(@Path("email")String email, @Path("id")String id);
+>>>>>>> a413dd632ab88d2716934e748c9e6a6ea9cbb17e
     /*
     Voorbeeld van API call
 
