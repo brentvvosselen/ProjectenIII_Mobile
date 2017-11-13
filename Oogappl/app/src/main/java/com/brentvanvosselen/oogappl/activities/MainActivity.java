@@ -38,14 +38,13 @@ import com.brentvanvosselen.oogappl.fragments.calendar.AgendaDayFragment;
 import com.brentvanvosselen.oogappl.fragments.calendar.AgendaFragment;
 import com.brentvanvosselen.oogappl.fragments.calendar.AgendaItemFragment;
 import com.brentvanvosselen.oogappl.fragments.main.ChildInfoFragment;
-import com.brentvanvosselen.oogappl.fragments.main.FinanceFragment;
+import com.brentvanvosselen.oogappl.fragments.finance.FinanceFragment;
 import com.brentvanvosselen.oogappl.fragments.main.HomeFragment;
 import com.brentvanvosselen.oogappl.fragments.main.ProfileFragment;
 import com.brentvanvosselen.oogappl.util.ObjectSerializer;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -149,7 +148,9 @@ public class MainActivity extends AppCompatActivity
 
                 @Override
                 public void onFailure(Call call, Throwable t) {
-                    Log.i("API event", "Fail to get user");
+                    Log.i("API event", getResources().getString(R.string.geen_verbinding));
+                    sharedPrefs.edit().remove("currentUser").commit();
+                    goToLogin();
                 }
             });
         }

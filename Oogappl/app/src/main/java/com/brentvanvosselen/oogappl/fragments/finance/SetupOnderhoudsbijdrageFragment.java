@@ -1,4 +1,4 @@
-package com.brentvanvosselen.oogappl.fragments.financeSetup;
+package com.brentvanvosselen.oogappl.fragments.finance;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

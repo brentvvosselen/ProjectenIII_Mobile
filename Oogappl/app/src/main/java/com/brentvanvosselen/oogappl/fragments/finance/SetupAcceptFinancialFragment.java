@@ -1,4 +1,4 @@
-package com.brentvanvosselen.oogappl.fragments.financeSetup;
+package com.brentvanvosselen.oogappl.fragments.finance;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.brentvanvosselen.oogappl.R;
 import com.brentvanvosselen.oogappl.RestClient.models.FinInfo;
-import com.brentvanvosselen.oogappl.RestClient.models.FinancialType;
 
 public class SetupAcceptFinancialFragment extends Fragment {
 
@@ -44,7 +43,7 @@ public class SetupAcceptFinancialFragment extends Fragment {
             } else {
                 int maxBedrag = kindrekening.getMaxBedrag();
                 if(maxBedrag > 0) {
-                    infoValue.setText(maxBedrag);
+                    infoValue.setText(Double.toString(maxBedrag));
                 }
             }
 

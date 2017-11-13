@@ -2,6 +2,8 @@ package com.brentvanvosselen.oogappl.RestClient;
 
 import com.brentvanvosselen.oogappl.RestClient.models.Category;
 import com.brentvanvosselen.oogappl.RestClient.models.Child;
+import com.brentvanvosselen.oogappl.RestClient.models.Cost;
+import com.brentvanvosselen.oogappl.RestClient.models.CostCategory;
 import com.brentvanvosselen.oogappl.RestClient.models.Event;
 import com.brentvanvosselen.oogappl.RestClient.models.Group;
 import com.brentvanvosselen.oogappl.RestClient.models.Parent;
@@ -90,8 +92,23 @@ public interface APIInterface {
     @POST("/api/finance/accept")
     Call<String> acceptFinanceInfo(@Body Parent parent);
 
+<<<<<<< HEAD
+    @GET("/api/costs/{email}")
+    Call<List<Cost>> getAllCosts(@Path("email") String email);
+
+    @GET("/api/costs/categories/{email}")
+    Call<List<CostCategory>> getAllCostCategories(@Path("email") String email);
+
+    @POST("/api/costs/addCost/{email}")
+    Call<Cost> addCost(@Path("email") String email, @Body Cost cost);
+
+    @POST("/api/costs/addCategory/{email}")
+    Call<CostCategory> addCategory(@Path("email") String email, @Body CostCategory category);
+
+=======
     @DELETE("/api/event/delete/{email}/{id}")
     Call<String> deleteEvent(@Path("email")String email, @Path("id")String id);
+>>>>>>> a413dd632ab88d2716934e748c9e6a6ea9cbb17e
     /*
     Voorbeeld van API call
 
