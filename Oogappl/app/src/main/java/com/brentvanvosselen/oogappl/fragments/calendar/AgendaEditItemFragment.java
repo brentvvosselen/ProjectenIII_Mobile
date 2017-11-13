@@ -227,7 +227,7 @@ public class AgendaEditItemFragment extends Fragment {
                                         public void onResponse(Call call, Response response) {
                                             if(response.isSuccessful()){
                                                 Toast.makeText(getContext(),"Categorie toegevoegd.",Toast.LENGTH_SHORT).show();
-                                                fillSpinner();
+
                                             }else{
                                                 Toast.makeText(getContext(),"Categorie NIET toegevoegd.",Toast.LENGTH_SHORT).show();
                                             }
@@ -235,7 +235,7 @@ public class AgendaEditItemFragment extends Fragment {
 
                                         @Override
                                         public void onFailure(Call call, Throwable t) {
-                                            Toast.makeText(getContext(),"Kon geen connectie maken met server",Toast.LENGTH_SHORT).show();
+                                            //Toast.makeText(getContext(),"Kon geen connectie maken met server",Toast.LENGTH_SHORT).show();
                                             call.cancel();
                                         }
                                     });
@@ -247,7 +247,12 @@ public class AgendaEditItemFragment extends Fragment {
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     Log.i("event","cancel category");
                                 }
-                            }).show();
+                            }).setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialogInterface) {
+                            fillSpinner();
+                        }
+                    }).show();
                 }else{
                     ColorDrawable color = new ColorDrawable(Color.parseColor(categories.get(i).getColor()));
                     vImageViewCategory.setBackground(color);
@@ -383,7 +388,13 @@ public class AgendaEditItemFragment extends Fragment {
 
                 String title = vEdittextTitle.getText().toString();
                 String description = vEdittextDescription.getText().toString();
-                Category category = categories.get(vSpinnerCategory.getSelectedItemPosition());
+                Category category = null;
+                try{
+                    category = categories.get(vSpinnerCategory.getSelectedItemPosition());
+                }catch(IndexOutOfBoundsException ex){
+                    Toast.makeText(getContext(),"Nog op te lossen bug met toevoegen categorie",Toast.LENGTH_SHORT).show();
+                }
+
                 SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_TIME_FORMAT);
                 Date start = new Date();
                 Date end = new Date();
