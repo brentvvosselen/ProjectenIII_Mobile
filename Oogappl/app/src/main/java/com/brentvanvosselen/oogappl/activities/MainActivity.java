@@ -37,6 +37,7 @@ import com.brentvanvosselen.oogappl.fragments.calendar.AgendaEditItemFragment;
 import com.brentvanvosselen.oogappl.fragments.calendar.AgendaDayFragment;
 import com.brentvanvosselen.oogappl.fragments.calendar.AgendaFragment;
 import com.brentvanvosselen.oogappl.fragments.calendar.AgendaItemFragment;
+import com.brentvanvosselen.oogappl.fragments.heenenweer.HeenEnWeerFragment;
 import com.brentvanvosselen.oogappl.fragments.main.ChildInfoFragment;
 import com.brentvanvosselen.oogappl.fragments.finance.FinanceFragment;
 import com.brentvanvosselen.oogappl.fragments.main.HomeFragment;
@@ -224,6 +225,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_finance:
                 fragment = new FinanceFragment();
+                break;
+            case R.id.nav_heenenweer:
+                fragment = new HeenEnWeerFragment();
                 break;
         }
 
