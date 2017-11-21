@@ -52,7 +52,7 @@ public class FinanceFragment extends Fragment {
 
     private User currentUser;
     private Parent parent;
-    private List<Cost> costs;
+    private List<Cost> costs = new ArrayList<>();
     private CardView vCardSetup;
     private List<CostCategory> categories;
     private List<String> categorieNames;
