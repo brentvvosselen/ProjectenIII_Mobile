@@ -103,7 +103,7 @@ public interface APIInterface {
 
     @POST("/api/costs/addCategory/{email}")
     Call<CostCategory> addCategory(@Path("email") String email, @Body CostCategory category);
-    
+
     @DELETE("/api/event/delete/{email}/{id}")
     Call<String> deleteEvent(@Path("email")String email, @Path("id")String id);
     /*

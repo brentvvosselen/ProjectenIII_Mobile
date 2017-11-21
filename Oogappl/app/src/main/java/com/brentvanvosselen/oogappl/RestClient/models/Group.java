@@ -16,6 +16,8 @@ public class Group implements Serializable {
     @SerializedName("finance")
     @Expose
     private FinInfo finType;
+    @SerializedName("heenEnWeerBoekjes")
+    private HeenEnWeerBoek[] books;
 
     public Group(String id, Child[] children, FinInfo finType) {
         this.id = id;
@@ -37,6 +39,10 @@ public class Group implements Serializable {
 
     public void setFinType(FinInfo info) {
         this.finType = info;
+    }
+
+    public HeenEnWeerBoek[] getBooks() {
+        return books;
     }
 
     public boolean parentHasAccepted(Parent p) {

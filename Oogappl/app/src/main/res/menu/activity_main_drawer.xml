@@ -15,6 +15,10 @@
             android:icon="@raw/ic_agenda"
             android:title="@string/agenda" />
         <item
+            android:id="@+id/nav_heenenweer"
+            android:icon="@drawable/ic_heenenweer"
+            android:title="@string/heenenweer"/>
+        <item
             android:id="@+id/nav_finance"
             android:icon="@raw/ic_wallet"
             android:title="@string/finance" />
