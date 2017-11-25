@@ -50,7 +50,7 @@ public class SetupAcceptFinancialFragment extends Fragment {
         } else if(this.info.getType().equals("onderhoudsbijdrage")) {
             FinInfo.Onderhoudsbijdrage onderhoudsbijdrage = this.info.getOnderhoudsbijdrage();
             infoTitle.setText(getResources().getString(R.string.bijdrage_percentage_kort) + ":");
-            infoValue.setText(onderhoudsbijdrage.getPercentage());
+//            infoValue.setText(onderhoudsbijdrage.getPercentage());
 
         } else {
             Log.i("FINTYPE ACCEPT", "VERKEERD TYPE");
