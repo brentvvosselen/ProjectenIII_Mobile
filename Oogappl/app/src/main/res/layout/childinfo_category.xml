@@ -58,7 +58,7 @@
                 android:scaleType="fitXY"
                 app:layout_constraintRight_toLeftOf="@+id/imageButton_category_edit"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_remove_circle" />
+                app:srcCompat="@drawable/ic_remove" />
 
         </android.support.constraint.ConstraintLayout>
 

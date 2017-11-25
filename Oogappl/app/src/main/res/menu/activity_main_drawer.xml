@@ -4,15 +4,15 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-            android:icon="@raw/ic_home"
+            android:icon="@drawable/ic_home"
             android:title="@string/home" />
         <item
             android:id="@+id/nav_childInfo"
-            android:icon="@raw/ic_info"
+            android:icon="@drawable/ic_info"
             android:title="@string/childinfo" />
         <item
             android:id="@+id/nav_agenda"
-            android:icon="@raw/ic_agenda"
+            android:icon="@drawable/ic_agenda"
             android:title="@string/agenda" />
         <item
             android:id="@+id/nav_heenenweer"
@@ -20,7 +20,7 @@
             android:title="@string/heenenweer"/>
         <item
             android:id="@+id/nav_finance"
-            android:icon="@raw/ic_wallet"
+            android:icon="@drawable/ic_wallet"
             android:title="@string/finance" />
     </group>
 
