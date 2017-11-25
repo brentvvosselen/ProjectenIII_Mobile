@@ -74,6 +74,7 @@ public class AgendaEditItemFragment extends Fragment {
     private String itemId = null;
 
     APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
+    SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
 
     EditText vEdittextTitle, vEdittextDescription, vEdittextStartDate, vEdittextEndDate, vEdittextStartTime, vEdittextEndTime;
     Button vButtonSave;
@@ -120,7 +121,7 @@ public class AgendaEditItemFragment extends Fragment {
         }
         //get event
         if(itemId != null){
-            Call itemCall = apiInterface.getEvent(itemId);
+            Call itemCall = apiInterface.getEvent("bearer " + sharedPreferences.getString("token",null), itemId);
             itemCall.enqueue(new Callback() {
                 @Override
                 public void onResponse(Call call, Response response) {
@@ -169,7 +170,7 @@ public class AgendaEditItemFragment extends Fragment {
 
 
 
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
+        final SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
         final User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
 
 
@@ -223,7 +224,7 @@ public class AgendaEditItemFragment extends Fragment {
                                     Log.i("event","add category");
                                     Category newCategory = new Category(vEdittextAddCategoryType.getText().toString(), currentColor);
 
-                                    Call addCategoryCall = apiInterface.addCategory(currentUser.getEmail(),newCategory);
+                                    Call addCategoryCall = apiInterface.addCategory("bearer " + sharedPreferences.getString("token",null), currentUser.getEmail(),newCategory);
                                     addCategoryCall.enqueue(new Callback() {
                                         @Override
                                         public void onResponse(Call call, Response response) {
@@ -429,7 +430,7 @@ public class AgendaEditItemFragment extends Fragment {
                 Event newEvent = new Event(title,start,end,description,category);
                 if(itemId != null){
                     //edit event
-                    Call editEventCall = apiInterface.editEvent(itemId,newEvent);
+                    Call editEventCall = apiInterface.editEvent("bearer " + sharedPreferences.getString("token",null), itemId,newEvent);
                     editEventCall.enqueue(new Callback() {
                         @Override
                         public void onResponse(Call call, Response response) {
@@ -448,7 +449,7 @@ public class AgendaEditItemFragment extends Fragment {
                     });
                 }else{
                     //add event
-                    Call addEventCall = apiInterface.addEvent(currentUser.getEmail(),newEvent);
+                    Call addEventCall = apiInterface.addEvent("bearer " + sharedPreferences.getString("token",null), currentUser.getEmail(),newEvent);
                     addEventCall.enqueue(new Callback() {
                         @Override
                         public void onResponse(Call call, Response response) {
@@ -509,10 +510,9 @@ public class AgendaEditItemFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.action_delete){
-            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
             final User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
 
-            Call deleteEvent = apiInterface.deleteEvent(currentUser.getEmail(),itemId);
+            Call deleteEvent = apiInterface.deleteEvent("bearer " + sharedPreferences.getString("token",null), currentUser.getEmail(),itemId);
             deleteEvent.enqueue(new Callback() {
                 @Override
                 public void onResponse(Call call, Response response) {
@@ -537,11 +537,10 @@ public class AgendaEditItemFragment extends Fragment {
 
     private void fillSpinner(){
 
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
         final User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
 
 
-        Call categoriesCall = apiInterface.getCategoriesFromUser(currentUser.getEmail());
+        Call categoriesCall = apiInterface.getCategoriesFromUser("bearer " + sharedPreferences.getString("token",null), currentUser.getEmail());
         categoriesCall.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {

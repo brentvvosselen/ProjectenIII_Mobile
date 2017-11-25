@@ -36,12 +36,18 @@ public class HomeFragment extends Fragment {
 
     private Parent parent;
 
+    SharedPreferences sharedPreferences;
+
+
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         TextView title = getActivity().findViewById(getResources().getIdentifier("action_bar_title", "id", getActivity().getPackageName()));
         title.setText(R.string.home);
+
+        sharedPreferences = getContext().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
 
         Button vButtonSetup = getView().findViewById(R.id.button_home_setup);
         vButtonSetup.setOnClickListener(new View.OnClickListener() {
@@ -53,10 +59,9 @@ public class HomeFragment extends Fragment {
         });
 
         //Indien de gebruiker de setup nog niet doorlopen heeft, krijgt hij dit kaartje te zien
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
         User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
         Log.i("API:", currentUser.getEmail());
-        Call call = RetrofitClient.getClient().create(APIInterface.class).getParentByEmail(currentUser.getEmail());
+        Call call = RetrofitClient.getClient().create(APIInterface.class).getParentByEmail("bearer "+ sharedPreferences.getString("token",null),currentUser.getEmail());
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
@@ -91,10 +96,9 @@ public class HomeFragment extends Fragment {
         vCardSetup.setVisibility(View.INVISIBLE);
 
         //Indien de gebruiker de setup nog niet doorlopen heeft, krijgt hij dit kaartje te zien
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
         User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
 
-        Call call = RetrofitClient.getClient().create(APIInterface.class).getParentByEmail(currentUser.getEmail());
+        Call call = RetrofitClient.getClient().create(APIInterface.class).getParentByEmail("bearer "+ sharedPreferences.getString("token",null),currentUser.getEmail());
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {

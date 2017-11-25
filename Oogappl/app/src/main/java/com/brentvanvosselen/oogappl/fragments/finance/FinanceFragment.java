@@ -59,6 +59,9 @@ public class FinanceFragment extends Fragment {
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
+    APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
+    SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -70,7 +73,7 @@ public class FinanceFragment extends Fragment {
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
         currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
-        Call call = RetrofitClient.getClient().create(APIInterface.class).getParentByEmail(currentUser.getEmail());
+        Call call = RetrofitClient.getClient().create(APIInterface.class).getParentByEmail("bearer "+ sharedPreferences.getString("token",null),currentUser.getEmail());
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
@@ -107,7 +110,7 @@ public class FinanceFragment extends Fragment {
             }
         });
 
-        Call call2 = RetrofitClient.getClient().create(APIInterface.class).getAllCostCategories(currentUser.getEmail());
+        Call call2 = apiInterface.getAllCostCategories("bearer " + sharedPreferences.getString("token",null), currentUser.getEmail());
         call2.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
@@ -159,7 +162,7 @@ public class FinanceFragment extends Fragment {
         vCardSetup.setVisibility(View.GONE);
         setHasOptionsMenu(true);
 
-        Call call = RetrofitClient.getClient().create(APIInterface.class).getAllCosts(currentUser.getEmail());
+        Call call = apiInterface.getAllCosts("bearer " + sharedPreferences.getString("token",null), currentUser.getEmail());
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
@@ -328,7 +331,7 @@ public class FinanceFragment extends Fragment {
 
     private void addCat(String catTitle) {
         CostCategory cat = new CostCategory(catTitle);
-        Call call = RetrofitClient.getClient().create(APIInterface.class).addCategory(currentUser.getEmail(), cat);
+        Call call = apiInterface.addCategory("bearer " + sharedPreferences.getString("token",null), currentUser.getEmail(), cat);
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
@@ -353,7 +356,7 @@ public class FinanceFragment extends Fragment {
     }
 
     private void addCost(final Cost c) {
-        Call call = RetrofitClient.getClient().create(APIInterface.class).addCost(currentUser.getEmail(), c);
+        Call call = apiInterface.addCost("bearer " + sharedPreferences.getString("token",null), currentUser.getEmail(), c);
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {

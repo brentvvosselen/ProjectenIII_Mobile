@@ -1,5 +1,7 @@
 package com.brentvanvosselen.oogappl.fragments.heenenweer;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -41,6 +43,9 @@ public class HeenEnWeerDayFragment extends Fragment {
     //dateformat
     private SimpleDateFormat dateFormat= new SimpleDateFormat("dd MMMM yyyy",Locale.getDefault());
 
+    APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
+    SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
+
 
     public static HeenEnWeerDayFragment newInstance(String dayId){
         HeenEnWeerDayFragment fragment = new HeenEnWeerDayFragment();
@@ -67,7 +72,7 @@ public class HeenEnWeerDayFragment extends Fragment {
         vLinearLayoutItems = getView().findViewById(R.id.linearlayout_heenenweer_day_items);
 
         //get day
-        Call dayCall = RetrofitClient.getClient().create(APIInterface.class).getHeenEnWeerDay(dayId);
+        Call dayCall = apiInterface.getHeenEnWeerDay("bearer " + sharedPreferences.getString("token",null), dayId);
         dayCall.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {

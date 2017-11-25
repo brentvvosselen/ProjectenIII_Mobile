@@ -39,6 +39,7 @@ import retrofit2.Response;
 public class AgendaDayFragment extends Fragment{
 
     private APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
+    SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
 
     private Date dateShown;
     private Calendar mCalendar = Calendar.getInstance();
@@ -83,10 +84,9 @@ public class AgendaDayFragment extends Fragment{
         vTextViewDate.setText(dateString);
         vTextViewDayOfWeek.setText(dayOfWeekString);
 
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
         User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
 
-        Call itemsCall = apiInterface.getEventsFromDate(currentUser.getEmail(),dateShown);
+        Call itemsCall = apiInterface.getEventsFromDate("bearer " + sharedPreferences.getString("token",null), currentUser.getEmail(),dateShown);
         itemsCall.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {

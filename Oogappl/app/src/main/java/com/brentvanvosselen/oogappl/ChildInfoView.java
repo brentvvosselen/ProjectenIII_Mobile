@@ -1,6 +1,7 @@
 package com.brentvanvosselen.oogappl;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -33,6 +34,9 @@ public class ChildInfoView extends ScrollView {
 
     private Child[] children = new Child[0];
     private int selectedChild = 0;
+
+    APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
+    SharedPreferences sharedPreferences = getContext().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
 
     public ChildInfoView(Context context) {
         super(context);
@@ -189,7 +193,7 @@ public class ChildInfoView extends ScrollView {
 
     private void saveChanges() {
         for (Child c : children) {
-            Call call = RetrofitClient.getClient().create(APIInterface.class).saveChild(c);
+            Call call = apiInterface.saveChild("bearer " + sharedPreferences.getString("token",null), c);
             call.enqueue(new Callback() {
                 @Override
                 public void onResponse(Call call, Response response) {

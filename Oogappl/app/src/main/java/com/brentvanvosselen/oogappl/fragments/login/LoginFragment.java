@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.brentvanvosselen.oogappl.RestClient.models.Parent;
 import com.brentvanvosselen.oogappl.fragments.login.RegisterFragment;
 import com.brentvanvosselen.oogappl.util.ObjectSerializer;
 import com.brentvanvosselen.oogappl.activities.MainActivity;
@@ -25,6 +26,9 @@ import com.brentvanvosselen.oogappl.R;
 import com.brentvanvosselen.oogappl.RestClient.APIInterface;
 import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
 import com.brentvanvosselen.oogappl.RestClient.models.User;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -111,6 +115,13 @@ public class LoginFragment extends Fragment {
             public void onResponse(Call call, Response response) {
                 if(response.isSuccessful()) {
                     Log.i("LOGIN", "SUCCESS");
+
+                    Parent p = (Parent)response.body();
+                    Log.i("VALUE",p.getToken());
+                    SharedPreferences sharedPreferences = getContext().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
+                    sharedPreferences.edit().putString("token",p.getToken()).apply();
+
+
                     Intent intent = new Intent(activity, MainActivity.class);
                     intent.putExtra("currentUser", (Parcelable) u);
                     saveUser(u);

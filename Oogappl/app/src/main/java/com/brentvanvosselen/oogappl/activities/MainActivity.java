@@ -129,7 +129,8 @@ public class MainActivity extends AppCompatActivity
         if(currentUser!=null){
             final TextView vTextViewProfileName = headerView.findViewById(R.id.profile_name);
             final TextView vTextViewProfileType = headerView.findViewById(R.id.profile_type);
-            Call call = apiInterface.getParentByEmail(currentUser.getEmail());
+            SharedPreferences sharedPreferences = this.getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
+            Call call = apiInterface.getParentByEmail("bearer " + sharedPreferences.getString("token",null), currentUser.getEmail());
             call.enqueue(new Callback() {
                 @Override
                 public void onResponse(Call call, Response response) {

@@ -1,7 +1,9 @@
 package com.brentvanvosselen.oogappl.fragments.main;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -37,6 +39,9 @@ public class ChildInfoEditFragment extends Fragment {
 
     private Child child;
     private ChildinfoCategory category;
+
+    APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
+    SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -104,7 +109,7 @@ public class ChildInfoEditFragment extends Fragment {
     private void saveChanges() {
         child.updateCategory(category);
 
-        Call call = RetrofitClient.getClient().create(APIInterface.class).updateChild(child);
+        Call call = apiInterface.updateChild("bearer " + sharedPreferences.getString("token",null), child);
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {

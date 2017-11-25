@@ -57,6 +57,8 @@ public class HeenEnWeerItemEditFragment extends Fragment{
 
 
     APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
+    SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
+
     private User currentUser;
 
 
@@ -87,7 +89,7 @@ public class HeenEnWeerItemEditFragment extends Fragment{
         //set title
         final TextView title = getActivity().findViewById(getResources().getIdentifier("action_bar_title", "id", getActivity().getPackageName()));
         //get current user
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
+        final SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
 
         currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
 
@@ -157,7 +159,7 @@ public class HeenEnWeerItemEditFragment extends Fragment{
                                     Log.i("event","add category");
                                     Category newCategory = new Category(vEdittextAddCategoryType.getText().toString(), currentColor);
 
-                                    Call addCategoryCall = apiInterface.addCategory(currentUser.getEmail(),newCategory);
+                                    Call addCategoryCall = apiInterface.addCategory("bearer " + sharedPreferences.getString("token",null), currentUser.getEmail(),newCategory);
                                     addCategoryCall.enqueue(new Callback() {
                                         @Override
                                         public void onResponse(Call call, Response response) {
@@ -218,7 +220,7 @@ public class HeenEnWeerItemEditFragment extends Fragment{
                     if(item != null){
                         item.setCategory(category);
                         item.setValue(value);
-                        Call editHeenEnWeerItemCall = apiInterface.editHeenEnWeerItem(item.getId(),item);
+                        Call editHeenEnWeerItemCall = apiInterface.editHeenEnWeerItem("bearer " + sharedPreferences.getString("token",null), item.getId(),item);
                         editHeenEnWeerItemCall.enqueue(new Callback() {
                             @Override
                             public void onResponse(Call call, Response response) {
@@ -237,7 +239,7 @@ public class HeenEnWeerItemEditFragment extends Fragment{
                         });
                     }else{
                         item = new HeenEnWeerItem(category,value);
-                        Call addHeenEnWeerItemCall = apiInterface.addHeenEnWeerItem(dayid,item);
+                        Call addHeenEnWeerItemCall = apiInterface.addHeenEnWeerItem("bearer " + sharedPreferences.getString("token",null), dayid,item);
                         addHeenEnWeerItemCall.enqueue(new Callback() {
                             @Override
                             public void onResponse(Call call, Response response) {
@@ -297,7 +299,7 @@ public class HeenEnWeerItemEditFragment extends Fragment{
 
 
     private void fillSpinner(){
-        Call categoriesCall = apiInterface.getCategoriesFromUser(currentUser.getEmail());
+        Call categoriesCall = apiInterface.getCategoriesFromUser("bearer " + sharedPreferences.getString("token",null), currentUser.getEmail());
         categoriesCall.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {

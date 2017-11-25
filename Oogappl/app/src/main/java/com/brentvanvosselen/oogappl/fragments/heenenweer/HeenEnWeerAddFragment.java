@@ -55,6 +55,7 @@ public class HeenEnWeerAddFragment extends Fragment{
     private Calendar myCalendar = Calendar.getInstance();
 
     private APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
+    SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
 
     private User currentUser;
 
@@ -67,7 +68,7 @@ public class HeenEnWeerAddFragment extends Fragment{
         TextView title = getActivity().findViewById(getResources().getIdentifier("action_bar_title", "id", getActivity().getPackageName()));
         title.setText(R.string.add);
 
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
+        final SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
         currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
 
         vEdittextDate = getView().findViewById(R.id.edittext_heenenweer_add_date);
@@ -103,7 +104,7 @@ public class HeenEnWeerAddFragment extends Fragment{
             }
         });
 
-        Call parentCall = apiInterface.getParentByEmail(currentUser.getEmail());
+        Call parentCall = apiInterface.getParentByEmail("bearer "+ sharedPreferences.getString("token",null),currentUser.getEmail());
         parentCall.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
@@ -143,7 +144,7 @@ public class HeenEnWeerAddFragment extends Fragment{
                 }
                 if(correctform){
                     HeenEnWeerDag newDay = new HeenEnWeerDag(day,description,child);
-                    Call addDayCall = apiInterface.addHeenEnWeerDay(newDay);
+                    Call addDayCall = apiInterface.addHeenEnWeerDay("bearer " + sharedPreferences.getString("token",null), newDay);
                     addDayCall.enqueue(new Callback() {
                         @Override
                         public void onResponse(Call call, Response response) {

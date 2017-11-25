@@ -59,6 +59,9 @@ public class ChildInfoFragment extends Fragment {
     private Parent parent;
     private int selectedChild;
 
+    APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
+    SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
+
     private ViewGroup main;
 
     EditText vEdittextBirthdate;
@@ -186,17 +189,16 @@ public class ChildInfoFragment extends Fragment {
 
                             final Child child = new Child(firstname, lastname, gender, birthdate);
                             //get user from localstorage
-                            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
                             User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser", null));
                             //create call to save child if correctform
                             if(correctform) {
-                                Call callUser = RetrofitClient.getClient().create(APIInterface.class).getParentByEmail(currentUser.getEmail());
+                                Call callUser = apiInterface.getParentByEmail("bearer "+ sharedPreferences.getString("token",null),currentUser.getEmail());
                                 callUser.enqueue(new Callback() {
                                     @Override
                                     public void onResponse(Call call, Response response) {
                                         if (response.isSuccessful()) {
                                             Parent parent = (Parent) response.body();
-                                            Call callChild = RetrofitClient.getClient().create(APIInterface.class).addChild(parent.getId(), child);
+                                            Call callChild = apiInterface.addChild("bearer " + sharedPreferences.getString("token",null), parent.getId(), child);
                                             callChild.enqueue(new Callback() {
                                                 @Override
                                                 public void onResponse(Call call, Response response) {
@@ -254,7 +256,7 @@ public class ChildInfoFragment extends Fragment {
     private void initFragment() {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
         User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser", null));
-        Call call = RetrofitClient.getClient().create(APIInterface.class).getParentByEmail(currentUser.getEmail());
+        Call call = RetrofitClient.getClient().create(APIInterface.class).getParentByEmail("bearer "+ sharedPreferences.getString("token",null),currentUser.getEmail());
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
@@ -400,7 +402,7 @@ public class ChildInfoFragment extends Fragment {
     }
 
     private void saveChanges() {
-        Call call = RetrofitClient.getClient().create(APIInterface.class).updateChild(parent.getChildren()[selectedChild]);
+        Call call = apiInterface.updateChild("bearer " + sharedPreferences.getString("token",null), parent.getChildren()[selectedChild]);
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {

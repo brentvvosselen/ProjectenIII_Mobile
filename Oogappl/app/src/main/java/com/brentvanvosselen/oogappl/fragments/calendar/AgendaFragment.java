@@ -42,6 +42,7 @@ import retrofit2.Response;
 public class AgendaFragment extends Fragment {
 
     private APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
+    SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
     private final Calendar mCalendar = Calendar.getInstance();
 
 
@@ -128,10 +129,9 @@ public class AgendaFragment extends Fragment {
             }
         });
 
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
         User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
 
-        Call nextItemCall = apiInterface.getNextEvent(currentUser.getEmail());
+        Call nextItemCall = apiInterface.getNextEvent("bearer " + sharedPreferences.getString("token",null), currentUser.getEmail());
         nextItemCall.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
@@ -198,11 +198,10 @@ public class AgendaFragment extends Fragment {
         Calendar c = Calendar.getInstance();
 
         //get current user
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
         User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
 
         //get events
-        Call call = apiInterface.getEvents(currentUser.getEmail());
+        Call call = apiInterface.getEvents("bearer " + sharedPreferences.getString("token",null), currentUser.getEmail());
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {

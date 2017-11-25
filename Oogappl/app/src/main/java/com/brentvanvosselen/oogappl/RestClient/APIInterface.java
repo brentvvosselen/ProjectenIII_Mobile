@@ -20,6 +20,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -39,7 +40,7 @@ public interface APIInterface {
     Call<List<Parent>> doGetParents();
 
     @POST("/api/parents")
-    Call<Parent> createParent(@Body Parent p);
+    Call<Parent> createParent(@Header("authorization") String token, @Body Parent p);
 
     @POST("/api/signup")
     Call<User> createUser(@Body User u);
@@ -48,82 +49,82 @@ public interface APIInterface {
     Call<Parent> loginUser(@Body User u);
 
     @GET("/api/parents/{email}")
-    Call<Parent> getParentByEmail(@Path("email") String email);
+    Call<Parent> getParentByEmail(@Header("authorization") String token, @Path("email") String email);
 
     @POST("/api/parents/edit")
-    Call<Parent> saveProfile(@Body Parent p);
+    Call<Parent> saveProfile(@Header("authorization") String token, @Body Parent p);
 
     @POST("/api/children/update")
-    Call<Child> saveChild(@Body Child c);
+    Call<Child> saveChild(@Header("authorization") String token, @Body Child c);
 
     @POST("/api/setup")
-    Call<String> completeSetup(@Body SetupValues s);
+    Call<String> completeSetup(@Header("authorization") String token, @Body SetupValues s);
 
     @POST("/api/child/{id}")
-    Call<Child> addChild(@Path("id") String id, @Body Child child);
+    Call<Child> addChild(@Header("authorization") String token, @Path("id") String id, @Body Child child);
 
     @POST("/api/children/update")
-    Call<Child> updateChild(@Body Child child);
+    Call<Child> updateChild(@Header("authorization") String token, @Body Child child);
 
     @GET("/api/calendar/getall/{email}")
-    Call<List<Event>> getEvents(@Path("email") String email);
+    Call<List<Event>> getEvents(@Header("authorization") String token, @Path("email") String email);
 
     @GET("/api/calendar/event/next/{email}")
-    Call<Event> getNextEvent(@Path("email") String email);
+    Call<Event> getNextEvent(@Header("authorization") String token, @Path("email") String email);
 
     @GET("/api/calendar/event/{id}")
-    Call<Event> getEvent(@Path("id") String id);
+    Call<Event> getEvent(@Header("authorization") String token, @Path("id") String id);
 
     @GET("/api/calendar/event/date/{email}/{date}")
-    Call<List<Event>> getEventsFromDate(@Path("email")String email, @Path("date")Date date);
+    Call<List<Event>> getEventsFromDate(@Header("authorization") String token, @Path("email")String email, @Path("date")Date date);
 
     @GET("/api/category/{email}")
-    Call<List<Category>> getCategoriesFromUser(@Path("email")String email);
+    Call<List<Category>> getCategoriesFromUser(@Header("authorization") String token, @Path("email")String email);
 
     @POST("/api/category/add/{email}")
-    Call<String> addCategory(@Path("email") String email, @Body Category category);
+    Call<String> addCategory(@Header("authorization") String token, @Path("email") String email, @Body Category category);
 
     @POST("/api/calendar/event/add/{email}")
-    Call<String> addEvent(@Path("email") String email, @Body Event event);
+    Call<String> addEvent(@Header("authorization") String token, @Path("email") String email, @Body Event event);
 
     @PUT("/api/calendar/event/edit/{id}")
-    Call<String> editEvent(@Path("id")String id, @Body Event event);
+    Call<String> editEvent(@Header("authorization") String token, @Path("id")String id, @Body Event event);
 
     @POST("/api/finance")
-    Call<Group> addFinanceInfo(@Body Group group);
+    Call<Group> addFinanceInfo(@Header("authorization") String token, @Body Group group);
 
     @POST("/api/finance/accept")
-    Call<String> acceptFinanceInfo(@Body Parent parent);
+    Call<String> acceptFinanceInfo(@Header("authorization") String token, @Body Parent parent);
 
     @GET("/api/costs/{email}")
-    Call<List<Cost>> getAllCosts(@Path("email") String email);
+    Call<List<Cost>> getAllCosts(@Header("authorization") String token, @Path("email") String email);
 
     @GET("/api/costs/categories/{email}")
-    Call<List<CostCategory>> getAllCostCategories(@Path("email") String email);
+    Call<List<CostCategory>> getAllCostCategories(@Header("authorization") String token, @Path("email") String email);
 
     @POST("/api/costs/addCost/{email}")
-    Call<Cost> addCost(@Path("email") String email, @Body Cost cost);
+    Call<Cost> addCost(@Header("authorization") String token, @Path("email") String email, @Body Cost cost);
 
     @POST("/api/costs/addCategory/{email}")
-    Call<CostCategory> addCategory(@Path("email") String email, @Body CostCategory category);
+    Call<CostCategory> addCategory(@Header("authorization") String token, @Path("email") String email, @Body CostCategory category);
 
     @DELETE("/api/event/delete/{email}/{id}")
-    Call<String> deleteEvent(@Path("email")String email, @Path("id")String id);
+    Call<String> deleteEvent(@Header("authorization") String token, @Path("email")String email, @Path("id")String id);
 
     @GET("/api/heenenweer/getAll/{email}")
-    Call<HeenEnWeerBoek[]> getAllBooks(@Path("email") String email);
+    Call<HeenEnWeerBoek[]> getAllBooks(@Header("authorization") String token, @Path("email") String email);
 
     @GET("/api/heenenweer/day/{id}")
-    Call<HeenEnWeerDag> getHeenEnWeerDay(@Path("id")String id);
+    Call<HeenEnWeerDag> getHeenEnWeerDay(@Header("authorization") String token, @Path("id")String id);
 
     @PUT("/api/heenenweer/item/edit/{id}")
-    Call<String> editHeenEnWeerItem(@Path("id")String id, @Body HeenEnWeerItem item);
+    Call<String> editHeenEnWeerItem(@Header("authorization") String token, @Path("id")String id, @Body HeenEnWeerItem item);
 
     @POST("/api/heenenweer/item/add/{dayid}")
-    Call<String> addHeenEnWeerItem(@Path("dayid")String id, @Body HeenEnWeerItem item);
+    Call<String> addHeenEnWeerItem(@Header("authorization") String token, @Path("dayid")String id, @Body HeenEnWeerItem item);
 
     @POST("/api/heenenweer/day/add")
-    Call<String> addHeenEnWeerDay(@Body HeenEnWeerDag item);
+    Call<String> addHeenEnWeerDay(@Header("authorization") String token, @Body HeenEnWeerDag item);
     /*
     Voorbeeld van API call
 

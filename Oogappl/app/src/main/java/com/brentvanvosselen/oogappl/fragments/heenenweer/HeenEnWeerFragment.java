@@ -52,6 +52,9 @@ public class HeenEnWeerFragment extends Fragment {
     private RecyclerView recyclerView;
     private DaysAdapter mAdapter;
 
+    APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
+    SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
+
     public interface OnHeenEnWeerAction{
         public void showDay(String id);
         public void onEditItem(HeenEnWeerItem id);
@@ -66,10 +69,9 @@ public class HeenEnWeerFragment extends Fragment {
         TextView title = getActivity().findViewById(getResources().getIdentifier("action_bar_title", "id", getActivity().getPackageName()));
         title.setText(R.string.heenenweer);
 
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
         User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
 
-        final Call booksCall = RetrofitClient.getClient().create(APIInterface.class).getAllBooks(currentUser.getEmail());
+        final Call booksCall = apiInterface.getAllBooks("bearer " + sharedPreferences.getString("token",null), currentUser.getEmail());
         booksCall.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
