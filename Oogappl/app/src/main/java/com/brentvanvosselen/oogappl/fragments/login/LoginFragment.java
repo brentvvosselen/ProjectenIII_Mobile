@@ -37,6 +37,8 @@ import retrofit2.Response;
 public class LoginFragment extends Fragment {
 
     private APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
+    private SharedPreferences sharedPreferences;
+
     private String registerEmail;
 
     private TextView vTextViewRegister;
@@ -49,6 +51,8 @@ public class LoginFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
 
         final View content = getView();
         activity = (AppCompatActivity) getActivity();
@@ -118,7 +122,7 @@ public class LoginFragment extends Fragment {
 
                     Parent p = (Parent)response.body();
                     Log.i("VALUE",p.getToken());
-                    SharedPreferences sharedPreferences = getContext().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
+
                     sharedPreferences.edit().putString("token",p.getToken()).apply();
 
 

@@ -74,7 +74,7 @@ public class AgendaEditItemFragment extends Fragment {
     private String itemId = null;
 
     APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
-    SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
+    SharedPreferences sharedPreferences;
 
     EditText vEdittextTitle, vEdittextDescription, vEdittextStartDate, vEdittextEndDate, vEdittextStartTime, vEdittextEndTime;
     Button vButtonSave;
@@ -104,6 +104,8 @@ public class AgendaEditItemFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
 
         final Calendar myCalendar = Calendar.getInstance();
 

@@ -55,7 +55,7 @@ public class HeenEnWeerAddFragment extends Fragment{
     private Calendar myCalendar = Calendar.getInstance();
 
     private APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
-    SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
+    SharedPreferences sharedPreferences;
 
     private User currentUser;
 
@@ -64,6 +64,8 @@ public class HeenEnWeerAddFragment extends Fragment{
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
 
         TextView title = getActivity().findViewById(getResources().getIdentifier("action_bar_title", "id", getActivity().getPackageName()));
         title.setText(R.string.add);

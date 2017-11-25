@@ -31,7 +31,7 @@ import retrofit2.Response;
 
 public class ProfileEditFragment extends Fragment {
     private APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
-    SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
+    SharedPreferences sharedPreferences;
 
     //declare the editTexts
     private EditText vEditTextStreet, vEditTextNumber, vEditTextPostalcode, vEditTextCity, vEditTextTelNumber, vEditTextWorkName, vEditTextWorkTelNumber;
@@ -40,6 +40,8 @@ public class ProfileEditFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
 
         TextView title = getActivity().findViewById(getResources().getIdentifier("action_bar_title", "id", getActivity().getPackageName()));
         title.setText(R.string.edit);

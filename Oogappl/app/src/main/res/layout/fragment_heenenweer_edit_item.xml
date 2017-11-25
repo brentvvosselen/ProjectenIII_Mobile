@@ -58,6 +58,7 @@
                 android:inputType="textMultiLine"
                 android:scrollbars="vertical"
                 android:padding="10dp"
+                android:gravity="top|left"
                 app:layout_constraintBottom_toTopOf="@+id/button_heenenweer_item_edit_save"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
