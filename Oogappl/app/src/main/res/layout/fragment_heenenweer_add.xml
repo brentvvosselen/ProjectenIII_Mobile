@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textview_heenenweer_add_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/poppins_medium"
+        android:text="@string/add"
+        android:textAllCaps="true"
+        android:textSize="32sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/spinner_heenenweer_add_child"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textview_heenenweer_add_title" />
+
+    <EditText
+        android:id="@+id/edittext_heenenweer_add_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/edittext_form"
+        android:ems="10"
+        android:inputType="date"
+        android:hint="@string/Date"
+        android:editable="false"
+        android:clickable="true"
+        app:layout_constraintStart_toStartOf="@+id/spinner_heenenweer_add_child"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_heenenweer_add_child" />
+
+    <EditText
+        android:id="@+id/edittext_heenenweer_add_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/edittext_form"
+        android:ems="10"
+        android:hint="@string/description"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="@+id/edittext_heenenweer_add_date"
+        app:layout_constraintTop_toBottomOf="@+id/edittext_heenenweer_add_date" />
+
+    <Button
+        android:id="@+id/button_heenenweer_add_save"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/button_blue_square_big"
+        android:text="@string/add"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edittext_heenenweer_add_description" />
+
+
+</android.support.constraint.ConstraintLayout>

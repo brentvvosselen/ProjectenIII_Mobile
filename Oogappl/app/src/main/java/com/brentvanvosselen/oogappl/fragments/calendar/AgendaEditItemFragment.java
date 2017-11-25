@@ -1,5 +1,6 @@
 package com.brentvanvosselen.oogappl.fragments.calendar;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -98,6 +99,7 @@ public class AgendaEditItemFragment extends Fragment {
 
 
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

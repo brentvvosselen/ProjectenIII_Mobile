@@ -6,6 +6,9 @@ import com.brentvanvosselen.oogappl.RestClient.models.Cost;
 import com.brentvanvosselen.oogappl.RestClient.models.CostCategory;
 import com.brentvanvosselen.oogappl.RestClient.models.Event;
 import com.brentvanvosselen.oogappl.RestClient.models.Group;
+import com.brentvanvosselen.oogappl.RestClient.models.HeenEnWeerBoek;
+import com.brentvanvosselen.oogappl.RestClient.models.HeenEnWeerDag;
+import com.brentvanvosselen.oogappl.RestClient.models.HeenEnWeerItem;
 import com.brentvanvosselen.oogappl.RestClient.models.Parent;
 import com.brentvanvosselen.oogappl.RestClient.models.SetupValues;
 import com.brentvanvosselen.oogappl.RestClient.models.User;
@@ -106,6 +109,21 @@ public interface APIInterface {
 
     @DELETE("/api/event/delete/{email}/{id}")
     Call<String> deleteEvent(@Path("email")String email, @Path("id")String id);
+
+    @GET("/api/heenenweer/getAll/{email}")
+    Call<HeenEnWeerBoek[]> getAllBooks(@Path("email") String email);
+
+    @GET("/api/heenenweer/day/{id}")
+    Call<HeenEnWeerDag> getHeenEnWeerDay(@Path("id")String id);
+
+    @PUT("/api/heenenweer/item/edit/{id}")
+    Call<String> editHeenEnWeerItem(@Path("id")String id, @Body HeenEnWeerItem item);
+
+    @POST("/api/heenenweer/item/add/{dayid}")
+    Call<String> addHeenEnWeerItem(@Path("dayid")String id, @Body HeenEnWeerItem item);
+
+    @POST("/api/heenenweer/day/add")
+    Call<String> addHeenEnWeerDay(@Body HeenEnWeerDag item);
     /*
     Voorbeeld van API call
 

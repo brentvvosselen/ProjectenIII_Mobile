@@ -55,6 +55,7 @@ public class HomeFragment extends Fragment {
         //Indien de gebruiker de setup nog niet doorlopen heeft, krijgt hij dit kaartje te zien
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
         User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
+        Log.i("API:", currentUser.getEmail());
         Call call = RetrofitClient.getClient().create(APIInterface.class).getParentByEmail(currentUser.getEmail());
         call.enqueue(new Callback() {
             @Override

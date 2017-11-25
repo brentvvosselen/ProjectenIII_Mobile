@@ -17,6 +17,12 @@ public class HeenEnWeerDag implements Serializable {
     @SerializedName("child")
     private Child child;
 
+    public HeenEnWeerDag(Date date, String description, Child child) {
+        this.date = date;
+        this.description = description;
+        this.child = child;
+    }
+
     public String getId() {
         return id;
     }
@@ -36,4 +42,6 @@ public class HeenEnWeerDag implements Serializable {
     public Child getChild() {
         return child;
     }
+
+
 }

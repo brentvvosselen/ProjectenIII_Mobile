@@ -13,6 +13,10 @@ public class HeenEnWeerBoek implements Serializable {
     @SerializedName("days")
     private HeenEnWeerDag[] days;
 
+    public HeenEnWeerBoek(String id) {
+        this.id = id;
+    }
+
     public String getId() {
         return id;
     }
