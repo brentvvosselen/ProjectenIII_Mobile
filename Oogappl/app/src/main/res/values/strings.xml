@@ -76,6 +76,8 @@
     <string name="no_events">Geen evenementen</string>
     <string name="overview">Overzicht</string>
     <string name="no_next_event">Geen volgende</string>
+    <string name="returning">Wederkerend</string>
+    <string name="Enddate">Einddatum</string>
 
 
     <!--setup finance-->

@@ -33,6 +33,7 @@ import com.brentvanvosselen.oogappl.RestClient.APIInterface;
 import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
 import com.brentvanvosselen.oogappl.RestClient.models.Cost;
 import com.brentvanvosselen.oogappl.RestClient.models.CostCategory;
+import com.brentvanvosselen.oogappl.RestClient.models.FinancialType;
 import com.brentvanvosselen.oogappl.RestClient.models.Parent;
 import com.brentvanvosselen.oogappl.RestClient.models.User;
 import com.brentvanvosselen.oogappl.activities.FinanceSetupActivity;
@@ -52,6 +53,7 @@ public class FinanceFragment extends Fragment {
 
     private User currentUser;
     private Parent parent;
+    private FinancialType type;
     private List<Cost> costs = new ArrayList<>();
     private CardView vCardSetup;
     private List<CostCategory> categories;
@@ -76,6 +78,7 @@ public class FinanceFragment extends Fragment {
             public void onResponse(Call call, Response response) {
                 if(response.isSuccessful()){
                     parent = (Parent) response.body();
+                    type = parent.getGroup().getFinancialType();
 
                     if(parent.getGroup().bothParentsAccepted()) {
                         // Beide parents hebben de financien geaccepteerd
@@ -235,7 +238,6 @@ public class FinanceFragment extends Fragment {
                 }
                 return true;
             }
-
         });
 
         ArrayAdapter<String>  arrayAdapter = new ArrayAdapter<>(getContext(),
@@ -280,6 +282,14 @@ public class FinanceFragment extends Fragment {
                         for(EditText e : fields) {
                             if(e.getText().toString().isEmpty()) {
                                 e.setError("Error");
+                                correct = false;
+                            }
+                        }
+
+                        if(type == FinancialType.KINDREKENING) {
+                            double max = parent.getGroup().getFinType().getKindrekening().getMaxBedrag();
+                            if(Double.parseDouble(editTextAmount.getText().toString()) < max) {
+                                editTextAmount.setError("Het bedrag moet hogen liggen dan " + max);
                                 correct = false;
                             }
                         }

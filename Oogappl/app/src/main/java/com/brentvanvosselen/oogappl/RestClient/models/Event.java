@@ -1,6 +1,7 @@
 package com.brentvanvosselen.oogappl.RestClient.models;
 
 import com.brentvanvosselen.oogappl.RestClient.models.Category;
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -24,6 +25,15 @@ public class Event{
     private String description;
     @SerializedName("categoryid")
     private Category category;
+    @SerializedName("interval")
+    @Expose
+    private int interval;
+    @SerializedName("freq")
+    @Expose
+    private String freq;
+    @SerializedName("until")
+    @Expose
+    private Date until;
 
 
     public Event(String title, Date start, Date end, String description, Category category) {
@@ -32,6 +42,17 @@ public class Event{
         this.end = end;
         this.description = description;
         this.category = category;
+    }
+
+    public Event(String title, Date start, Date end, String description, Category category, int interval, String freq, Date until) {
+        this.title = title;
+        this.start = start;
+        this.end = end;
+        this.description = description;
+        this.category = category;
+        this.interval = interval;
+        this.freq = freq;
+        this.until = until;
     }
 
     public Date getStart() {

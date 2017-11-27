@@ -41,7 +41,7 @@ public class SetupAcceptFinancialFragment extends Fragment {
                 Log.i("KINDREK", "NULL");
                 infoValue.setText(getResources().getString(R.string.geen_max_bedrag));
             } else {
-                int maxBedrag = kindrekening.getMaxBedrag();
+                double maxBedrag = kindrekening.getMaxBedrag();
                 if(maxBedrag > 0) {
                     infoValue.setText(Double.toString(maxBedrag));
                 }

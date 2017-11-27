@@ -11,8 +11,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,9 +22,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -40,20 +41,16 @@ import com.brentvanvosselen.oogappl.RestClient.models.Event;
 import com.brentvanvosselen.oogappl.RestClient.models.User;
 import com.brentvanvosselen.oogappl.util.ObjectSerializer;
 import com.flask.colorpicker.ColorPickerView;
-import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
-import java.io.Console;
-import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -74,29 +71,28 @@ public class AgendaEditItemFragment extends Fragment {
 
     APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
 
-    EditText vEdittextTitle, vEdittextDescription, vEdittextStartDate, vEdittextEndDate, vEdittextStartTime, vEdittextEndTime;
+    EditText vEdittextTitle, vEdittextDescription, vEdittextStartDate, vEdittextEndDate, vEdittextStartTime, vEdittextEndTime, vEdittextWederkerendEinddatum;
     Button vButtonSave;
     CircularImageView vImageViewCategory;
-    Spinner vSpinnerCategory;
+    Spinner vSpinnerCategory, vSpinnerWederkerendFrequenty;
+    CheckBox vCheckboxWederkerend;
+    TextView vTextViewWederkerendEinddatum;
 
     List<Category> categories;
+    String[] frequenties = {"Dagelijks", "Wekelijks", "Maandelijks"};
 
     String currentColor = "#2CA49D";
 
 
     //method to create a new instance and fill the currentEvent
     //you only need to use this if you want to edit an event
-    public static AgendaEditItemFragment newInstance(String eventId){
+    public static AgendaEditItemFragment newInstance(String eventId) {
         AgendaEditItemFragment fragment = new AgendaEditItemFragment();
         Bundle bundle = new Bundle();
-        bundle.putSerializable("event",eventId);
+        bundle.putSerializable("event", eventId);
         fragment.setArguments(bundle);
         return fragment;
     }
-
-
-
-
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -117,12 +113,12 @@ public class AgendaEditItemFragment extends Fragment {
             e.printStackTrace();
         }
         //get event
-        if(itemId != null){
+        if (itemId != null) {
             Call itemCall = apiInterface.getEvent(itemId);
             itemCall.enqueue(new Callback() {
                 @Override
                 public void onResponse(Call call, Response response) {
-                    if(response.isSuccessful()){
+                    if (response.isSuccessful()) {
                         Event e = (Event) response.body();
                         title.setText(R.string.edit_item);
 
@@ -137,19 +133,19 @@ public class AgendaEditItemFragment extends Fragment {
                         vEdittextEndTime.setText(timeFormat.format(e.getEnd()));
                         vButtonSave.setText(R.string.save);
                         int categoryIndex = -1;
-                        for(int i = 0 ; i<categories.size();i++){
-                            if(categories.get(i).getType().equals(e.getCategory().getType()))
+                        for (int i = 0; i < categories.size(); i++) {
+                            if (categories.get(i).getType().equals(e.getCategory().getType()))
                                 categoryIndex = i;
                         }
                         vSpinnerCategory.setSelection(categoryIndex);
-                    }else{
-                        Toast.makeText(getContext(),"Could not retrieve event",Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), "Could not retrieve event", Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
                 public void onFailure(Call call, Throwable t) {
-                    Toast.makeText(getContext(),"Could not connect to the server",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Could not connect to the server", Toast.LENGTH_SHORT).show();
                     call.cancel();
                 }
             });
@@ -164,17 +160,18 @@ public class AgendaEditItemFragment extends Fragment {
         vButtonSave = getView().findViewById(R.id.button_edit_event_save);
         vEdittextStartTime = getView().findViewById(R.id.edittext_edit_event_startTime);
         vEdittextEndTime = getView().findViewById(R.id.edittext_edit_event_endTime);
-
-
+        vCheckboxWederkerend = getView().findViewById(R.id.checkBox_wederkerend);
+        vSpinnerWederkerendFrequenty = getView().findViewById(R.id.spinner_wederkerend_frequenty);
+        vTextViewWederkerendEinddatum = getView().findViewById(R.id.textview_wederkerend_enddate);
+        vEdittextWederkerendEinddatum = getView().findViewById(R.id.editText_wederkerend_einddatum);
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
-        final User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
-
+        final User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser", null));
 
         vSpinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if(i == categories.size()){
+                if (i == categories.size()) {
                     //create an alert dialog
                     final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     final LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -218,18 +215,18 @@ public class AgendaEditItemFragment extends Fragment {
                             .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    Log.i("event","add category");
+                                    Log.i("event", "add category");
                                     Category newCategory = new Category(vEdittextAddCategoryType.getText().toString(), currentColor);
 
-                                    Call addCategoryCall = apiInterface.addCategory(currentUser.getEmail(),newCategory);
+                                    Call addCategoryCall = apiInterface.addCategory(currentUser.getEmail(), newCategory);
                                     addCategoryCall.enqueue(new Callback() {
                                         @Override
                                         public void onResponse(Call call, Response response) {
-                                            if(response.isSuccessful()){
-                                                Toast.makeText(getContext(),"Categorie toegevoegd.",Toast.LENGTH_SHORT).show();
+                                            if (response.isSuccessful()) {
+                                                Toast.makeText(getContext(), "Categorie toegevoegd.", Toast.LENGTH_SHORT).show();
 
-                                            }else{
-                                                Toast.makeText(getContext(),"Categorie NIET toegevoegd.",Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                Toast.makeText(getContext(), "Categorie NIET toegevoegd.", Toast.LENGTH_SHORT).show();
                                             }
                                         }
 
@@ -245,7 +242,7 @@ public class AgendaEditItemFragment extends Fragment {
                             .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    Log.i("event","cancel category");
+                                    Log.i("event", "cancel category");
                                 }
                             }).setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @Override
@@ -253,7 +250,7 @@ public class AgendaEditItemFragment extends Fragment {
                             fillSpinner();
                         }
                     }).show();
-                }else{
+                } else {
                     ColorDrawable color = new ColorDrawable(Color.parseColor(categories.get(i).getColor()));
                     vImageViewCategory.setBackground(color);
                 }
@@ -266,21 +263,25 @@ public class AgendaEditItemFragment extends Fragment {
             }
         });
 
+        ArrayAdapter<String> frequentyArrayAdapter = new ArrayAdapter<String>(getContext(), R.layout.support_simple_spinner_dropdown_item, this.frequenties);
+        vSpinnerWederkerendFrequenty.setAdapter(frequentyArrayAdapter);
+        vSpinnerWederkerendFrequenty.setVisibility(View.GONE);
+
 
         final DatePickerDialog.OnDateSetListener dateStartListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                myCalendar.set(Calendar.YEAR,year);
-                myCalendar.set(Calendar.MONTH,month);
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, month);
                 myCalendar.set(Calendar.DAY_OF_MONTH, day);
-                updateLabel(DATE_FORMAT,myCalendar,vEdittextStartDate);
+                updateLabel(DATE_FORMAT, myCalendar, vEdittextStartDate);
             }
         };
 
         vEdittextStartDate.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                     //set date of textfield in datepicker
                     SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
                     try {
@@ -288,7 +289,7 @@ public class AgendaEditItemFragment extends Fragment {
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    DatePickerDialog dialog = new DatePickerDialog(getContext(),dateStartListener,myCalendar.get(Calendar.YEAR),myCalendar.get(Calendar.MONTH),myCalendar.get(Calendar.DAY_OF_MONTH));
+                    DatePickerDialog dialog = new DatePickerDialog(getContext(), dateStartListener, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH));
                     dialog.getDatePicker().setMinDate(new Date().getTime());
                     dialog.show();
                 }
@@ -299,17 +300,17 @@ public class AgendaEditItemFragment extends Fragment {
         final DatePickerDialog.OnDateSetListener dateEndListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                myCalendar.set(Calendar.YEAR,year);
-                myCalendar.set(Calendar.MONTH,month);
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, month);
                 myCalendar.set(Calendar.DAY_OF_MONTH, day);
-                updateLabel(DATE_FORMAT,myCalendar,vEdittextEndDate);
+                updateLabel(DATE_FORMAT, myCalendar, vEdittextEndDate);
             }
         };
 
         vEdittextEndDate.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                     //set date of textfield in datepicker
                     SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
                     try {
@@ -317,7 +318,7 @@ public class AgendaEditItemFragment extends Fragment {
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    DatePickerDialog dialog = new DatePickerDialog(getContext(),dateEndListener,myCalendar.get(Calendar.YEAR),myCalendar.get(Calendar.MONTH),myCalendar.get(Calendar.DAY_OF_WEEK));
+                    DatePickerDialog dialog = new DatePickerDialog(getContext(), dateEndListener, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_WEEK));
                     dialog.getDatePicker().setMinDate(new Date().getTime());
                     dialog.show();
                 }
@@ -328,16 +329,16 @@ public class AgendaEditItemFragment extends Fragment {
         final TimePickerDialog.OnTimeSetListener timeStartListener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int hours, int minutes) {
-                myCalendar.set(Calendar.HOUR_OF_DAY,hours);
-                myCalendar.set(Calendar.MINUTE,minutes);
-                updateLabel(TIME_FORMAT,myCalendar,vEdittextStartTime);
+                myCalendar.set(Calendar.HOUR_OF_DAY, hours);
+                myCalendar.set(Calendar.MINUTE, minutes);
+                updateLabel(TIME_FORMAT, myCalendar, vEdittextStartTime);
             }
         };
 
         vEdittextStartTime.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                     //set date of textfield in datepicker
                     SimpleDateFormat format = new SimpleDateFormat(TIME_FORMAT);
                     try {
@@ -345,7 +346,7 @@ public class AgendaEditItemFragment extends Fragment {
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    TimePickerDialog dialog = new TimePickerDialog(getContext(),timeStartListener,myCalendar.get(Calendar.HOUR_OF_DAY),myCalendar.get(Calendar.MINUTE),true);
+                    TimePickerDialog dialog = new TimePickerDialog(getContext(), timeStartListener, myCalendar.get(Calendar.HOUR_OF_DAY), myCalendar.get(Calendar.MINUTE), true);
                     dialog.show();
                 }
                 return true;
@@ -355,16 +356,16 @@ public class AgendaEditItemFragment extends Fragment {
         final TimePickerDialog.OnTimeSetListener timeEndListener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int hours, int minutes) {
-                myCalendar.set(Calendar.HOUR_OF_DAY,hours);
-                myCalendar.set(Calendar.MINUTE,minutes);
-                updateLabel(TIME_FORMAT,myCalendar,vEdittextEndTime);
+                myCalendar.set(Calendar.HOUR_OF_DAY, hours);
+                myCalendar.set(Calendar.MINUTE, minutes);
+                updateLabel(TIME_FORMAT, myCalendar, vEdittextEndTime);
             }
         };
 
         vEdittextEndTime.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                     //set date of textfield in datepicker
                     SimpleDateFormat format = new SimpleDateFormat(TIME_FORMAT);
                     try {
@@ -372,27 +373,72 @@ public class AgendaEditItemFragment extends Fragment {
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    TimePickerDialog dialog = new TimePickerDialog(getContext(),timeEndListener,myCalendar.get(Calendar.HOUR_OF_DAY),myCalendar.get(Calendar.MINUTE),true);
+                    TimePickerDialog dialog = new TimePickerDialog(getContext(), timeEndListener, myCalendar.get(Calendar.HOUR_OF_DAY), myCalendar.get(Calendar.MINUTE), true);
                     dialog.show();
                 }
                 return true;
             }
         });
 
+        final DatePickerDialog.OnDateSetListener dateWederkerendEndListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, month);
+                myCalendar.set(Calendar.DAY_OF_MONTH, day);
+                updateLabel(DATE_FORMAT, myCalendar, vEdittextWederkerendEinddatum);
+            }
+        };
+
+        vEdittextWederkerendEinddatum.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    //set date of textfield in datepicker
+                    SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
+                    try {
+                        myCalendar.setTime(format.parse(vEdittextWederkerendEinddatum.getText().toString()));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    DatePickerDialog dialog = new DatePickerDialog(getContext(), dateWederkerendEndListener, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_WEEK));
+                    dialog.getDatePicker().setMinDate(new Date().getTime());
+                    dialog.show();
+                }
+                return true;
+            }
+        });
+
+        vEdittextWederkerendEinddatum.setVisibility(View.GONE);
+        vTextViewWederkerendEinddatum.setVisibility(View.GONE);
+
+        vCheckboxWederkerend.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    vSpinnerWederkerendFrequenty.setVisibility(View.VISIBLE);
+                    vEdittextWederkerendEinddatum.setVisibility(View.VISIBLE);
+                    vTextViewWederkerendEinddatum.setVisibility(View.VISIBLE);
+                } else {
+                    vSpinnerWederkerendFrequenty.setVisibility(View.GONE);
+                    vEdittextWederkerendEinddatum.setVisibility(View.GONE);
+                    vTextViewWederkerendEinddatum.setVisibility(View.GONE);
+                }
+            }
+        });
 
         vButtonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 boolean correctForm = true;
 
-
                 String title = vEdittextTitle.getText().toString();
                 String description = vEdittextDescription.getText().toString();
                 Category category = null;
-                try{
+                try {
                     category = categories.get(vSpinnerCategory.getSelectedItemPosition());
-                }catch(IndexOutOfBoundsException ex){
-                    Toast.makeText(getContext(),"Nog op te lossen bug met toevoegen categorie",Toast.LENGTH_SHORT).show();
+                } catch (IndexOutOfBoundsException ex) {
+                    Toast.makeText(getContext(), "Nog op te lossen bug met toevoegen categorie", Toast.LENGTH_SHORT).show();
                 }
 
                 SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_TIME_FORMAT);
@@ -403,76 +449,108 @@ public class AgendaEditItemFragment extends Fragment {
                     end = dateFormat.parse(vEdittextEndDate.getText().toString() + " " + vEdittextEndTime.getText().toString());
                 } catch (ParseException e) {
                     e.printStackTrace();
-                    Toast.makeText(getContext(),"Start en einde van evenement moet ingevuld zijn!",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Start en einde van evenement moeten ingevuld zijn", Toast.LENGTH_SHORT).show();
                     correctForm = false;
                 }
 
 
-                if(title.isEmpty() || title == null){
+                if (title.isEmpty() || title == null) {
                     correctForm = false;
                     vEdittextTitle.setError("De titel mag niet leeg zijn");
                 }
-                if(category == null){
-                    correctForm = false;
-                }
-                if(start == null || end == null){
-                    correctForm = false;
-                }else if(start.after(end)){
+
+                if (category == null) {
                     correctForm = false;
                 }
 
-                if(correctForm){
+                if (start == null || end == null) {
+                    correctForm = false;
+                } else if (start.after(end)) {
+                    correctForm = false;
+                }
 
+                if(vCheckboxWederkerend.isChecked()) {
+                    if(vEdittextWederkerendEinddatum.getText().toString().isEmpty()) {
+                        vEdittextWederkerendEinddatum.setError("Einddatum moet ingevuld zijn");
+                    }
+                }
 
-                Event newEvent = new Event(title,start,end,description,category);
-                if(itemId != null){
-                    //edit event
-                    Call editEventCall = apiInterface.editEvent(itemId,newEvent);
-                    editEventCall.enqueue(new Callback() {
-                        @Override
-                        public void onResponse(Call call, Response response) {
-                            if(response.isSuccessful()){
-                                Toast.makeText(getContext(),"event gewijzigd",Toast.LENGTH_SHORT).show();
-                                getActivity().onBackPressed();
-                            }else{
-                                Toast.makeText(getContext(),"event niet gewijzigd",Toast.LENGTH_SHORT).show();
+                if (correctForm) {
+                    Event newEvent;
+
+                    if(vCheckboxWederkerend.isChecked()) {
+                        Log.i("WEDERKEREND", "JA");
+                        String selectedFreq = (String) vSpinnerWederkerendFrequenty.getSelectedItem();
+                        String freq = "";
+                        if(selectedFreq.equals(frequenties[0])) {
+                            freq = "daily";
+                        }else if (selectedFreq.equals(frequenties[1])) {
+                            freq = "weekly";
+                        } else if (selectedFreq.equals(frequenties[2])) {
+                            freq = "monthly";
+                        }
+
+                        SimpleDateFormat timeFormat = new SimpleDateFormat(DATE_FORMAT);
+                        Date until = new Date();
+                        try {
+                            until = timeFormat.parse(vEdittextWederkerendEinddatum.getText().toString());
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
+                        Log.i("WEDERKEREND ITEMS", freq + " " + until.toString());
+
+                        newEvent = new Event(title, start, end, description, category, 1, freq, until);
+                    } else {
+                        newEvent = new Event(title, start, end, description, category);
+                    }
+
+                    if (itemId != null) {
+                        //edit event
+                        Call editEventCall = apiInterface.editEvent(itemId, newEvent);
+                        editEventCall.enqueue(new Callback() {
+                            @Override
+                            public void onResponse(Call call, Response response) {
+                                if (response.isSuccessful()) {
+                                    Toast.makeText(getContext(), "event gewijzigd", Toast.LENGTH_SHORT).show();
+                                    getActivity().onBackPressed();
+                                } else {
+                                    Toast.makeText(getContext(), "event niet gewijzigd", Toast.LENGTH_SHORT).show();
+                                }
                             }
-                        }
 
-                        @Override
-                        public void onFailure(Call call, Throwable t) {
-                            Toast.makeText(getContext(),"Kon niet verbinden met server",Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }else{
-                    //add event
-                    Call addEventCall = apiInterface.addEvent(currentUser.getEmail(),newEvent);
-                    addEventCall.enqueue(new Callback() {
-                        @Override
-                        public void onResponse(Call call, Response response) {
-                            if(response.isSuccessful()){
-                                Toast.makeText(getContext(),"event toegevoegd",Toast.LENGTH_SHORT).show();
-                                getActivity().onBackPressed();
-
-                            }else{
-                                Toast.makeText(getContext(),"event niet toegevoegd",Toast.LENGTH_SHORT).show();
+                            @Override
+                            public void onFailure(Call call, Throwable t) {
+                                Toast.makeText(getContext(), "Kon niet verbinden met server", Toast.LENGTH_SHORT).show();
                             }
-                        }
+                        });
+                    } else {
+                        //add event
+                        Call addEventCall = apiInterface.addEvent(currentUser.getEmail(), newEvent);
+                        addEventCall.enqueue(new Callback() {
+                            @Override
+                            public void onResponse(Call call, Response response) {
+                                if (response.isSuccessful()) {
+                                    Toast.makeText(getContext(), "event toegevoegd", Toast.LENGTH_SHORT).show();
+                                    getActivity().onBackPressed();
 
-                        @Override
-                        public void onFailure(Call call, Throwable t) {
-                            Toast.makeText(getContext(),"Kon niet verbinden met server",Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
-                }else{
-                    Log.i("FORM","not correct");
+                                } else {
+                                    Toast.makeText(getContext(), "event niet toegevoegd", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call call, Throwable t) {
+                                Toast.makeText(getContext(), "Kon niet verbinden met server", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                } else {
+                    Log.i("FORM", "not correct");
                 }
 
             }
         });
-
-
 
 
     }
@@ -482,15 +560,15 @@ public class AgendaEditItemFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         //get event from arguments
-        try{
-            itemId = (String)getArguments().getSerializable("event");
-         }catch(NullPointerException ex){
-            Log.i("event","none");
-        }catch(Exception e){
-            Log.i("event","none");
+        try {
+            itemId = (String) getArguments().getSerializable("event");
+        } catch (NullPointerException ex) {
+            Log.i("event", "none");
+        } catch (Exception e) {
+            Log.i("event", "none");
         }
 
-        return inflater.inflate(R.layout.fragment_agenda_edit_item,container,false);
+        return inflater.inflate(R.layout.fragment_agenda_edit_item, container, false);
     }
 
     @Override
@@ -501,71 +579,71 @@ public class AgendaEditItemFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_delete,menu);
+        inflater.inflate(R.menu.menu_delete, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.action_delete){
+        if (item.getItemId() == R.id.action_delete) {
             SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
-            final User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
+            final User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser", null));
 
-            Call deleteEvent = apiInterface.deleteEvent(currentUser.getEmail(),itemId);
+            Call deleteEvent = apiInterface.deleteEvent(currentUser.getEmail(), itemId);
             deleteEvent.enqueue(new Callback() {
                 @Override
                 public void onResponse(Call call, Response response) {
-                    if(response.isSuccessful()){
-                        Toast.makeText(getContext(),"Evenement verwijderd",Toast.LENGTH_SHORT).show();
-                        AgendaFragment.OnCalendarItemSelected mCallback = (AgendaFragment.OnCalendarItemSelected)getActivity();
+                    if (response.isSuccessful()) {
+                        Toast.makeText(getContext(), "Evenement verwijderd", Toast.LENGTH_SHORT).show();
+                        AgendaFragment.OnCalendarItemSelected mCallback = (AgendaFragment.OnCalendarItemSelected) getActivity();
                         mCallback.onItemDeleted();
-                    }else{
-                        Toast.makeText(getContext(),"Evenement niet verwijderd",Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), "Evenement niet verwijderd", Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
                 public void onFailure(Call call, Throwable t) {
                     call.cancel();
-                    Toast.makeText(getContext(),"Evenement niet verwijderd",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Evenement niet verwijderd", Toast.LENGTH_SHORT).show();
                 }
             });
         }
         return true;
     }
 
-    private void fillSpinner(){
+    private void fillSpinner() {
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
-        final User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
+        final User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser", null));
 
 
         Call categoriesCall = apiInterface.getCategoriesFromUser(currentUser.getEmail());
         categoriesCall.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
                     categories = (List<Category>) response.body();
                     List<String> categorynames = new ArrayList<>();
-                    for (Category c: categories) {
+                    for (Category c : categories) {
                         categorynames.add(c.getType());
                     }
                     categorynames.add(getResources().getString(R.string.new_category));
-                    ArrayAdapter<String> categoryAdapter = new ArrayAdapter<String>(getContext(),R.layout.custom_spinner_item,categorynames);
+                    ArrayAdapter<String> categoryAdapter = new ArrayAdapter<String>(getContext(), R.layout.custom_spinner_item, categorynames);
                     vSpinnerCategory.setAdapter(categoryAdapter);
-                }else{
-                    Toast.makeText(getContext(),"Could not retrieve categories",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "Could not retrieve categories", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
-                Toast.makeText(getContext(),"Could not connect to server",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Could not connect to server", Toast.LENGTH_SHORT).show();
                 call.cancel();
             }
         });
     }
 
-    private void updateLabel(String format, Calendar calendar, EditText editText){
+    private void updateLabel(String format, Calendar calendar, EditText editText) {
         SimpleDateFormat sdf = new SimpleDateFormat(format);
         editText.setText(sdf.format(calendar.getTime()));
     }

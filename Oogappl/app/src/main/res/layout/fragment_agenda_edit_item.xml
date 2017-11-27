@@ -223,6 +223,59 @@
                 app:layout_constraintStart_toStartOf="@+id/imageview_edit_event_category"
                 app:layout_constraintTop_toBottomOf="@+id/textview_edit_event_label_description" />
 
+            <CheckBox
+                android:id="@+id/checkBox_wederkerend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/returning"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edittext_edit_event_description" />
+
+            <Spinner
+                android:id="@+id/spinner_wederkerend_frequenty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/checkBox_wederkerend" />
+
+            <TextView
+                android:id="@+id/textview_wederkerend_enddate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:enabled="false"
+                android:fontFamily="@font/poppins_medium"
+                android:text="@string/Enddate"
+                android:textColor="@color/dim_gray_text"
+                android:visibility="invisible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/spinner_wederkerend_frequenty" />
+
+            <EditText
+                android:id="@+id/editText_wederkerend_einddatum"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginStart="16dp"
+                android:background="@drawable/edittext_form"
+                android:clickable="true"
+                android:editable="false"
+                android:ems="10"
+                android:fontFamily="@font/poppins_medium"
+                android:inputType="datetime"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textview_wederkerend_enddate" />
+
             <Button
                 android:id="@+id/button_edit_event_save"
                 android:layout_width="0dp"
@@ -230,7 +283,7 @@
                 android:layout_marginBottom="24dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:background="@drawable/button_blue_square_big"
                 android:text="@string/add"
                 android:textColor="@color/white"
@@ -238,9 +291,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edittext_edit_event_description" />
-
-
+                app:layout_constraintTop_toBottomOf="@+id/editText_wederkerend_einddatum" />
 
 
         </android.support.constraint.ConstraintLayout>

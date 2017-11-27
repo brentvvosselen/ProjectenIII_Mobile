@@ -78,13 +78,13 @@ public class FinInfo implements Serializable {
 
     public class Kindrekening implements Serializable {
         @SerializedName("maxBedrag")
-        private int maxBedrag;
+        private double maxBedrag;
 
         public Kindrekening(int maxBedrag) {
             this.maxBedrag = maxBedrag;
         }
 
-        public int getMaxBedrag() {
+        public double getMaxBedrag() {
             return this.maxBedrag;
         }
     }

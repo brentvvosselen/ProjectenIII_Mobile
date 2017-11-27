@@ -69,4 +69,15 @@ public class Group implements Serializable {
 
         return finType.otherParentHasAccepted(p);
     }
+
+    public FinancialType getFinancialType() {
+        String type = this.finType.getType();
+        if(type == null || type.equals("")) {
+            return null;
+        } else if(type.equals("onderhoudsbijdrage")) {
+            return FinancialType.ONDERHOUDSBIJDRAGE;
+        } else {
+            return FinancialType.KINDREKENING;
+        }
+    }
 }
