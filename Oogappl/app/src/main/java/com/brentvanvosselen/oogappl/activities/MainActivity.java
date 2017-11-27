@@ -29,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brentvanvosselen.oogappl.RestClient.APIInterface;
+import com.brentvanvosselen.oogappl.RestClient.models.HeenEnWeerItem;
 import com.brentvanvosselen.oogappl.RestClient.models.Parent;
 import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
 import com.brentvanvosselen.oogappl.R;
@@ -37,7 +38,10 @@ import com.brentvanvosselen.oogappl.fragments.calendar.AgendaEditItemFragment;
 import com.brentvanvosselen.oogappl.fragments.calendar.AgendaDayFragment;
 import com.brentvanvosselen.oogappl.fragments.calendar.AgendaFragment;
 import com.brentvanvosselen.oogappl.fragments.calendar.AgendaItemFragment;
+import com.brentvanvosselen.oogappl.fragments.heenenweer.HeenEnWeerAddFragment;
+import com.brentvanvosselen.oogappl.fragments.heenenweer.HeenEnWeerDayFragment;
 import com.brentvanvosselen.oogappl.fragments.heenenweer.HeenEnWeerFragment;
+import com.brentvanvosselen.oogappl.fragments.heenenweer.HeenEnWeerItemEditFragment;
 import com.brentvanvosselen.oogappl.fragments.main.ChildInfoFragment;
 import com.brentvanvosselen.oogappl.fragments.finance.FinanceFragment;
 import com.brentvanvosselen.oogappl.fragments.main.HomeFragment;
@@ -52,7 +56,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, AgendaFragment.OnCalendarItemSelected{
+        implements NavigationView.OnNavigationItemSelectedListener, AgendaFragment.OnCalendarItemSelected, HeenEnWeerFragment.OnHeenEnWeerAction{
 
     // private Boolean loggedIn = false;
     private User currentUser;
@@ -125,7 +129,8 @@ public class MainActivity extends AppCompatActivity
         if(currentUser!=null){
             final TextView vTextViewProfileName = headerView.findViewById(R.id.profile_name);
             final TextView vTextViewProfileType = headerView.findViewById(R.id.profile_type);
-            Call call = apiInterface.getParentByEmail(currentUser.getEmail());
+            SharedPreferences sharedPreferences = this.getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
+            Call call = apiInterface.getParentByEmail("bearer " + sharedPreferences.getString("token",null), currentUser.getEmail());
             call.enqueue(new Callback() {
                 @Override
                 public void onResponse(Call call, Response response) {
@@ -331,5 +336,41 @@ public class MainActivity extends AppCompatActivity
     private void goToLogin() {
         Intent loginIntent = new Intent(this, LoginActivity.class);
         startActivity(loginIntent);
+    }
+
+    @Override
+    public void showDay(String id) {
+        Fragment heenEnWeerDayFragment = HeenEnWeerDayFragment.newInstance(id);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content_main,heenEnWeerDayFragment);
+        ft.addToBackStack("heenenweer_day");
+        ft.commit();
+    }
+
+    @Override
+    public void onEditItem(HeenEnWeerItem item) {
+        Fragment heenenweerEditItemFragment = HeenEnWeerItemEditFragment.newInstance(item);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content_main,heenenweerEditItemFragment);
+        ft.addToBackStack("heenenweer_edit_item");
+        ft.commit();
+    }
+
+    @Override
+    public void onAddItem(String dayid) {
+        Fragment heenenweerAddItemFragment = HeenEnWeerItemEditFragment.newInstance(dayid);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content_main,heenenweerAddItemFragment);
+        ft.addToBackStack("heenenweer_add_item");
+        ft.commit();
+    }
+
+    @Override
+    public void onAddDay() {
+        Fragment heenenweerAddDayFragment = new HeenEnWeerAddFragment();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content_main,heenenweerAddDayFragment);
+        ft.addToBackStack("heenenweer_add");
+        ft.commit();
     }
 }

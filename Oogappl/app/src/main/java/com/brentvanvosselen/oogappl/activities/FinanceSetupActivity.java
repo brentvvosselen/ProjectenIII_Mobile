@@ -1,6 +1,8 @@
 package com.brentvanvosselen.oogappl.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -34,6 +36,7 @@ public class FinanceSetupActivity extends AppCompatActivity implements
     SetupAcceptFinancialFragment.OnAcceptFinancial {
 
     private APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
+    SharedPreferences sharedPreferences = this.getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
 
     private Parent parent;
     private FinancialType financialType;
@@ -135,7 +138,7 @@ public class FinanceSetupActivity extends AppCompatActivity implements
 
         Log.i("GROUP", parent.getGroup().toString());
 
-        Call call = apiInterface.addFinanceInfo(parent.getGroup());
+        Call call = apiInterface.addFinanceInfo("bearer " + sharedPreferences.getString("token",null), parent.getGroup());
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
@@ -161,7 +164,7 @@ public class FinanceSetupActivity extends AppCompatActivity implements
     @Override
     public void onAcceptFinancial(boolean accept) {
         if(accept) {
-            Call call = apiInterface.acceptFinanceInfo(parent);
+            Call call = apiInterface.acceptFinanceInfo("bearer " + sharedPreferences.getString("token",null), parent);
             call.enqueue(new Callback() {
                 @Override
                 public void onResponse(Call call, Response response) {

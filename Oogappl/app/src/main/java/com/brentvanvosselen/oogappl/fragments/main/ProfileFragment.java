@@ -1,5 +1,7 @@
 package com.brentvanvosselen.oogappl.fragments.main;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -32,7 +34,7 @@ public class ProfileFragment extends Fragment {
 
     //declaration fo the api-interface
     private APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
-
+    private SharedPreferences sharedPreferences;
 
     TextView vTextViewEmail, vTextViewFirstname, vTextViewAddress, vTextViewTelephone, vTextViewWork, vTextViewType;
 
@@ -40,6 +42,8 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
 
         TextView title = getActivity().findViewById(getResources().getIdentifier("action_bar_title", "id", getActivity().getPackageName()));
         title.setText(R.string.profile);
@@ -53,8 +57,9 @@ public class ProfileFragment extends Fragment {
         vTextViewWork = content.findViewById(R.id.textview_profile_work);
         vTextViewType = content.findViewById(R.id.textview_profile_type);
 
+
         //get the user from the api-server
-        Call call = apiInterface.getParentByEmail(((MainActivity) getActivity()).getUserEmail());
+        Call call = apiInterface.getParentByEmail("bearer "+ sharedPreferences.getString("token",null),((MainActivity) getActivity()).getUserEmail());
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {

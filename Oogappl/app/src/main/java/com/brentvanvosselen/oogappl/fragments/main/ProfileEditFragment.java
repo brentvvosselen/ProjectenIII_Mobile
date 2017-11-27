@@ -1,5 +1,7 @@
 package com.brentvanvosselen.oogappl.fragments.main;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -28,9 +30,8 @@ import retrofit2.Response;
  */
 
 public class ProfileEditFragment extends Fragment {
-
-    //declare the API-interface
     private APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
+    SharedPreferences sharedPreferences;
 
     //declare the editTexts
     private EditText vEditTextStreet, vEditTextNumber, vEditTextPostalcode, vEditTextCity, vEditTextTelNumber, vEditTextWorkName, vEditTextWorkTelNumber;
@@ -39,6 +40,8 @@ public class ProfileEditFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
 
         TextView title = getActivity().findViewById(getResources().getIdentifier("action_bar_title", "id", getActivity().getPackageName()));
         title.setText(R.string.edit);
@@ -79,8 +82,7 @@ public class ProfileEditFragment extends Fragment {
      * Fills the edittexts with the current data of the userprofile
      */
     private void fillTextFields(){
-
-        Call call = apiInterface.getParentByEmail(((MainActivity)getActivity()).getUserEmail());
+        Call call = apiInterface.getParentByEmail("bearer "+ sharedPreferences.getString("token",null),((MainActivity)getActivity()).getUserEmail());
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
@@ -111,8 +113,7 @@ public class ProfileEditFragment extends Fragment {
      *  updates the user profile
      */
     private void updateProfile(){
-
-        Call call = apiInterface.getParentByEmail(((MainActivity) getActivity()).getUserEmail());
+        Call call = apiInterface.getParentByEmail("bearer "+ sharedPreferences.getString("token",null),((MainActivity) getActivity()).getUserEmail());
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
@@ -128,7 +129,7 @@ public class ProfileEditFragment extends Fragment {
                     parent.setWorkNumber(vEditTextWorkTelNumber.getText().toString());
 
                     //save changes
-                    Call callSave = apiInterface.saveProfile(parent);
+                    Call callSave = apiInterface.saveProfile("bearer " + sharedPreferences.getString("token",null), parent);
                     callSave.enqueue(new Callback() {
                         @Override
                         public void onResponse(Call call, Response response) {

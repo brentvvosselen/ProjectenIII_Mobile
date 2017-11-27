@@ -42,6 +42,7 @@ import retrofit2.Response;
 public class AgendaFragment extends Fragment {
 
     private APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
+    SharedPreferences sharedPreferences;
     private final Calendar mCalendar = Calendar.getInstance();
 
 
@@ -71,6 +72,8 @@ public class AgendaFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
 
         TextView title = getActivity().findViewById(getResources().getIdentifier("action_bar_title", "id", getActivity().getPackageName()));
         title.setText(R.string.agenda);
@@ -128,10 +131,9 @@ public class AgendaFragment extends Fragment {
             }
         });
 
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
         User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
 
-        Call nextItemCall = apiInterface.getNextEvent(currentUser.getEmail());
+        Call nextItemCall = apiInterface.getNextEvent("bearer " + sharedPreferences.getString("token",null), currentUser.getEmail());
         nextItemCall.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
@@ -198,11 +200,10 @@ public class AgendaFragment extends Fragment {
         Calendar c = Calendar.getInstance();
 
         //get current user
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
         User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
 
         //get events
-        Call call = apiInterface.getEvents(currentUser.getEmail());
+        Call call = apiInterface.getEvents("bearer " + sharedPreferences.getString("token",null), currentUser.getEmail());
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {

@@ -1,6 +1,8 @@
 package com.brentvanvosselen.oogappl.fragments.calendar;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -38,7 +40,9 @@ import retrofit2.Response;
 public class AgendaItemFragment extends Fragment{
 
     private String itemId;
+
     private APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
+    SharedPreferences sharedPreferences;
 
     private TextView vTextViewStartDate,vTextViewStartMonth, vTextViewStartTime,vTextViewEndDate,vTextViewEndMonth, vTextViewEndTime, vTextViewCategory,vTextViewDescription, vTextViewTitle;
     private ImageView vImageViewCategory;
@@ -61,6 +65,8 @@ public class AgendaItemFragment extends Fragment{
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
+
         View content = getView();
 
         vTextViewStartDate = content.findViewById(R.id.textview_calendar_item_start_date);
@@ -74,7 +80,7 @@ public class AgendaItemFragment extends Fragment{
         vTextViewDescription = content.findViewById(R.id.textview_calendar_item_description);
         vTextViewTitle = content.findViewById(R.id.textview_calendar_item_title);
 
-        Call itemCall = apiInterface.getEvent(itemId);
+        Call itemCall = apiInterface.getEvent("bearer " + sharedPreferences.getString("token",null), itemId);
         itemCall.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {

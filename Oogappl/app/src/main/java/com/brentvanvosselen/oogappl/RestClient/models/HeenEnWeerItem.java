@@ -16,6 +16,11 @@ public class HeenEnWeerItem implements Serializable {
     @SerializedName("value")
     private String value;
 
+    public HeenEnWeerItem(Category category, String value) {
+        this.category = category;
+        this.value = value;
+    }
+
     public String getId() {
         return id;
     }
@@ -26,5 +31,13 @@ public class HeenEnWeerItem implements Serializable {
 
     public String getValue() {
         return value;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 }

@@ -1,5 +1,6 @@
 package com.brentvanvosselen.oogappl.fragments.calendar;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -70,6 +71,7 @@ public class AgendaEditItemFragment extends Fragment {
     private String itemId = null;
 
     APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
+    SharedPreferences sharedPreferences;
 
     EditText vEdittextTitle, vEdittextDescription, vEdittextStartDate, vEdittextEndDate, vEdittextStartTime, vEdittextEndTime, vEdittextWederkerendEinddatum;
     Button vButtonSave;
@@ -94,9 +96,12 @@ public class AgendaEditItemFragment extends Fragment {
         return fragment;
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
 
         final Calendar myCalendar = Calendar.getInstance();
 
@@ -112,9 +117,10 @@ public class AgendaEditItemFragment extends Fragment {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
         //get event
-        if (itemId != null) {
-            Call itemCall = apiInterface.getEvent(itemId);
+        if(itemId != null){
+            Call itemCall = apiInterface.getEvent("bearer " + sharedPreferences.getString("token",null), itemId);
             itemCall.enqueue(new Callback() {
                 @Override
                 public void onResponse(Call call, Response response) {
@@ -165,8 +171,8 @@ public class AgendaEditItemFragment extends Fragment {
         vTextViewWederkerendEinddatum = getView().findViewById(R.id.textview_wederkerend_enddate);
         vEdittextWederkerendEinddatum = getView().findViewById(R.id.editText_wederkerend_einddatum);
 
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
-        final User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser", null));
+        final SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
+        final User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
 
         vSpinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -218,7 +224,7 @@ public class AgendaEditItemFragment extends Fragment {
                                     Log.i("event", "add category");
                                     Category newCategory = new Category(vEdittextAddCategoryType.getText().toString(), currentColor);
 
-                                    Call addCategoryCall = apiInterface.addCategory(currentUser.getEmail(), newCategory);
+                                    Call addCategoryCall = apiInterface.addCategory("bearer " + sharedPreferences.getString("token",null), currentUser.getEmail(),newCategory);
                                     addCategoryCall.enqueue(new Callback() {
                                         @Override
                                         public void onResponse(Call call, Response response) {
@@ -432,13 +438,14 @@ public class AgendaEditItemFragment extends Fragment {
             public void onClick(View view) {
                 boolean correctForm = true;
 
+
                 String title = vEdittextTitle.getText().toString();
                 String description = vEdittextDescription.getText().toString();
                 Category category = null;
-                try {
+                try{
                     category = categories.get(vSpinnerCategory.getSelectedItemPosition());
-                } catch (IndexOutOfBoundsException ex) {
-                    Toast.makeText(getContext(), "Nog op te lossen bug met toevoegen categorie", Toast.LENGTH_SHORT).show();
+                }catch(IndexOutOfBoundsException ex){
+                    Toast.makeText(getContext(),"Nog op te lossen bug met toevoegen categorie",Toast.LENGTH_SHORT).show();
                 }
 
                 SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_TIME_FORMAT);
@@ -449,110 +456,74 @@ public class AgendaEditItemFragment extends Fragment {
                     end = dateFormat.parse(vEdittextEndDate.getText().toString() + " " + vEdittextEndTime.getText().toString());
                 } catch (ParseException e) {
                     e.printStackTrace();
-                    Toast.makeText(getContext(), "Start en einde van evenement moeten ingevuld zijn", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),"Start en einde van evenement moet ingevuld zijn!",Toast.LENGTH_SHORT).show();
                     correctForm = false;
                 }
 
 
-                if (title.isEmpty() || title == null) {
+                if(title.isEmpty() || title == null){
                     correctForm = false;
                     vEdittextTitle.setError("De titel mag niet leeg zijn");
                 }
-
-                if (category == null) {
+                if(category == null){
+                    correctForm = false;
+                }
+                if(start == null || end == null){
+                    correctForm = false;
+                }else if(start.after(end)){
                     correctForm = false;
                 }
 
-                if (start == null || end == null) {
-                    correctForm = false;
-                } else if (start.after(end)) {
-                    correctForm = false;
-                }
+                if(correctForm){
 
-                if(vCheckboxWederkerend.isChecked()) {
-                    if(vEdittextWederkerendEinddatum.getText().toString().isEmpty()) {
-                        vEdittextWederkerendEinddatum.setError("Einddatum moet ingevuld zijn");
-                    }
-                }
 
-                if (correctForm) {
-                    Event newEvent;
-
-                    if(vCheckboxWederkerend.isChecked()) {
-                        Log.i("WEDERKEREND", "JA");
-                        String selectedFreq = (String) vSpinnerWederkerendFrequenty.getSelectedItem();
-                        String freq = "";
-                        if(selectedFreq.equals(frequenties[0])) {
-                            freq = "daily";
-                        }else if (selectedFreq.equals(frequenties[1])) {
-                            freq = "weekly";
-                        } else if (selectedFreq.equals(frequenties[2])) {
-                            freq = "monthly";
-                        }
-
-                        SimpleDateFormat timeFormat = new SimpleDateFormat(DATE_FORMAT);
-                        Date until = new Date();
-                        try {
-                            until = timeFormat.parse(vEdittextWederkerendEinddatum.getText().toString());
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-
-                        Log.i("WEDERKEREND ITEMS", freq + " " + until.toString());
-
-                        newEvent = new Event(title, start, end, description, category, 1, freq, until);
-                    } else {
-                        newEvent = new Event(title, start, end, description, category);
-                    }
-
-                    if (itemId != null) {
+                    Event newEvent = new Event(title,start,end,description,category);
+                    if(itemId != null){
                         //edit event
-                        Call editEventCall = apiInterface.editEvent(itemId, newEvent);
+                        Call editEventCall = apiInterface.editEvent("bearer " + sharedPreferences.getString("token",null), itemId,newEvent);
                         editEventCall.enqueue(new Callback() {
                             @Override
                             public void onResponse(Call call, Response response) {
-                                if (response.isSuccessful()) {
-                                    Toast.makeText(getContext(), "event gewijzigd", Toast.LENGTH_SHORT).show();
+                                if(response.isSuccessful()){
+                                    Toast.makeText(getContext(),"event gewijzigd",Toast.LENGTH_SHORT).show();
                                     getActivity().onBackPressed();
-                                } else {
-                                    Toast.makeText(getContext(), "event niet gewijzigd", Toast.LENGTH_SHORT).show();
+                                }else{
+                                    Toast.makeText(getContext(),"event niet gewijzigd",Toast.LENGTH_SHORT).show();
                                 }
                             }
 
                             @Override
                             public void onFailure(Call call, Throwable t) {
-                                Toast.makeText(getContext(), "Kon niet verbinden met server", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(),"Kon niet verbinden met server",Toast.LENGTH_SHORT).show();
                             }
                         });
-                    } else {
+                    }else{
                         //add event
-                        Call addEventCall = apiInterface.addEvent(currentUser.getEmail(), newEvent);
+                        Call addEventCall = apiInterface.addEvent("bearer " + sharedPreferences.getString("token",null), currentUser.getEmail(),newEvent);
                         addEventCall.enqueue(new Callback() {
                             @Override
                             public void onResponse(Call call, Response response) {
-                                if (response.isSuccessful()) {
-                                    Toast.makeText(getContext(), "event toegevoegd", Toast.LENGTH_SHORT).show();
+                                if(response.isSuccessful()){
+                                    Toast.makeText(getContext(),"event toegevoegd",Toast.LENGTH_SHORT).show();
                                     getActivity().onBackPressed();
 
-                                } else {
-                                    Toast.makeText(getContext(), "event niet toegevoegd", Toast.LENGTH_SHORT).show();
+                                }else{
+                                    Toast.makeText(getContext(),"event niet toegevoegd",Toast.LENGTH_SHORT).show();
                                 }
                             }
 
                             @Override
                             public void onFailure(Call call, Throwable t) {
-                                Toast.makeText(getContext(), "Kon niet verbinden met server", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(),"Kon niet verbinden met server",Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
-                } else {
-                    Log.i("FORM", "not correct");
+                }else{
+                    Log.i("FORM","not correct");
                 }
 
             }
         });
-
-
     }
 
     @Nullable
@@ -584,11 +555,10 @@ public class AgendaEditItemFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_delete) {
-            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
-            final User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser", null));
+        if(item.getItemId() == R.id.action_delete){
+            final User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
 
-            Call deleteEvent = apiInterface.deleteEvent(currentUser.getEmail(), itemId);
+            Call deleteEvent = apiInterface.deleteEvent("bearer " + sharedPreferences.getString("token",null), currentUser.getEmail(),itemId);
             deleteEvent.enqueue(new Callback() {
                 @Override
                 public void onResponse(Call call, Response response) {
@@ -612,12 +582,11 @@ public class AgendaEditItemFragment extends Fragment {
     }
 
     private void fillSpinner() {
-
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
         final User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser", null));
 
 
-        Call categoriesCall = apiInterface.getCategoriesFromUser(currentUser.getEmail());
+        Call categoriesCall = apiInterface.getCategoriesFromUser("bearer " + sharedPreferences.getString("token",null), currentUser.getEmail());
         categoriesCall.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {

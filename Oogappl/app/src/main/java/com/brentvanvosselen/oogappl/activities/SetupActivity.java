@@ -32,6 +32,7 @@ public class SetupActivity extends AppCompatActivity implements
         SetupChildrenFragment.OnChildrenSelected {
 
     private APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
+    SharedPreferences sharedPreferences = this.getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
 
     private char type;
     private String otherEmail, otherFirstname, otherLastname;
@@ -88,7 +89,6 @@ public class SetupActivity extends AppCompatActivity implements
     }
 
     private void sendInfo() {
-        SharedPreferences sharedPreferences = this.getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
         User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
 
         //convert children to array
@@ -97,7 +97,7 @@ public class SetupActivity extends AppCompatActivity implements
         //create the setup values object
         SetupValues values = new SetupValues(currentUser.getEmail(),String.valueOf(this.type),this.otherEmail,this.otherFirstname, this.otherLastname, childrenArr);
 
-        Call call = apiInterface.completeSetup(values);
+        Call call = apiInterface.completeSetup("bearer " + sharedPreferences.getString("token",null), values);
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {

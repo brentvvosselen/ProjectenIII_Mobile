@@ -78,7 +78,7 @@
                 android:background="@android:color/transparent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearlayout_setup_children"
-                app:srcCompat="@drawable/ic_person_add" />
+                app:srcCompat="@drawable/ic_add_person" />
 
             <Button
                 android:id="@+id/button_end_setup"

@@ -45,6 +45,9 @@ public class Parent implements Serializable {
     @SerializedName("doneSetup")
     private boolean doneSetup;
 
+    @SerializedName("token")
+    private String token;
+
     public Parent(String id, String email, String firstname, String lastname) {
         this.id = id;
         this.email = email;
@@ -129,6 +132,8 @@ public class Parent implements Serializable {
     public Child[] getChildren() { return this.group.getChildren(); }
 
     public Group getGroup() { return this.group; }
+
+    public String getToken(){ return this.token; }
 
     public boolean hasDoneSetup(){ return doneSetup;}
 }

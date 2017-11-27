@@ -61,7 +61,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_remove_circle" />
+            app:srcCompat="@drawable/ic_remove" />
     </android.support.constraint.ConstraintLayout>
 
 </android.support.v7.widget.CardView>
