@@ -38,7 +38,9 @@ import com.brentvanvosselen.oogappl.R;
 import com.brentvanvosselen.oogappl.RestClient.APIInterface;
 import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
 import com.brentvanvosselen.oogappl.RestClient.models.Category;
+import com.brentvanvosselen.oogappl.RestClient.models.Child;
 import com.brentvanvosselen.oogappl.RestClient.models.Event;
+import com.brentvanvosselen.oogappl.RestClient.models.Parent;
 import com.brentvanvosselen.oogappl.RestClient.models.User;
 import com.brentvanvosselen.oogappl.util.ObjectSerializer;
 import com.flask.colorpicker.ColorPickerView;
@@ -46,9 +48,11 @@ import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -72,15 +76,17 @@ public class AgendaEditItemFragment extends Fragment {
 
     APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
     SharedPreferences sharedPreferences;
+    User currentUser;
 
     EditText vEdittextTitle, vEdittextDescription, vEdittextStartDate, vEdittextEndDate, vEdittextStartTime, vEdittextEndTime, vEdittextWederkerendEinddatum;
     Button vButtonSave;
     CircularImageView vImageViewCategory;
-    Spinner vSpinnerCategory, vSpinnerWederkerendFrequenty;
+    Spinner vSpinnerCategory, vSpinnerWederkerendFrequenty, vSpinnerChild;
     CheckBox vCheckboxWederkerend;
     TextView vTextViewWederkerendEinddatum;
 
     List<Category> categories;
+    List<Child> children;
     String[] frequenties = {"Dagelijks", "Wekelijks", "Maandelijks"};
 
     String currentColor = "#2CA49D";
@@ -102,6 +108,7 @@ public class AgendaEditItemFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
+        currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
 
         final Calendar myCalendar = Calendar.getInstance();
 
@@ -111,6 +118,8 @@ public class AgendaEditItemFragment extends Fragment {
 
         //make a call for the categories and fill the adapter
         fillSpinner();
+        fillChildSpinner();
+
 
         try {
             Thread.sleep(200);
@@ -144,6 +153,17 @@ public class AgendaEditItemFragment extends Fragment {
                                 categoryIndex = i;
                         }
                         vSpinnerCategory.setSelection(categoryIndex);
+
+                        int childIndex = -1;
+                        for(int i = 0; i <  children.size(); i ++){
+                            if(children.get(i).get_id().equals(e.getchildren()[0])){
+                                childIndex = i;
+                            }
+                        }
+                        if(e.getchildren().length == children.size()){
+                            childIndex = children.size();
+                        }
+                        vSpinnerChild.setSelection(childIndex);
                     } else {
                         Toast.makeText(getContext(), "Could not retrieve event", Toast.LENGTH_SHORT).show();
                     }
@@ -170,9 +190,11 @@ public class AgendaEditItemFragment extends Fragment {
         vSpinnerWederkerendFrequenty = getView().findViewById(R.id.spinner_wederkerend_frequenty);
         vTextViewWederkerendEinddatum = getView().findViewById(R.id.textview_wederkerend_enddate);
         vEdittextWederkerendEinddatum = getView().findViewById(R.id.editText_wederkerend_einddatum);
+        vSpinnerChild = getView().findViewById(R.id.spinner_edit_event_child);
 
-        final SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
-        final User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
+
+
+
 
         vSpinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -448,6 +470,18 @@ public class AgendaEditItemFragment extends Fragment {
                     Toast.makeText(getContext(),"Nog op te lossen bug met toevoegen categorie",Toast.LENGTH_SHORT).show();
                 }
 
+                List<Child> myChildren = new ArrayList<>();
+                try{
+                    int index = vSpinnerChild.getSelectedItemPosition();
+                    if(index == children.size()){
+                        myChildren = children;
+                    }else{
+                        myChildren.add(children.get(index));
+                    }
+                }catch(IndexOutOfBoundsException ex){
+                    Toast.makeText(getContext(),"Verkeerde index",Toast.LENGTH_SHORT).show();
+                }
+
                 SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_TIME_FORMAT);
                 Date start = new Date();
                 Date end = new Date();
@@ -468,6 +502,9 @@ public class AgendaEditItemFragment extends Fragment {
                 if(category == null){
                     correctForm = false;
                 }
+                if(myChildren.size() == 0 || myChildren == null){
+                    correctForm = false;
+                }
                 if(start == null || end == null){
                     correctForm = false;
                 }else if(start.after(end)){
@@ -477,7 +514,11 @@ public class AgendaEditItemFragment extends Fragment {
                 if(correctForm){
 
 
-                    Event newEvent = new Event(title,start,end,description,category);
+                    Child[] childs = new Child[myChildren.size()];
+                    for(int i = 0; i< myChildren.size();i++){
+                        childs[i] = myChildren.get(i);
+                    }
+                    Event newEvent = new Event(title,start,end,description,category, childs);
                     if(itemId != null){
                         //edit event
                         Call editEventCall = apiInterface.editEvent("bearer " + sharedPreferences.getString("token",null), itemId,newEvent);
@@ -521,6 +562,33 @@ public class AgendaEditItemFragment extends Fragment {
                 }else{
                     Log.i("FORM","not correct");
                 }
+
+            }
+        });
+    }
+
+    private void fillChildSpinner() {
+        Call parentCall = apiInterface.getParentByEmail("bearer " + sharedPreferences.getString("token",null),currentUser.getEmail());
+        parentCall.enqueue(new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) {
+                if (response.isSuccessful()){
+                    Parent p = (Parent) response.body();
+                    children = Arrays.asList(p.getChildren());
+                    Log.i("parent",p.toString());
+                    Log.i("children",children.toString());
+                    List<String> childNames = new ArrayList<>();
+                    for (Child child:children) {
+                        childNames.add(child.getFirstname() + " " + child.getLastname());
+                    }
+                    childNames.add("Alle kinderen");
+                    ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(getContext(),R.layout.custom_spinner_item,childNames);
+                    vSpinnerChild.setAdapter(mAdapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call call, Throwable t) {
 
             }
         });

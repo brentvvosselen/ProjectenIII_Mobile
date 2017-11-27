@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.brentvanvosselen.oogappl.R;
 import com.brentvanvosselen.oogappl.RestClient.APIInterface;
 import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
+import com.brentvanvosselen.oogappl.RestClient.models.Child;
 import com.brentvanvosselen.oogappl.RestClient.models.Event;
 
 import java.text.SimpleDateFormat;
@@ -44,7 +45,7 @@ public class AgendaItemFragment extends Fragment{
     private APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
     SharedPreferences sharedPreferences;
 
-    private TextView vTextViewStartDate,vTextViewStartMonth, vTextViewStartTime,vTextViewEndDate,vTextViewEndMonth, vTextViewEndTime, vTextViewCategory,vTextViewDescription, vTextViewTitle;
+    private TextView vTextViewStartDate,vTextViewStartMonth, vTextViewStartTime,vTextViewEndDate,vTextViewEndMonth, vTextViewEndTime, vTextViewChildren,vTextViewDescription, vTextViewTitle;
     private ImageView vImageViewCategory;
 
     private SimpleDateFormat dateFormatForTime = new SimpleDateFormat("HH:mm",Locale.getDefault());
@@ -79,6 +80,7 @@ public class AgendaItemFragment extends Fragment{
 
         vTextViewDescription = content.findViewById(R.id.textview_calendar_item_description);
         vTextViewTitle = content.findViewById(R.id.textview_calendar_item_title);
+        vTextViewChildren = content.findViewById(R.id.textview_calendar_item_children);
 
         Call itemCall = apiInterface.getEvent("bearer " + sharedPreferences.getString("token",null), itemId);
         itemCall.enqueue(new Callback() {
@@ -97,6 +99,16 @@ public class AgendaItemFragment extends Fragment{
 
                     vTextViewDescription.setText(event.getDescription());
                     vTextViewTitle.setText(event.getTitle());
+
+
+                    String children = "";
+                    for (Child child : event.getchildren()) {
+                        children += " " + child.getFirstname() + " " + child.getLastname();
+                    }
+                    Log.i("children",children);
+                    vTextViewChildren.setText(children);
+
+
 
                     ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
 

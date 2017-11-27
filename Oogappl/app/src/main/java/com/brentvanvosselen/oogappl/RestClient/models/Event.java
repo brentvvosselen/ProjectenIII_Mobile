@@ -34,14 +34,17 @@ public class Event{
     @SerializedName("until")
     @Expose
     private Date until;
+    @SerializedName("children")
+    private Child[] children;
 
 
-    public Event(String title, Date start, Date end, String description, Category category) {
+    public Event(String title, Date start, Date end, String description, Category category, Child[] myChildren) {
         this.title = title;
         this.start = start;
         this.end = end;
         this.description = description;
         this.category = category;
+        this.children = myChildren;
     }
 
     public Event(String title, Date start, Date end, String description, Category category, int interval, String freq, Date until) {
@@ -78,4 +81,6 @@ public class Event{
     public String getDescription() {
         return description;
     }
+
+    public Child[] getchildren(){ return this.children;}
 }

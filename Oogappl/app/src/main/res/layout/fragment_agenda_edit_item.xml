@@ -44,7 +44,7 @@
                 android:text="Titel"
                 android:textColor="@color/dim_gray_text"
                 app:layout_constraintStart_toStartOf="@+id/edittext_edit_event_title"
-                app:layout_constraintTop_toBottomOf="@+id/textView" />
+                app:layout_constraintTop_toBottomOf="@+id/edittext_edit_event_endDate" />
 
             <EditText
                 android:id="@+id/edittext_edit_event_title"
@@ -64,23 +64,22 @@
                 android:id="@+id/textview_edit_event_label_startdate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:fontFamily="@font/poppins_medium"
                 android:text="Startdatum"
                 android:textColor="@color/dim_gray_text"
                 app:layout_constraintStart_toStartOf="@+id/edittext_edit_event_startDate"
-                app:layout_constraintTop_toBottomOf="@+id/edittext_edit_event_title" />
+                app:layout_constraintTop_toBottomOf="@+id/textView" />
 
             <TextView
                 android:id="@+id/textview_edit_event_label_starttime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:fontFamily="@font/poppins_medium"
                 android:text="Starttijd"
                 android:textColor="@color/dim_gray_text"
                 app:layout_constraintStart_toStartOf="@+id/edittext_edit_event_startTime"
-                app:layout_constraintTop_toBottomOf="@+id/edittext_edit_event_title" />
+                app:layout_constraintTop_toTopOf="@+id/textview_edit_event_label_startdate" />
 
             <EditText
                 android:id="@+id/edittext_edit_event_startDate"
@@ -169,12 +168,12 @@
                 android:id="@+id/textview_edit_event_label_category"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:fontFamily="@font/poppins_medium"
                 android:text="Categorie"
                 android:textColor="@color/dim_gray_text"
                 app:layout_constraintStart_toStartOf="@+id/imageview_edit_event_category"
-                app:layout_constraintTop_toBottomOf="@+id/edittext_edit_event_endDate" />
+                app:layout_constraintTop_toBottomOf="@+id/edittext_edit_event_title" />
 
 
             <com.mikhaellopez.circularimageview.CircularImageView xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -292,6 +291,26 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/editText_wederkerend_einddatum" />
+
+            <TextView
+                android:id="@+id/textView12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Kind"
+                android:textColor="@color/dim_gray_text"
+                android:fontFamily="@font/poppins_medium"
+                app:layout_constraintStart_toStartOf="@+id/edittext_edit_event_startTime"
+                app:layout_constraintTop_toBottomOf="@+id/edittext_edit_event_title" />
+
+            <Spinner
+                android:id="@+id/spinner_edit_event_child"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/textView12"
+                app:layout_constraintTop_toTopOf="@+id/spinner_edit_event_category" />
 
 
         </android.support.constraint.ConstraintLayout>

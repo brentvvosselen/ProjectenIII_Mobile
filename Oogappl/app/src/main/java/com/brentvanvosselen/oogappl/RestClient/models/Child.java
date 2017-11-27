@@ -32,6 +32,10 @@ public class Child implements Serializable {
         return lastname;
     }
 
+    public String get_id() {
+        return _id;
+    }
+
     public List<ChildinfoCategory> getCategory() {
         return this.category;
     }
