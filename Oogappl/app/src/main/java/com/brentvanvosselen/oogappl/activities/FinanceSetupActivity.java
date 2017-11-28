@@ -36,7 +36,7 @@ public class FinanceSetupActivity extends AppCompatActivity implements
     SetupAcceptFinancialFragment.OnAcceptFinancial {
 
     private APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
-    SharedPreferences sharedPreferences = this.getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
+    SharedPreferences sharedPreferences;
 
     private Parent parent;
     private FinancialType financialType;
@@ -52,6 +52,8 @@ public class FinanceSetupActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup);
+
+        this.sharedPreferences = this.getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
 
         Intent intent = this.getIntent();
         parent = ObjectSerializer.deserialize2(intent.getStringExtra("parent"));

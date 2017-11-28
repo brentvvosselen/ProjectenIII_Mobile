@@ -32,7 +32,7 @@ public class SetupActivity extends AppCompatActivity implements
         SetupChildrenFragment.OnChildrenSelected {
 
     private APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
-    SharedPreferences sharedPreferences = this.getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
+    SharedPreferences sharedPreferences;
 
     private char type;
     private String otherEmail, otherFirstname, otherLastname;
@@ -47,6 +47,7 @@ public class SetupActivity extends AppCompatActivity implements
         Fragment typeFragment = new SetupTypeFragment();
         displayScreen(typeFragment,R.id.content_setup);
 
+        this.sharedPreferences = this.getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
     }
 
 

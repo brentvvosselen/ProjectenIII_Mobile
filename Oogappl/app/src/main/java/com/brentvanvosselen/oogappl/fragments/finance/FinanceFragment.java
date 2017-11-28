@@ -181,6 +181,7 @@ public class FinanceFragment extends Fragment {
             @Override
             public void onFailure(Call call, Throwable t) {
                 Toast.makeText(getContext(), getResources().getString(R.string.geen_verbinding), Toast.LENGTH_SHORT).show();
+                Log.i("ERROR", t.getMessage());
             }
         });
     }
