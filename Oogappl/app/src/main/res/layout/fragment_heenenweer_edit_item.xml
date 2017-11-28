@@ -76,6 +76,8 @@
 
             <Button
                 android:id="@+id/button_heenenweer_item_edit_save"
+                android:background="@drawable/button_blue_square_big"
+                android:textColor="@color/white"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
