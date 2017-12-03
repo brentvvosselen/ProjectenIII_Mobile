@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,8 +18,12 @@ import android.widget.Toast;
 import com.brentvanvosselen.oogappl.R;
 import com.brentvanvosselen.oogappl.RestClient.APIInterface;
 import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
+import com.brentvanvosselen.oogappl.RestClient.models.Child;
 import com.brentvanvosselen.oogappl.RestClient.models.Event;
+import com.brentvanvosselen.oogappl.RestClient.models.HeenEnWeerBoek;
+import com.brentvanvosselen.oogappl.RestClient.models.HeenEnWeerDag;
 import com.brentvanvosselen.oogappl.RestClient.models.User;
+import com.brentvanvosselen.oogappl.fragments.heenenweer.HeenEnWeerFragment;
 import com.brentvanvosselen.oogappl.util.ObjectSerializer;
 
 import java.text.DateFormat;
@@ -52,6 +57,7 @@ public class AgendaDayFragment extends Fragment{
     private SimpleDateFormat dateFormatForDay = new SimpleDateFormat("dd MMMM",Locale.getDefault());
 
     private List<Event> events;
+    private List<HeenEnWeerDag> childrenBooks;
 
     //method to create a new instance and pass data to this new fragment
     public static AgendaDayFragment newInstance(Date d){
@@ -110,6 +116,24 @@ public class AgendaDayFragment extends Fragment{
             }
         });
 
+        final Call childrenCall = apiInterface.getChildrenFromBookFromDate("bearer " + sharedPreferences.getString("token",null),currentUser.getEmail(),dateShown);
+        childrenCall.enqueue(new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) {
+                if(response.isSuccessful()){
+                    childrenBooks = (List<HeenEnWeerDag>)response.body();
+                    renderChildren();
+                }else{
+                    Toast.makeText(getContext(),"Could not retrieve items from " + dateString,Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call call, Throwable t) {
+                Toast.makeText(getContext(),"Could not connect to the server",Toast.LENGTH_SHORT).show();
+                call.cancel();
+            }
+        });
 
 
     }
@@ -124,6 +148,25 @@ public class AgendaDayFragment extends Fragment{
         return inflater.inflate(R.layout.fragment_agenda_day,container,false);
     }
 
+    private void renderChildren(){
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        final ViewGroup main = getView().findViewById(R.id.linearlayout_calendar_day_children);
+        for (final HeenEnWeerDag c : childrenBooks){
+            View childView = inflater.inflate(R.layout.row_child_book,null);
+
+            childView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    HeenEnWeerFragment.OnHeenEnWeerAction mCallback = (HeenEnWeerFragment.OnHeenEnWeerAction)getActivity();
+                    mCallback.showDay(c.getId());
+                }
+            });
+
+            TextView vTextViewName = childView.findViewById(R.id.textview_row_child_book_name);
+            vTextViewName.setText("Er is een boekje voor " + c.getChild().getFirstname());
+            main.addView(childView);
+        }
+    }
 
     private void renderLayout(){
         LayoutInflater inflater = getActivity().getLayoutInflater();

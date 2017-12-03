@@ -78,6 +78,9 @@ public interface APIInterface {
     @GET("/api/calendar/event/date/{email}/{date}")
     Call<List<Event>> getEventsFromDate(@Header("authorization") String token, @Path("email")String email, @Path("date")Date date);
 
+    @GET("/api/calendar/heenenweer/day/{email}/{date}")
+    Call<List<HeenEnWeerDag>> getChildrenFromBookFromDate(@Header("authorization") String token, @Path("email") String email, @Path("date")Date date);
+
     @GET("/api/category/{email}")
     Call<List<Category>> getCategoriesFromUser(@Header("authorization") String token, @Path("email")String email);
 
