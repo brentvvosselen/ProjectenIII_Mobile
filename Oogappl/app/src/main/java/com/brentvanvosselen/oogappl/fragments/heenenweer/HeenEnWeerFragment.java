@@ -16,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,12 +32,17 @@ import com.brentvanvosselen.oogappl.listeners.ClickListener;
 import com.brentvanvosselen.oogappl.listeners.DayRecyclerTouchListener;
 import com.brentvanvosselen.oogappl.util.ObjectSerializer;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
+import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters;
+import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
+import io.github.luizgrp.sectionedrecyclerviewadapter.StatelessSection;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -51,9 +57,13 @@ public class HeenEnWeerFragment extends Fragment {
     private List<HeenEnWeerDag> days;
     private RecyclerView recyclerView;
     private DaysAdapter mAdapter;
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
+
 
     APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
     SharedPreferences sharedPreferences;
+
+    SectionedRecyclerViewAdapter sectionAdapter;
 
     public interface OnHeenEnWeerAction{
         public void showDay(String id);
@@ -82,20 +92,34 @@ public class HeenEnWeerFragment extends Fragment {
                     //fill list
                     recyclerView = (RecyclerView) getView().findViewById(R.id.recycler_books);
 
+                    sectionAdapter = new SectionedRecyclerViewAdapter();
+
+
                     days = new ArrayList<>();
                     for (HeenEnWeerBoek book:books) {
                         List<HeenEnWeerDag> bookDay = new ArrayList<>(Arrays.asList(book.getDays()));
                         days.addAll(bookDay);
+
+                        sectionAdapter.addSection(new BookSection(book.getChild().getFirstname(),Arrays.asList(book.getDays())));
                     }
-                    mAdapter = new DaysAdapter(days);
+
+
+
+                    //mAdapter = new DaysAdapter(days);
+
+
+
 
                     RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
                     recyclerView.setLayoutManager(mLayoutManager);
-                    recyclerView.setItemAnimator(new DefaultItemAnimator());
                     recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),LinearLayoutManager.VERTICAL));
-                    recyclerView.setHasFixedSize(true);
-                    recyclerView.setAdapter(mAdapter);
-                    recyclerView.addOnItemTouchListener(new DayRecyclerTouchListener(getContext(), recyclerView, new ClickListener() {
+                    recyclerView.setItemAnimator(new DefaultItemAnimator());
+                   /* recyclerView.setItemAnimator(new DefaultItemAnimator());
+                    recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),LinearLayoutManager.VERTICAL));
+                    recyclerView.setHasFixedSize(true);*/
+                    //recyclerView.setAdapter(mAdapter);
+                    recyclerView.setAdapter(sectionAdapter);
+                   /* recyclerView.addOnItemTouchListener(new DayRecyclerTouchListener(getContext(), recyclerView, new ClickListener() {
                         @Override
                         public void onClick(View view, int position) {
                             HeenEnWeerDag dag = days.get(position);
@@ -108,7 +132,7 @@ public class HeenEnWeerFragment extends Fragment {
 
                         }
                     }));
-                    Log.i("VALUES",books.toString());
+                    Log.i("VALUES",books.toString());*/
                 }
             }
 
@@ -146,5 +170,113 @@ public class HeenEnWeerFragment extends Fragment {
         }
         return super.onOptionsItemSelected(item);
 
+    }
+
+
+    private class BookSection extends StatelessSection {
+
+        String title;
+        List<HeenEnWeerDag> days = new ArrayList<>();
+        boolean expanded = false;
+
+        public BookSection(String title, List<HeenEnWeerDag>list){
+            super(new SectionParameters.Builder(R.layout.row_list_days)
+                    .headerResourceId(R.layout.section_list_days)
+                    .build());
+
+            this.title = title;
+            this.days = list;
+        }
+
+
+
+        @Override
+        public int getContentItemsTotal() {
+            return expanded? days.size() : 0;
+        }
+
+        @Override
+        public RecyclerView.ViewHolder getItemViewHolder(View view) {
+            return new HeenEnWeerBoekViewHolder(view);
+        }
+
+        @Override
+        public void onBindItemViewHolder(RecyclerView.ViewHolder holder, int position) {
+            HeenEnWeerBoekViewHolder itemHolder = (HeenEnWeerBoekViewHolder) holder;
+
+            //viewbinding
+            final HeenEnWeerDag day = days.get(position);
+
+            itemHolder.tvDescription.setText(day.getDescription());
+            itemHolder.tvDate.setText(dateFormat.format(day.getDate()));
+            itemHolder.tvChild.setText(day.getChild().getFirstname());
+
+            itemHolder.rootView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    HeenEnWeerFragment.OnHeenEnWeerAction mCallback = (HeenEnWeerFragment.OnHeenEnWeerAction) getActivity();
+                    mCallback.showDay(day.getId());
+                }
+            });
+        }
+
+        @Override
+        public RecyclerView.ViewHolder getHeaderViewHolder(View view) {
+            return new DayHeaderViewHolder(view);
+        }
+
+        @Override
+        public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder) {
+            final DayHeaderViewHolder headerHolder = (DayHeaderViewHolder) holder;
+
+            headerHolder.tvTitle.setText(title);
+
+            headerHolder.rootView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    expanded = !expanded;
+                    headerHolder.igChevron.setImageResource(
+                            expanded ? R.drawable.ic_arrow_up : R.drawable.ic_arrow_down
+                    );
+
+                    sectionAdapter.notifyDataSetChanged();
+                }
+            });
+
+
+        }
+
+
+        private class HeenEnWeerBoekViewHolder extends RecyclerView.ViewHolder{
+
+            private final TextView tvChild, tvDate, tvDescription;
+            private final View rootView;
+
+
+            HeenEnWeerBoekViewHolder(View view){
+                super(view);
+                rootView = view;
+                tvChild = view.findViewById(R.id.textview_days_list_child);
+                tvDate = view.findViewById(R.id.textview_days_list_date);
+                tvDescription = view.findViewById(R.id.textview_days_list_description);
+
+            }
+
+        }
+
+        private class DayHeaderViewHolder extends RecyclerView.ViewHolder{
+            private final View rootView;
+            private final TextView tvTitle;
+            private final ImageView igChevron;
+
+            DayHeaderViewHolder(View view){
+                super(view);
+
+                rootView = view;
+                tvTitle = view.findViewById(R.id.text_view_section_days);
+                igChevron = view.findViewById(R.id.imageview_section_days);
+            }
+
+        }
     }
 }

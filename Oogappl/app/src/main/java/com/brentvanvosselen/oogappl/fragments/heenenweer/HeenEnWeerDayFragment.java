@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,8 +24,12 @@ import com.brentvanvosselen.oogappl.RestClient.models.HeenEnWeerDag;
 import com.brentvanvosselen.oogappl.RestClient.models.HeenEnWeerItem;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
+import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters;
+import io.github.luizgrp.sectionedrecyclerviewadapter.StatelessSection;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -153,4 +158,8 @@ public class HeenEnWeerDayFragment extends Fragment {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+
+
 }
