@@ -201,7 +201,7 @@ public class HeenEnWeerFragment extends Fragment {
         }
 
         @Override
-        public void onBindItemViewHolder(RecyclerView.ViewHolder holder, int position) {
+        public void onBindItemViewHolder(RecyclerView.ViewHolder holder, final int position) {
             HeenEnWeerBoekViewHolder itemHolder = (HeenEnWeerBoekViewHolder) holder;
 
             //viewbinding
