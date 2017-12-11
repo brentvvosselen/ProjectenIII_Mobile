@@ -2,10 +2,13 @@ package com.brentvanvosselen.oogappl.fragments.main;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +25,7 @@ import com.brentvanvosselen.oogappl.R;
 import com.brentvanvosselen.oogappl.RestClient.APIInterface;
 import com.brentvanvosselen.oogappl.RestClient.models.Parent;
 import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
+import com.mikhaellopez.circularimageview.CircularImageView;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,7 +42,7 @@ public class ProfileFragment extends Fragment {
     private SharedPreferences sharedPreferences;
 
     TextView vTextViewEmail, vTextViewFirstname, vTextViewAddress, vTextViewTelephone, vTextViewWork, vTextViewType;
-
+    CircularImageView vImageViewProfile;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -57,6 +62,7 @@ public class ProfileFragment extends Fragment {
         vTextViewWork = content.findViewById(R.id.textview_profile_work);
         vTextViewType = content.findViewById(R.id.textview_profile_type);
 
+        vImageViewProfile = content.findViewById(R.id.profile_imageview);
 
         //get the user from the api-server
         Call call = apiInterface.getParentByEmail("bearer "+ sharedPreferences.getString("token",null),((MainActivity) getActivity()).getUserEmail());
@@ -65,6 +71,13 @@ public class ProfileFragment extends Fragment {
             public void onResponse(Call call, Response response) {
                 if(response.isSuccessful()){
                     Parent parent = (Parent) response.body();
+                    Log.i("parent",parent.toString());
+
+                    byte[] decodedString = Base64.decode(parent.getPicture().getValue(),Base64.DEFAULT);
+                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString,0,decodedString.length);
+
+                    vImageViewProfile.setImageBitmap(decodedByte);
+
                     vTextViewEmail.setText((parent.getEmail() == null)?"":parent.getEmail());
                     vTextViewFirstname.setText(parent.getFirstname() + " " + parent.getLastname());
                     if((parent.getAddressStreet() == null  || parent.getAddressStreet().isEmpty()) && (parent.getAddressNumber() == null || parent.getAddressNumber().isEmpty()) && (parent.getAddressPostalcode() == null || parent.getAddressPostalcode().isEmpty()) && (parent.getAddressCity() == null || parent.getAddressCity().isEmpty())){

@@ -44,6 +44,8 @@ public class Parent implements Serializable {
     private Group group;
     @SerializedName("doneSetup")
     private boolean doneSetup;
+    @SerializedName("picture")
+    private Image picture;
 
     @SerializedName("token")
     private String token;
@@ -136,4 +138,8 @@ public class Parent implements Serializable {
     public String getToken(){ return this.token; }
 
     public boolean hasDoneSetup(){ return doneSetup;}
+
+    public Image getPicture(){
+        return this.picture;
+    }
 }
