@@ -4,6 +4,8 @@ package com.brentvanvosselen.oogappl.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,6 +19,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -47,6 +50,7 @@ import com.brentvanvosselen.oogappl.fragments.finance.FinanceFragment;
 import com.brentvanvosselen.oogappl.fragments.main.HomeFragment;
 import com.brentvanvosselen.oogappl.fragments.main.ProfileFragment;
 import com.brentvanvosselen.oogappl.util.ObjectSerializer;
+import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -108,7 +112,8 @@ public class MainActivity extends AppCompatActivity
         View headerView = navigationView.getHeaderView(0);
 
         //When the user clicks on the image in the navigation drawer, navigate to the profile fragment
-        final ImageView vImageViewProfile = headerView.findViewById(R.id.profile_imageview);
+        final CircularImageView vImageViewProfile = headerView.findViewById(R.id.profile_imageview);
+
         vImageViewProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -137,6 +142,10 @@ public class MainActivity extends AppCompatActivity
                     if(response.isSuccessful()){
                         Parent p = (Parent)response.body();
                         vTextViewProfileName.setText(p.getFirstname() + " " + p.getLastname());
+
+                        byte[] decodedString = Base64.decode(p.getPicture().getValue(),Base64.DEFAULT);
+                        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString,0,decodedString.length);
+                        vImageViewProfile.setImageBitmap(decodedByte);
                         if(p.getType() != null){
                             switch (p.getType()){
                                 case "M": vTextViewProfileType.setText(R.string.mother);

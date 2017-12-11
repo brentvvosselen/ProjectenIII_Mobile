@@ -28,11 +28,10 @@
         android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent" />
 
-    <ImageView
+    <com.mikhaellopez.circularimageview.CircularImageView
         android:id="@+id/profile_imageview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@android:drawable/sym_def_app_icon"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:contentDescription="Profile picture"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="24dp"
