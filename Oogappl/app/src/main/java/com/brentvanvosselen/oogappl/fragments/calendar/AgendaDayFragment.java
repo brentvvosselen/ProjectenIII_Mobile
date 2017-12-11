@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,7 +25,9 @@ import com.brentvanvosselen.oogappl.RestClient.models.Event;
 import com.brentvanvosselen.oogappl.RestClient.models.HeenEnWeerBoek;
 import com.brentvanvosselen.oogappl.RestClient.models.HeenEnWeerDag;
 import com.brentvanvosselen.oogappl.RestClient.models.User;
+import com.brentvanvosselen.oogappl.adapters.DayChildrenAdapter;
 import com.brentvanvosselen.oogappl.fragments.heenenweer.HeenEnWeerFragment;
+import com.brentvanvosselen.oogappl.layout.ExpandableHeightGridView;
 import com.brentvanvosselen.oogappl.util.ObjectSerializer;
 
 import java.text.DateFormat;
@@ -149,7 +153,19 @@ public class AgendaDayFragment extends Fragment{
     }
 
     private void renderChildren(){
-        LayoutInflater inflater = getActivity().getLayoutInflater();
+        ExpandableHeightGridView gridView = (ExpandableHeightGridView) getView().findViewById(R.id.gridview_calendar_day_children);
+        DayChildrenAdapter childrenAdapter = new DayChildrenAdapter(getContext(),childrenBooks.toArray(new HeenEnWeerDag[childrenBooks.size()]));
+        gridView.setAdapter(childrenAdapter);
+        gridView.setExpanded(true);
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                HeenEnWeerDag dag = childrenBooks.get(i);
+                HeenEnWeerFragment.OnHeenEnWeerAction mCallback = (HeenEnWeerFragment.OnHeenEnWeerAction)getActivity();
+                mCallback.showDay(dag.getId());
+            }
+        });
+        /*LayoutInflater inflater = getActivity().getLayoutInflater();
         final ViewGroup main = getView().findViewById(R.id.linearlayout_calendar_day_children);
         for (final HeenEnWeerDag c : childrenBooks){
             View childView = inflater.inflate(R.layout.row_child_book,null);
@@ -163,9 +179,10 @@ public class AgendaDayFragment extends Fragment{
             });
 
             TextView vTextViewName = childView.findViewById(R.id.textview_row_child_book_name);
-            vTextViewName.setText("Er is een boekje voor " + c.getChild().getFirstname());
+            vTextViewName.setText(c.getChild().getFirstname());
             main.addView(childView);
-        }
+        }*/
+
     }
 
     private void renderLayout(){

@@ -9,7 +9,7 @@ public class RetrofitClient {
 
     private static Retrofit retrofit;
 
-    private static final String IPADRESS = "192.168.2.13";
+    private static final String IPADRESS = "192.168.2.17";
 
 
     public static Retrofit getClient() {
