@@ -29,6 +29,7 @@ import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
 import com.brentvanvosselen.oogappl.RestClient.models.HeenEnWeerBoek;
 import com.brentvanvosselen.oogappl.RestClient.models.HeenEnWeerDag;
 import com.brentvanvosselen.oogappl.RestClient.models.HeenEnWeerItem;
+import com.brentvanvosselen.oogappl.RestClient.models.Image;
 import com.brentvanvosselen.oogappl.RestClient.models.User;
 import com.brentvanvosselen.oogappl.adapters.DaysAdapter;
 import com.brentvanvosselen.oogappl.listeners.ClickListener;
@@ -102,9 +103,10 @@ public class HeenEnWeerFragment extends Fragment {
                     days = new ArrayList<>();
                     for (HeenEnWeerBoek book:books) {
                         List<HeenEnWeerDag> bookDay = new ArrayList<>(Arrays.asList(book.getDays()));
+
                         days.addAll(bookDay);
 
-                        sectionAdapter.addSection(new BookSection(book.getChild().getFirstname(),Arrays.asList(book.getDays())));
+                        sectionAdapter.addSection(new BookSection(book.getChild().getFirstname(),Arrays.asList(book.getDays()),book.getChild().getPicture()));
                     }
 
 
@@ -179,17 +181,19 @@ public class HeenEnWeerFragment extends Fragment {
 
     private class BookSection extends StatelessSection {
 
-        String title;
-        List<HeenEnWeerDag> days = new ArrayList<>();
+        private String title;
+        private List<HeenEnWeerDag> days = new ArrayList<>();
+        private Image childImage;
         boolean expanded = false;
 
-        public BookSection(String title, List<HeenEnWeerDag>list){
+        public BookSection(String title, List<HeenEnWeerDag>list, Image childImage){
             super(new SectionParameters.Builder(R.layout.row_list_days)
                     .headerResourceId(R.layout.section_list_days)
                     .build());
 
             this.title = title;
             this.days = list;
+            this.childImage = childImage;
         }
 
 
@@ -215,8 +219,8 @@ public class HeenEnWeerFragment extends Fragment {
             itemHolder.tvDate.setText(dateFormat.format(day.getDate()));
             itemHolder.tvChild.setText(day.getChild().getFirstname());
 
-            if(day.getChild().getPicture() != null){
-                byte[] decodedString = Base64.decode(day.getChild().getPicture().getValue(),Base64.DEFAULT);
+            if(childImage != null){
+                byte[] decodedString = Base64.decode(childImage.getValue(),Base64.DEFAULT);
                 Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString,0,decodedString.length);
                 itemHolder.ivChild.setImageBitmap(decodedByte);
             }else{

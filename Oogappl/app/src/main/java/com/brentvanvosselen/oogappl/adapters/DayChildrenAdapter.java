@@ -1,6 +1,10 @@
 package com.brentvanvosselen.oogappl.adapters;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +15,8 @@ import com.brentvanvosselen.oogappl.R;
 import com.brentvanvosselen.oogappl.RestClient.models.Child;
 import com.brentvanvosselen.oogappl.RestClient.models.HeenEnWeerBoek;
 import com.brentvanvosselen.oogappl.RestClient.models.HeenEnWeerDag;
+import com.brentvanvosselen.oogappl.RestClient.models.Image;
+import com.mikhaellopez.circularimageview.CircularImageView;
 
 /**
  * Created by brentvanvosselen on 11/12/2017.
@@ -50,8 +56,21 @@ public class DayChildrenAdapter extends BaseAdapter {
         }
 
         final TextView vTextViewChild = (TextView) view.findViewById(R.id.textview_row_child_book_name);
+        final CircularImageView vImageViewChild = view.findViewById(R.id.imageview_row_child_book_picture);
+
 
         vTextViewChild.setText(day.getChild().getFirstname());
+
+        //image
+
+        if(day.getChild().getPicture() != null){
+            byte[] decodedString = Base64.decode(day.getChild().getPicture().getValue(),Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString,0,decodedString.length);
+            vImageViewChild.setImageBitmap(decodedByte);
+        }else{
+            Bitmap image = BitmapFactory.decodeResource(Resources.getSystem(),R.drawable.no_picture);
+            vImageViewChild.setImageBitmap(image);
+        }
 
         return view;
     }
