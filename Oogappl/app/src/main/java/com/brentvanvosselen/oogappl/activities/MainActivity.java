@@ -143,9 +143,9 @@ public class MainActivity extends AppCompatActivity
                         Parent p = (Parent)response.body();
                         vTextViewProfileName.setText(p.getFirstname() + " " + p.getLastname());
 
-                        byte[] decodedString = Base64.decode(p.getPicture().getValue(),Base64.DEFAULT);
-                        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString,0,decodedString.length);
-                        vImageViewProfile.setImageBitmap(decodedByte);
+                        //byte[] decodedString = Base64.decode(p.getPicture().getValue(),Base64.DEFAULT);
+                        //Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString,0,decodedString.length);
+                        //vImageViewProfile.setImageBitmap(decodedByte);
                         if(p.getType() != null){
                             switch (p.getType()){
                                 case "M": vTextViewProfileType.setText(R.string.mother);

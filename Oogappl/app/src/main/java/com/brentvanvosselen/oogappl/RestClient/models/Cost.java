@@ -1,5 +1,6 @@
 package com.brentvanvosselen.oogappl.RestClient.models;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
@@ -16,13 +17,17 @@ public class Cost {
     private Date date;
     @SerializedName("costCategoryid")
     private CostCategory category;
+    @SerializedName("children")
+    @Expose
+    private Child[] children;
 
-    public Cost(String title, String description, double amount, Date date, CostCategory category) {
+    public Cost(String title, String description, double amount, Date date, CostCategory category, Child[] children) {
         this.title = title;
         this.description = description;
         this.amount = amount;
         this.date = date;
         this.category = category;
+        this.children = children;
     }
 
     public Cost(String title, String description, double amount, Date date) {
@@ -55,4 +60,6 @@ public class Cost {
     public CostCategory getCategory() {
         return category;
     }
+
+    public Child[] getChildren() { return children; }
 }
