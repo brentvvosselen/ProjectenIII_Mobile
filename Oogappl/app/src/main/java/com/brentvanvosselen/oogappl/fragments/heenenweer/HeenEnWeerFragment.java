@@ -2,6 +2,8 @@ package com.brentvanvosselen.oogappl.fragments.heenenweer;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,6 +11,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -31,6 +34,7 @@ import com.brentvanvosselen.oogappl.adapters.DaysAdapter;
 import com.brentvanvosselen.oogappl.listeners.ClickListener;
 import com.brentvanvosselen.oogappl.listeners.DayRecyclerTouchListener;
 import com.brentvanvosselen.oogappl.util.ObjectSerializer;
+import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -211,6 +215,15 @@ public class HeenEnWeerFragment extends Fragment {
             itemHolder.tvDate.setText(dateFormat.format(day.getDate()));
             itemHolder.tvChild.setText(day.getChild().getFirstname());
 
+            if(day.getChild().getPicture() != null){
+                byte[] decodedString = Base64.decode(day.getChild().getPicture().getValue(),Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString,0,decodedString.length);
+                itemHolder.ivChild.setImageBitmap(decodedByte);
+            }else{
+                Bitmap image = BitmapFactory.decodeResource(getContext().getResources(),R.drawable.no_picture);
+                itemHolder.ivChild.setImageBitmap(image);
+            }
+
             itemHolder.rootView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -250,6 +263,7 @@ public class HeenEnWeerFragment extends Fragment {
         private class HeenEnWeerBoekViewHolder extends RecyclerView.ViewHolder{
 
             private final TextView tvChild, tvDate, tvDescription;
+            private final CircularImageView ivChild;
             private final View rootView;
 
 
@@ -259,6 +273,7 @@ public class HeenEnWeerFragment extends Fragment {
                 tvChild = view.findViewById(R.id.textview_days_list_child);
                 tvDate = view.findViewById(R.id.textview_days_list_date);
                 tvDescription = view.findViewById(R.id.textview_days_list_description);
+                ivChild = view.findViewById(R.id.imageview_days_list_child);
 
             }
 

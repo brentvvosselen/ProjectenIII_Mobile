@@ -23,6 +23,8 @@ public class Child implements Serializable {
     private Date birthdate;
     @SerializedName("categories")
     private List<ChildinfoCategory> category;
+    @SerializedName("picture")
+    private Image picture;
 
     public String getFirstname() {
         return firstname;
@@ -73,5 +75,9 @@ public class Child implements Serializable {
 
     public void removeCategory(ChildinfoCategory c) {
         this.category.remove(c);
+    }
+
+    public Image getPicture(){
+        return this.picture;
     }
 }
