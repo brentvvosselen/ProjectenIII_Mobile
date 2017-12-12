@@ -1,13 +1,19 @@
 package com.brentvanvosselen.oogappl.fragments.main;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.graphics.BitmapCompat;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,12 +26,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.brentvanvosselen.oogappl.RestClient.models.Image;
+import com.brentvanvosselen.oogappl.RestClient.models.User;
 import com.brentvanvosselen.oogappl.activities.MainActivity;
 import com.brentvanvosselen.oogappl.R;
 import com.brentvanvosselen.oogappl.RestClient.APIInterface;
 import com.brentvanvosselen.oogappl.RestClient.models.Parent;
 import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
+import com.brentvanvosselen.oogappl.util.ObjectSerializer;
 import com.mikhaellopez.circularimageview.CircularImageView;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,9 +54,14 @@ public class ProfileFragment extends Fragment {
     //declaration fo the api-interface
     private APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
     private SharedPreferences sharedPreferences;
+    private int PICK_IMAGE_REQUEST = 1;
 
     TextView vTextViewEmail, vTextViewFirstname, vTextViewAddress, vTextViewTelephone, vTextViewWork, vTextViewType;
     CircularImageView vImageViewProfile;
+
+    public interface OnNavigationChange{
+        public void profilePictureChanged(Bitmap b);
+    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -64,6 +83,24 @@ public class ProfileFragment extends Fragment {
 
         vImageViewProfile = content.findViewById(R.id.profile_imageview);
 
+        vImageViewProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(getView(), "Duw lang om foto te wijzigen", Snackbar.LENGTH_SHORT).show();
+            }
+        });
+
+        vImageViewProfile.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if(takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null){
+                    startActivityForResult(takePictureIntent,PICK_IMAGE_REQUEST);
+                }
+                return true;
+            }
+        });
+
         //get the user from the api-server
         Call call = apiInterface.getParentByEmail("bearer "+ sharedPreferences.getString("token",null),((MainActivity) getActivity()).getUserEmail());
         call.enqueue(new Callback() {
@@ -73,10 +110,15 @@ public class ProfileFragment extends Fragment {
                     Parent parent = (Parent) response.body();
                     Log.i("parent",parent.toString());
 
-                    byte[] decodedString = Base64.decode(parent.getPicture().getValue(),Base64.DEFAULT);
-                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString,0,decodedString.length);
+                    if(parent.getPicture() != null){
+                        byte[] decodedString = Base64.decode(parent.getPicture().getValue(),Base64.DEFAULT);
+                        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString,0,decodedString.length);
+                        vImageViewProfile.setImageBitmap(decodedByte);
+                    }else{
+                        Bitmap image = BitmapFactory.decodeResource(getContext().getResources(),R.drawable.no_picture);
+                        vImageViewProfile.setImageBitmap(image);
+                    }
 
-                    vImageViewProfile.setImageBitmap(decodedByte);
 
                     vTextViewEmail.setText((parent.getEmail() == null)?"":parent.getEmail());
                     vTextViewFirstname.setText(parent.getFirstname() + " " + parent.getLastname());
@@ -120,19 +162,7 @@ public class ProfileFragment extends Fragment {
             }
          });
 
-        //go to editfragment when the user clicks on the edit button
-        /*Button vButtonEdit = content.findViewById(R.id.button_profile_edit);
-        vButtonEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Fragment editFragment = new ProfileEditFragment();
-                if (editFragment != null){
-                    FragmentTransaction ft = getFragmentManager().beginTransaction();
-                    ft.replace(R.id.content_main,editFragment);
-                    ft.commit();
-                }
-            }
-        });*/
+
     }
 
     @Nullable
@@ -164,5 +194,59 @@ public class ProfileFragment extends Fragment {
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK){
+            Bundle extras = data.getExtras();
+                Bitmap bitmap = (Bitmap) extras.get("data");
+                // Log.d(TAG, String.valueOf(bitmap));
+                Log.i("before compress", String.valueOf(BitmapCompat.getAllocationByteCount(bitmap)));
+
+                //compressing image
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+                bitmap.compress(Bitmap.CompressFormat.JPEG,50,out);
+                Bitmap smaller = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
+                Log.i("after compress", String.valueOf(BitmapCompat.getAllocationByteCount(smaller)));
+
+                byte[] byteArray = out.toByteArray();
+                String value = Base64.encodeToString(byteArray,Base64.DEFAULT);
+                String name = String.valueOf(new Date().getTime());
+                String type = "image/jpeg";
+
+                Image image = new Image(name,type,value);
+
+                User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
+
+                Call changeProfilePictureCall = apiInterface.changeProfilePicture("bearer " + sharedPreferences.getString("token",null),currentUser.getEmail(),image);
+                changeProfilePictureCall.enqueue(new Callback() {
+                    @Override
+                    public void onResponse(Call call, Response response) {
+                        if(response.isSuccessful()){
+                            Snackbar.make(getView(), "Profielfoto gewijzigd", Snackbar.LENGTH_SHORT).show();
+
+                        }else{
+                            Snackbar.make(getView(), "Profielfoto niet gewijzigd", Snackbar.LENGTH_SHORT).show();
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call call, Throwable t) {
+                        Snackbar.make(getView(), "Kon niet connecteren met de server", Snackbar.LENGTH_SHORT).show();
+
+                    }
+                });
+
+            OnNavigationChange mCallback = (OnNavigationChange)getActivity();
+            mCallback.profilePictureChanged(smaller);
+            vImageViewProfile.setImageBitmap(smaller);
+
+
+        }
     }
 }
