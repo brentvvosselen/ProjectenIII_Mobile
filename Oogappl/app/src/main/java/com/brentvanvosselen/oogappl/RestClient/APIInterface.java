@@ -9,6 +9,7 @@ import com.brentvanvosselen.oogappl.RestClient.models.Group;
 import com.brentvanvosselen.oogappl.RestClient.models.HeenEnWeerBoek;
 import com.brentvanvosselen.oogappl.RestClient.models.HeenEnWeerDag;
 import com.brentvanvosselen.oogappl.RestClient.models.HeenEnWeerItem;
+import com.brentvanvosselen.oogappl.RestClient.models.Image;
 import com.brentvanvosselen.oogappl.RestClient.models.Parent;
 import com.brentvanvosselen.oogappl.RestClient.models.SetupValues;
 import com.brentvanvosselen.oogappl.RestClient.models.User;
@@ -128,6 +129,9 @@ public interface APIInterface {
 
     @POST("/api/heenenweer/day/add")
     Call<String> addHeenEnWeerDay(@Header("authorization") String token, @Body HeenEnWeerDag item);
+
+    @POST("/api/parents/picture/{email}")
+    Call<String> changeProfilePicture(@Header("authorization")String token, @Path("email")String email, @Body Image image);
     /*
     Voorbeeld van API call
 

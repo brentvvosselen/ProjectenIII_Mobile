@@ -28,7 +28,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brentvanvosselen.oogappl.RestClient.APIInterface;
@@ -60,11 +59,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, AgendaFragment.OnCalendarItemSelected, HeenEnWeerFragment.OnHeenEnWeerAction{
+        implements NavigationView.OnNavigationItemSelectedListener, AgendaFragment.OnCalendarItemSelected, HeenEnWeerFragment.OnHeenEnWeerAction, ProfileFragment.OnNavigationChange{
 
     // private Boolean loggedIn = false;
     private User currentUser;
     private Parent parent;
+
+    CircularImageView vImageViewProfile;
 
     APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
 
@@ -112,7 +113,7 @@ public class MainActivity extends AppCompatActivity
         View headerView = navigationView.getHeaderView(0);
 
         //When the user clicks on the image in the navigation drawer, navigate to the profile fragment
-        final CircularImageView vImageViewProfile = headerView.findViewById(R.id.profile_imageview);
+        vImageViewProfile = headerView.findViewById(R.id.profile_imageview);
 
         vImageViewProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,10 +143,14 @@ public class MainActivity extends AppCompatActivity
                     if(response.isSuccessful()){
                         Parent p = (Parent)response.body();
                         vTextViewProfileName.setText(p.getFirstname() + " " + p.getLastname());
-
-                        //byte[] decodedString = Base64.decode(p.getPicture().getValue(),Base64.DEFAULT);
-                        //Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString,0,decodedString.length);
-                        //vImageViewProfile.setImageBitmap(decodedByte);
+                        if(p.getPicture() != null){
+                            byte[] decodedString = Base64.decode(p.getPicture().getValue(),Base64.DEFAULT);
+                            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString,0,decodedString.length);
+                            vImageViewProfile.setImageBitmap(decodedByte);
+                        }else{
+                            Bitmap image = BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.no_picture);
+                            vImageViewProfile.setImageBitmap(image);
+                        }
                         if(p.getType() != null){
                             switch (p.getType()){
                                 case "M": vTextViewProfileType.setText(R.string.mother);
@@ -381,5 +386,10 @@ public class MainActivity extends AppCompatActivity
         ft.replace(R.id.content_main,heenenweerAddDayFragment);
         ft.addToBackStack("heenenweer_add");
         ft.commit();
+    }
+
+    @Override
+    public void profilePictureChanged(Bitmap b) {
+        vImageViewProfile.setImageBitmap(b);
     }
 }
