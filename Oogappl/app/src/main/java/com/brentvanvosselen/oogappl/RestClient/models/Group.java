@@ -70,12 +70,40 @@ public class Group implements Serializable {
 
     public FinancialType getFinancialType() {
         String type = this.finType.getType();
-        if(type == null || type.equals("")) {
+        if (type == null || type.equals("")) {
             return null;
-        } else if(type.equals("onderhoudsbijdrage")) {
+        } else if (type.equals("onderhoudsbijdrage")) {
             return FinancialType.ONDERHOUDSBIJDRAGE;
         } else {
             return FinancialType.KINDREKENING;
         }
+    }
+
+    public String[] getSelectChildnamesCost() {
+        String[] names = new String[this.children.length + 1];
+        names[0] = "Allemaal";
+
+        for(int i = 0; i < this.children.length; i++) {
+            names[i + 1] = this.children[i].getFirstname();
+        }
+
+        return names;
+    }
+
+    public Child[] getChildByName(String firstname) {
+        if(firstname.equals("Allemaal")) {
+            return this.children;
+        } else {
+            Child[] temp = new Child[1];
+
+            for(Child c : this.children) {
+                if(c.getFirstname().equals(firstname)) {
+                    temp[0] = c;
+                    return temp;
+                }
+            }
+        }
+
+        return null;
     }
 }

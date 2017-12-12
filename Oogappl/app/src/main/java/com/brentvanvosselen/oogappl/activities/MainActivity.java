@@ -143,7 +143,6 @@ public class MainActivity extends AppCompatActivity
                     if(response.isSuccessful()){
                         Parent p = (Parent)response.body();
                         vTextViewProfileName.setText(p.getFirstname() + " " + p.getLastname());
-
                         if(p.getPicture() != null){
                             byte[] decodedString = Base64.decode(p.getPicture().getValue(),Base64.DEFAULT);
                             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString,0,decodedString.length);
@@ -152,7 +151,6 @@ public class MainActivity extends AppCompatActivity
                             Bitmap image = BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.no_picture);
                             vImageViewProfile.setImageBitmap(image);
                         }
-
                         if(p.getType() != null){
                             switch (p.getType()){
                                 case "M": vTextViewProfileType.setText(R.string.mother);

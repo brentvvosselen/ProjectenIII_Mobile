@@ -31,6 +31,7 @@ import android.widget.Toast;
 import com.brentvanvosselen.oogappl.R;
 import com.brentvanvosselen.oogappl.RestClient.APIInterface;
 import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
+import com.brentvanvosselen.oogappl.RestClient.models.Child;
 import com.brentvanvosselen.oogappl.RestClient.models.Cost;
 import com.brentvanvosselen.oogappl.RestClient.models.CostCategory;
 import com.brentvanvosselen.oogappl.RestClient.models.FinancialType;
@@ -214,7 +215,7 @@ public class FinanceFragment extends Fragment {
 
         final EditText editTextTitle = mView.findViewById(R.id.editText_cost_title);
         fields.add(editTextTitle);
-        final EditText editTextDescription = mView.findViewById(R.id.editText_card_cost_description);
+        final EditText editTextDescription = mView.findViewById(R.id.editText_card_cost_description3);
         fields.add(editTextDescription);
         final EditText editTextAmount = mView.findViewById(R.id.editText_cost_bedrag);
         fields.add(editTextAmount);
@@ -266,6 +267,13 @@ public class FinanceFragment extends Fragment {
             }
         });
 
+        String[] nameSelect = this.parent.getGroup().getSelectChildnamesCost();
+
+        ArrayAdapter<String> arrayAdapter1 = new ArrayAdapter<String>(getContext(),
+                R.layout.support_simple_spinner_dropdown_item, nameSelect);
+        final Spinner spinnerChildren = mView.findViewById(R.id.spinner_child);
+        spinnerChildren.setAdapter(arrayAdapter1);
+
         final AlertDialog dialog = builder.setView(mView)
                 .setPositiveButton(R.string.add, null)
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -304,11 +312,19 @@ public class FinanceFragment extends Fragment {
                             String title = editTextTitle.getText().toString();
                             String desciption = editTextDescription.getText().toString();
                             double amount = Double.parseDouble(editTextAmount.getText().toString());
+
                             String date = editTextDate.getText().toString();
+                            int day = Integer.parseInt(date.substring(0, 2));
+                            int month = Integer.parseInt(date.substring(3, 5)) - 1;
+                            int year = Integer.parseInt(date.substring(6, 10)) - 1900;
 
                             CostCategory category = categories.get(spinnerCategory.getSelectedItemPosition());
-                            Cost temp = new Cost(title, desciption, amount, new Date(), category);
-                            addCost(temp);
+
+                            String childName = (String) spinnerChildren.getSelectedItem();
+
+                            Cost temp = new Cost(title, desciption, amount, new Date(year, month, day), category, parent.getGroup().getChildByName(childName));
+                            Log.i("DATE", temp.getDate().toString());
+                            // addCost(temp);
                             dialog.dismiss();
                         }
                     }
