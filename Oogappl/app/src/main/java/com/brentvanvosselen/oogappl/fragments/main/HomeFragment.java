@@ -38,8 +38,6 @@ public class HomeFragment extends Fragment {
 
     SharedPreferences sharedPreferences;
 
-
-
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -61,7 +59,7 @@ public class HomeFragment extends Fragment {
         //Indien de gebruiker de setup nog niet doorlopen heeft, krijgt hij dit kaartje te zien
         User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
         Log.i("API:", currentUser.getEmail());
-        Call call = RetrofitClient.getClient().create(APIInterface.class).getParentByEmail("bearer "+ sharedPreferences.getString("token",null),currentUser.getEmail());
+        Call call = RetrofitClient.getClient(getContext()).create(APIInterface.class).getParentByEmail("bearer "+ sharedPreferences.getString("token",null),currentUser.getEmail());
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
@@ -98,7 +96,7 @@ public class HomeFragment extends Fragment {
         //Indien de gebruiker de setup nog niet doorlopen heeft, krijgt hij dit kaartje te zien
         User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
 
-        Call call = RetrofitClient.getClient().create(APIInterface.class).getParentByEmail("bearer "+ sharedPreferences.getString("token",null),currentUser.getEmail());
+        Call call = RetrofitClient.getClient(getContext()).create(APIInterface.class).getParentByEmail("bearer "+ sharedPreferences.getString("token",null),currentUser.getEmail());
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {

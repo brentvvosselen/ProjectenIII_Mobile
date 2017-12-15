@@ -35,7 +35,7 @@ public class ChildInfoView extends ScrollView {
     private Child[] children = new Child[0];
     private int selectedChild = 0;
 
-    APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
+    APIInterface apiInterface = RetrofitClient.getClient(getContext()).create(APIInterface.class);
     SharedPreferences sharedPreferences = getContext().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
 
     public ChildInfoView(Context context) {

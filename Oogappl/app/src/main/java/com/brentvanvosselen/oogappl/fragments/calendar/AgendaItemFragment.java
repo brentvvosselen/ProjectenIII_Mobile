@@ -42,7 +42,7 @@ public class AgendaItemFragment extends Fragment{
 
     private String itemId;
 
-    private APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
+    private APIInterface apiInterface;
     SharedPreferences sharedPreferences;
 
     private TextView vTextViewStartDate,vTextViewStartMonth, vTextViewStartTime,vTextViewEndDate,vTextViewEndMonth, vTextViewEndTime, vTextViewChildren,vTextViewDescription, vTextViewTitle;
@@ -66,6 +66,7 @@ public class AgendaItemFragment extends Fragment{
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        apiInterface = RetrofitClient.getClient(getContext()).create(APIInterface.class);
         sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
 
         View content = getView();

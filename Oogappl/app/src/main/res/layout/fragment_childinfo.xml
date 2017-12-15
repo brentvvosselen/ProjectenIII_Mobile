@@ -41,8 +41,7 @@
                 app:civ_border="false"
                 app:civ_shadow="true"
                 app:civ_shadow_radius="10"
-                app:civ_shadow_color="#616161"
-                android:src="@raw/img_man" />
+                app:civ_shadow_color="#616161" />
 
             <ImageButton
                 android:id="@+id/imageButton_childinfo_add_category"

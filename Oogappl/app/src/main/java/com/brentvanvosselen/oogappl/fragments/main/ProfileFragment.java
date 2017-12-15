@@ -52,7 +52,7 @@ import retrofit2.Response;
 public class ProfileFragment extends Fragment {
 
     //declaration fo the api-interface
-    private APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
+    private APIInterface apiInterface;
     private SharedPreferences sharedPreferences;
     private int PICK_IMAGE_REQUEST = 1;
 
@@ -67,6 +67,7 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        apiInterface = RetrofitClient.getClient(getContext()).create(APIInterface.class);
         sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
 
         TextView title = getActivity().findViewById(getResources().getIdentifier("action_bar_title", "id", getActivity().getPackageName()));

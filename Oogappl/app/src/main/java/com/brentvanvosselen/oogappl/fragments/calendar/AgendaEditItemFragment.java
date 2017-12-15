@@ -11,7 +11,11 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearSnapHelper;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SnapHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -42,6 +46,7 @@ import com.brentvanvosselen.oogappl.RestClient.models.Child;
 import com.brentvanvosselen.oogappl.RestClient.models.Event;
 import com.brentvanvosselen.oogappl.RestClient.models.Parent;
 import com.brentvanvosselen.oogappl.RestClient.models.User;
+import com.brentvanvosselen.oogappl.adapters.ChildrenHorizontalPickerAdapter;
 import com.brentvanvosselen.oogappl.util.ObjectSerializer;
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
@@ -60,6 +65,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import travel.ithaka.android.horizontalpickerlib.PickerLayoutManager;
 
 /**
  * Created by brentvanvosselen on 05/11/2017.
@@ -74,7 +80,7 @@ public class AgendaEditItemFragment extends Fragment {
     //use this variable to edit an event, if this is null you want to create an event
     private String itemId = null;
 
-    APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
+    APIInterface apiInterface;
     SharedPreferences sharedPreferences;
     User currentUser;
 
@@ -84,6 +90,9 @@ public class AgendaEditItemFragment extends Fragment {
     Spinner vSpinnerCategory, vSpinnerWederkerendFrequenty, vSpinnerChild;
     CheckBox vCheckboxWederkerend;
     TextView vTextViewWederkerendEinddatum;
+
+    RecyclerView vRecyclerChildren;
+    ChildrenHorizontalPickerAdapter mChildrenAdapter;
 
     List<Category> categories;
     List<Child> children;
@@ -107,6 +116,7 @@ public class AgendaEditItemFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        apiInterface = RetrofitClient.getClient(getContext()).create(APIInterface.class);
         sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
         currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
 
@@ -575,6 +585,7 @@ public class AgendaEditItemFragment extends Fragment {
                 if (response.isSuccessful()){
                     Parent p = (Parent) response.body();
                     children = Arrays.asList(p.getChildren());
+
                     Log.i("parent",p.toString());
                     Log.i("children",children.toString());
                     List<String> childNames = new ArrayList<>();
@@ -582,6 +593,34 @@ public class AgendaEditItemFragment extends Fragment {
                         childNames.add(child.getFirstname() + " " + child.getLastname());
                     }
                     childNames.add("Alle kinderen");
+                    //horizontalpicker/
+
+                    vRecyclerChildren = getView().findViewById(R.id.recycler_agenda_edit_children);
+
+                    PickerLayoutManager pickerLayoutManager = new PickerLayoutManager(getContext(),PickerLayoutManager.HORIZONTAL,false);
+                    pickerLayoutManager.setChangeAlpha(true);
+                    pickerLayoutManager.setScaleDownBy(0.99f);
+                    pickerLayoutManager.setScaleDownDistance(0.9f);
+
+
+                    mChildrenAdapter = new ChildrenHorizontalPickerAdapter(getContext(),childNames,vRecyclerChildren);
+
+                    SnapHelper snapHelper = new LinearSnapHelper();
+                    snapHelper.attachToRecyclerView(vRecyclerChildren);
+
+                    vRecyclerChildren.setLayoutManager(pickerLayoutManager);
+                    vRecyclerChildren.setAdapter(mChildrenAdapter);
+
+
+
+
+
+
+
+
+
+                    ////
+
                     ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(getContext(),R.layout.custom_spinner_item,childNames);
                     vSpinnerChild.setAdapter(mAdapter);
                 }

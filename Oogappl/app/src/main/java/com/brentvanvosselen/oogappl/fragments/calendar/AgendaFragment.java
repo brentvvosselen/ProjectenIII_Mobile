@@ -41,7 +41,7 @@ import retrofit2.Response;
 
 public class AgendaFragment extends Fragment {
 
-    private APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
+    private APIInterface apiInterface;
     SharedPreferences sharedPreferences;
     private final Calendar mCalendar = Calendar.getInstance();
 
@@ -73,6 +73,7 @@ public class AgendaFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        apiInterface = RetrofitClient.getClient(getContext()).create(APIInterface.class);
         sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
 
         TextView title = getActivity().findViewById(getResources().getIdentifier("action_bar_title", "id", getActivity().getPackageName()));

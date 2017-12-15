@@ -35,6 +35,18 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_agenda_edit_children"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:clipToPadding="false"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView"></android.support.v7.widget.RecyclerView>
+
+        
+
             <TextView
                 android:id="@+id/textview_edit_event_label_title"
                 android:layout_width="wrap_content"
@@ -64,12 +76,11 @@
                 android:id="@+id/textview_edit_event_label_startdate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:fontFamily="@font/poppins_medium"
                 android:text="Startdatum"
                 android:textColor="@color/dim_gray_text"
                 app:layout_constraintStart_toStartOf="@+id/edittext_edit_event_startDate"
-                app:layout_constraintTop_toBottomOf="@+id/textView" />
+                app:layout_constraintTop_toBottomOf="@+id/recycler_agenda_edit_children" />
 
             <TextView
                 android:id="@+id/textview_edit_event_label_starttime"

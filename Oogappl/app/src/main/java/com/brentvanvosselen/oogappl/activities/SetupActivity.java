@@ -31,7 +31,7 @@ public class SetupActivity extends AppCompatActivity implements
         SetupOtherParentFragment.OnParentNextSelected,
         SetupChildrenFragment.OnChildrenSelected {
 
-    private APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
+    private APIInterface apiInterface;
     SharedPreferences sharedPreferences;
 
     private char type;
@@ -42,6 +42,8 @@ public class SetupActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup);
+
+        apiInterface = RetrofitClient.getClient(this).create(APIInterface.class);
 
         //start type fragment
         Fragment typeFragment = new SetupTypeFragment();

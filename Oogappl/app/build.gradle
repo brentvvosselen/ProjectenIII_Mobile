@@ -50,6 +50,8 @@ dependencies {
     compile 'com.github.QuadFlask:colorpicker:0.0.13'
     //sectionRecycler
     compile 'io.github.luizgrp.sectionedrecyclerviewadapter:sectionedrecyclerviewadapter:1.1.3'
+    //horizontalpicker
+    compile 'com.github.adityagohad:HorizontalPicker:1.0.1'
 
     testCompile 'junit:junit:4.12'
 }

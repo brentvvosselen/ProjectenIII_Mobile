@@ -35,7 +35,7 @@ public class FinanceSetupActivity extends AppCompatActivity implements
     SetupOnderhoudsbijdragePercentageFragment.OnOnderhoudsbijdragepercentageSelect,
     SetupAcceptFinancialFragment.OnAcceptFinancial {
 
-    private APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
+    private APIInterface apiInterface;
     SharedPreferences sharedPreferences;
 
     private Parent parent;
@@ -53,6 +53,7 @@ public class FinanceSetupActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup);
 
+        apiInterface = RetrofitClient.getClient(this).create(APIInterface.class);
         this.sharedPreferences = this.getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
 
         Intent intent = this.getIntent();

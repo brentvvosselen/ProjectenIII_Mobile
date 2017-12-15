@@ -36,7 +36,7 @@ import retrofit2.Response;
 
 public class LoginFragment extends Fragment {
 
-    private APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
+    private APIInterface apiInterface;
     private SharedPreferences sharedPreferences;
 
     private String registerEmail;
@@ -52,6 +52,7 @@ public class LoginFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        apiInterface = RetrofitClient.getClient(getContext()).create(APIInterface.class);
         sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
 
         final View content = getView();

@@ -24,7 +24,7 @@ import retrofit2.Response;
 
 public class RegisterFragment extends Fragment{
 
-    private APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
+    private APIInterface apiInterface;
 
     private Context context;
     private EditText vEditTextFirstname;
@@ -38,6 +38,8 @@ public class RegisterFragment extends Fragment{
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        apiInterface = RetrofitClient.getClient(getContext()).create(APIInterface.class);
 
         final View content = getView();
         context = getActivity().getApplicationContext();
