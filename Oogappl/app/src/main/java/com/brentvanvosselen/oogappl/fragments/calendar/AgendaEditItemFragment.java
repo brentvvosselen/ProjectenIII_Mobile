@@ -74,7 +74,7 @@ public class AgendaEditItemFragment extends Fragment {
     //use this variable to edit an event, if this is null you want to create an event
     private String itemId = null;
 
-    APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
+    APIInterface apiInterface;
     SharedPreferences sharedPreferences;
     User currentUser;
 
@@ -107,6 +107,7 @@ public class AgendaEditItemFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        apiInterface = RetrofitClient.getClient(getContext()).create(APIInterface.class);
         sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
         currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
 

@@ -72,7 +72,7 @@ public class ChildInfoFragment extends Fragment {
     private Parent parent;
     private int selectedChild;
 
-    APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
+    APIInterface apiInterface;
     SharedPreferences sharedPreferences;
 
     private ViewGroup main;
@@ -88,6 +88,7 @@ public class ChildInfoFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        apiInterface = RetrofitClient.getClient(getContext()).create(APIInterface.class);
         sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
 
         vImageViewPicture = getView().findViewById(R.id.imageview_child_info_picture);
@@ -294,7 +295,7 @@ public class ChildInfoFragment extends Fragment {
     private void initFragment() {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
         User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser", null));
-        Call call = RetrofitClient.getClient().create(APIInterface.class).getParentByEmail("bearer "+ sharedPreferences.getString("token",null),currentUser.getEmail());
+        Call call = RetrofitClient.getClient(getContext()).create(APIInterface.class).getParentByEmail("bearer "+ sharedPreferences.getString("token",null),currentUser.getEmail());
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {

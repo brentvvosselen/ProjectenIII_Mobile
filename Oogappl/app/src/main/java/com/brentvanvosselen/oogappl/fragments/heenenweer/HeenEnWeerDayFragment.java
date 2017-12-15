@@ -48,7 +48,7 @@ public class HeenEnWeerDayFragment extends Fragment {
     //dateformat
     private SimpleDateFormat dateFormat= new SimpleDateFormat("dd MMMM yyyy",Locale.getDefault());
 
-    APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
+    APIInterface apiInterface;
     SharedPreferences sharedPreferences;
 
 
@@ -64,6 +64,7 @@ public class HeenEnWeerDayFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        apiInterface = RetrofitClient.getClient(getContext()).create(APIInterface.class);
         sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
 
         //set title

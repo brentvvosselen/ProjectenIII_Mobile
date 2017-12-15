@@ -67,10 +67,12 @@ public class MainActivity extends AppCompatActivity
 
     CircularImageView vImageViewProfile;
 
-    APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
+    APIInterface apiInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        this.apiInterface = RetrofitClient.getClient(this).create(APIInterface.class);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window w = getWindow();
             w.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);

@@ -62,13 +62,14 @@ public class FinanceFragment extends Fragment {
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-    APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
+    APIInterface apiInterface;
     SharedPreferences sharedPreferences;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        apiInterface = RetrofitClient.getClient(getContext()).create(APIInterface.class);
         sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
 
         TextView title = getActivity().findViewById(getResources().getIdentifier("action_bar_title", "id", getActivity().getPackageName()));
@@ -78,7 +79,7 @@ public class FinanceFragment extends Fragment {
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
         currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
-        Call call = RetrofitClient.getClient().create(APIInterface.class).getParentByEmail("bearer "+ sharedPreferences.getString("token",null),currentUser.getEmail());
+        Call call = RetrofitClient.getClient(getContext()).create(APIInterface.class).getParentByEmail("bearer "+ sharedPreferences.getString("token",null),currentUser.getEmail());
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
@@ -201,7 +202,6 @@ public class FinanceFragment extends Fragment {
             ((TextView) costCard.findViewById(R.id.textView_card_cost_description)).setText(c.getDescription());
 
             container.addView(costCard);
-            Log.i("COST", "Cost added");
         }
     }
 
@@ -324,7 +324,7 @@ public class FinanceFragment extends Fragment {
 
                             Cost temp = new Cost(title, desciption, amount, new Date(year, month, day), category, parent.getGroup().getChildByName(childName));
                             Log.i("DATE", temp.getDate().toString());
-                            // addCost(temp);
+                            addCost(temp);
                             dialog.dismiss();
                         }
                     }

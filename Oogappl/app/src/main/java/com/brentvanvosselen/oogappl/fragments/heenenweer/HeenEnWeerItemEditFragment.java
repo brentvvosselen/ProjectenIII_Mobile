@@ -55,7 +55,7 @@ public class HeenEnWeerItemEditFragment extends Fragment{
     private Spinner vSpinnerCategory;
     private Button vButtonSave;
 
-    APIInterface apiInterface = RetrofitClient.getClient().create(APIInterface.class);
+    APIInterface apiInterface;
     SharedPreferences sharedPreferences;
 
     private User currentUser;
@@ -85,6 +85,7 @@ public class HeenEnWeerItemEditFragment extends Fragment{
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        apiInterface = RetrofitClient.getClient(getContext()).create(APIInterface.class);
         sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
 
         //set title
