@@ -104,19 +104,17 @@ public class SetupActivity extends AppCompatActivity implements
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
-                Log.i("API event", response.message());
                 if(response.isSuccessful()){
                     finish();
                 }else{
-                    Toast.makeText(getApplicationContext(),"Complete setup failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
                     finish();
                 }
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
-                Log.i("API event", t.getMessage());
-                Toast.makeText(getApplicationContext(),"Cannot connet to server", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
                 call.cancel();
             }
         });

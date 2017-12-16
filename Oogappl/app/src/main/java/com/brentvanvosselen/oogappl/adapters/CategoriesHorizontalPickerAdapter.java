@@ -84,7 +84,7 @@ public class CategoriesHorizontalPickerAdapter extends  RecyclerView.Adapter<Cat
         CategoryViewHolder cvh = holder;
 
         if(position == categories.size()){
-            cvh.pickerTxt.setText("+ nieuwe categorie");
+            cvh.pickerTxt.setText(R.string.new_category_plus);
             cvh.imageView.setVisibility(View.INVISIBLE);
         }else{
             Category selectedCategory = categories.get(position);
@@ -110,7 +110,7 @@ public class CategoriesHorizontalPickerAdapter extends  RecyclerView.Adapter<Cat
             @Override
             public void onClick(View view) {
                 if(position == categories.size()){
-                    Snackbar.make(view,"Druk lang om een nieuwe categorie toe te voegen",Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(view,R.string.new_category_press,Snackbar.LENGTH_SHORT).show();
 
                 }
             }
@@ -142,14 +142,14 @@ public class CategoriesHorizontalPickerAdapter extends  RecyclerView.Adapter<Cat
                                     .initialColor(Color.parseColor(currentColor))
                                     .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
                                     .density(8)
-                                    .setPositiveButton("ok", new ColorPickerClickListener() {
+                                    .setPositiveButton(R.string.ok, new ColorPickerClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialogInterface, int color, Integer[] colors) {
                                             vImageviewAddCategory.setBackgroundColor(Color.parseColor("#" + Integer.toHexString(color)));
                                             currentColor = "#" + Integer.toHexString(color);
                                         }
                                     })
-                                    .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -173,10 +173,10 @@ public class CategoriesHorizontalPickerAdapter extends  RecyclerView.Adapter<Cat
                                         @Override
                                         public void onResponse(Call call, Response response) {
                                             if (response.isSuccessful()) {
-                                                Toast.makeText(context, "Categorie toegevoegd.", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(context, R.string.new_category_pos, Toast.LENGTH_SHORT).show();
 
                                             } else {
-                                                Toast.makeText(context, "Categorie NIET toegevoegd.", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(context, R.string.new_category_neg, Toast.LENGTH_SHORT).show();
                                             }
                                         }
 

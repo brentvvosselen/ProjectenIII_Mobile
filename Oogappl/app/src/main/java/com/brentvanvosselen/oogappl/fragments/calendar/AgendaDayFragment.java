@@ -110,13 +110,13 @@ public class AgendaDayFragment extends Fragment{
                         vTextViewUpcoming.setText(R.string.no_events);
 
                 }else{
-                    Toast.makeText(getContext(),"Could not retrieve items from " + dateString,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.retrieve_items_neg + dateString,Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
-                Toast.makeText(getContext(),"Could not connect to the server",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
                 call.cancel();
             }
         });
@@ -129,13 +129,13 @@ public class AgendaDayFragment extends Fragment{
                     childrenBooks = (List<HeenEnWeerDag>)response.body();
                     renderChildren();
                 }else{
-                    Toast.makeText(getContext(),"Could not retrieve items from " + dateString,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),R.string.retrieve_items_neg + dateString,Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
-                Toast.makeText(getContext(),"Could not connect to the server",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
                 call.cancel();
             }
         });

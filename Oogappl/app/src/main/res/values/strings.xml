@@ -6,12 +6,13 @@
     <string name="action_settings">Settings</string>
 
     <!-- algemeen-->
+    <string name="ok">Ok</string>
     <string name="save">Opslaan</string>
     <string name="add">Voeg Toe</string>
     <string name="cancel">Terug</string>
     <string name="color">Kleur</string>
     <string name="choose_color">Kies een kleur</string>
-    <string name="geen_verbinding">Kan server niet bereiken</string>
+    <string name="geen_verbinding">Kan server niet bereiken. Controleer uw internetverbinding</string>
     <string name="title">Titel</string>
     <string name="description">Beschrijving</string>
     <string name="Amount">Bedrag</string>
@@ -37,7 +38,16 @@
     <string name="personal_data">Persoonsgegevens</string>
     <string name="security_data">Beveiligingsgegevens</string>
     <string name="work_data">Werkgegevens</string>
-
+    <string name="get_event_neg">Kan evenementen niet ophalen van de server</string>
+    <string name="err_start_end_event">"Start en einde van evenement moet ingevuld zijn"</string>
+    <string name="err_title_event">De titel mag niet leeg zijn</string>
+    <string name="change_event_pos">Evenement gewijzigd</string>
+    <string name="change_event_neg">Evenement NIET gewijzigd</string>
+    <string name="add_event_pos">Evenement toegevoegd</string>
+    <string name="add_event_neg">Evenement NIET toegevoegd</string>
+    <string name="del_event_pos">Evenement verwijderd</string>
+    <string name="del_event_neg">Evenement NIET verwijderd</string>
+    <string name="get_category_neg">Kan categorieën nog ophalen van de server</string>
 
     <!-- Strings related to profile-->
     <string name="edit">Wijzig</string>
@@ -75,9 +85,10 @@
     <string name="upcoming_events">Deze dag</string>
     <string name="no_events">Geen evenementen</string>
     <string name="overview">Overzicht</string>
-    <string name="no_next_event">Geen volgende</string>
+    <string name="no_next_event">Geen volgende evenement</string>
     <string name="returning">Wederkerend</string>
     <string name="Enddate">Einddatum</string>
+    <string name="retrieve_items_neg">Kan items niet ophalen voor </string>
 
 
     <!--setup finance-->
@@ -106,4 +117,12 @@
 
     <!--heen en weer-->
     <string name="heenenweer">Heen en Weer</string>
+
+    <!-- Adapters -->
+    <string name="new_category_plus">+ nieuwe categorie</string>
+    <string name="new_category_press">Druk lang om een nieuwe categorie toe te voegen</string>
+    <string name="new_category_pos">Categorie toegevoegd</string>
+    <string name="new_category_neg">Categorie NIET toegevoegd</string>
+    <string name="no_children">Geen kinderen</string>
+    <string name="all_children">Alle kinderen</string>
 </resources>

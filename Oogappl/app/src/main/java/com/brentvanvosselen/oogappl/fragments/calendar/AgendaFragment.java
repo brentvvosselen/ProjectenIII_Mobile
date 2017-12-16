@@ -147,7 +147,7 @@ public class AgendaFragment extends Fragment {
                     nextItemId = event.getId();
 
                 }else{
-                    Toast.makeText(getContext(),"not succesful",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.geen_verbinding,Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -238,7 +238,7 @@ public class AgendaFragment extends Fragment {
             @Override
             public void onFailure(Call call, Throwable t) {
                 call.cancel();
-                Toast.makeText(getContext(),"Could not connect to server",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.geen_verbinding,Toast.LENGTH_SHORT).show();
             }
         });
 

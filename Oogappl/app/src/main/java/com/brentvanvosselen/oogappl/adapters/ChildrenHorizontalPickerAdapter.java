@@ -47,10 +47,10 @@ public class ChildrenHorizontalPickerAdapter extends RecyclerView.Adapter<Childr
     public void onBindViewHolder(ChildViewHolder holder, final int position) {
         ChildViewHolder cvh = holder;
         if(position == 0){
-            cvh.pickerTxt.setText("Geen kinderen");
+            cvh.pickerTxt.setText(R.string.no_children);
             cvh.imageView.setVisibility(View.INVISIBLE);
         }else if(position == children.size() + 1){
-            cvh.pickerTxt.setText("Alle kinderen");
+            cvh.pickerTxt.setText(R.string.all_children);
             cvh.imageView.setVisibility(View.INVISIBLE);
         }else{
             Child selectedChild = children.get(position - 1);

@@ -180,13 +180,13 @@ public class AgendaEditItemFragment extends Fragment {
                         }
                         vSpinnerChild.setSelection(childIndex);
                     } else {
-                        Toast.makeText(getContext(), "Could not retrieve event", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), R.string.get_event_neg, Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
                 public void onFailure(Call call, Throwable t) {
-                    Toast.makeText(getContext(), "Could not connect to the server", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
                     call.cancel();
                 }
             });
@@ -232,14 +232,14 @@ public class AgendaEditItemFragment extends Fragment {
                                     .initialColor(Color.parseColor(currentColor))
                                     .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
                                     .density(8)
-                                    .setPositiveButton("ok", new ColorPickerClickListener() {
+                                    .setPositiveButton(R.string.ok, new ColorPickerClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialogInterface, int color, Integer[] colors) {
                                             vImageviewAddCategory.setBackgroundColor(Color.parseColor("#" + Integer.toHexString(color)));
                                             currentColor = "#" + Integer.toHexString(color);
                                         }
                                     })
-                                    .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -263,10 +263,10 @@ public class AgendaEditItemFragment extends Fragment {
                                         @Override
                                         public void onResponse(Call call, Response response) {
                                             if (response.isSuccessful()) {
-                                                Toast.makeText(getContext(), "Categorie toegevoegd.", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getContext(), R.string.new_category_pos, Toast.LENGTH_SHORT).show();
 
                                             } else {
-                                                Toast.makeText(getContext(), "Categorie NIET toegevoegd.", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getContext(), R.string.new_category_neg, Toast.LENGTH_SHORT).show();
                                             }
                                         }
 
@@ -508,14 +508,14 @@ public class AgendaEditItemFragment extends Fragment {
                     end = dateFormat.parse(vEdittextEndDate.getText().toString() + " " + vEdittextEndTime.getText().toString());
                 } catch (ParseException e) {
                     e.printStackTrace();
-                    Toast.makeText(getContext(),"Start en einde van evenement moet ingevuld zijn!",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.err_start_end_event,Toast.LENGTH_SHORT).show();
                     correctForm = false;
                 }
 
 
                 if(title.isEmpty() || title == null){
                     correctForm = false;
-                    vEdittextTitle.setError("De titel mag niet leeg zijn");
+                    vEdittextTitle.setError( getResources().getString(R.string.err_title_event));
                 }
                 if(category == null){
                     correctForm = false;
@@ -542,16 +542,16 @@ public class AgendaEditItemFragment extends Fragment {
                             @Override
                             public void onResponse(Call call, Response response) {
                                 if(response.isSuccessful()){
-                                    Toast.makeText(getContext(),"event gewijzigd",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), R.string.change_event_pos,Toast.LENGTH_SHORT).show();
                                     getActivity().onBackPressed();
                                 }else{
-                                    Toast.makeText(getContext(),"event niet gewijzigd",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), R.string.change_event_neg,Toast.LENGTH_SHORT).show();
                                 }
                             }
 
                             @Override
                             public void onFailure(Call call, Throwable t) {
-                                Toast.makeText(getContext(),"Kon niet verbinden met server",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), R.string.geen_verbinding,Toast.LENGTH_SHORT).show();
                             }
                         });
                     }else{
@@ -561,17 +561,17 @@ public class AgendaEditItemFragment extends Fragment {
                             @Override
                             public void onResponse(Call call, Response response) {
                                 if(response.isSuccessful()){
-                                    Toast.makeText(getContext(),"event toegevoegd",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), R.string.add_event_pos,Toast.LENGTH_SHORT).show();
                                     getActivity().onBackPressed();
 
                                 }else{
-                                    Toast.makeText(getContext(),"event niet toegevoegd",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), R.string.add_event_neg,Toast.LENGTH_SHORT).show();
                                 }
                             }
 
                             @Override
                             public void onFailure(Call call, Throwable t) {
-                                Toast.makeText(getContext(),"Kon niet verbinden met server",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(),R.string.geen_verbinding,Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
@@ -665,18 +665,18 @@ public class AgendaEditItemFragment extends Fragment {
                 @Override
                 public void onResponse(Call call, Response response) {
                     if (response.isSuccessful()) {
-                        Toast.makeText(getContext(), "Evenement verwijderd", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), R.string.del_event_pos, Toast.LENGTH_SHORT).show();
                         AgendaFragment.OnCalendarItemSelected mCallback = (AgendaFragment.OnCalendarItemSelected) getActivity();
                         mCallback.onItemDeleted();
                     } else {
-                        Toast.makeText(getContext(), "Evenement niet verwijderd", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), R.string.del_event_neg, Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
                 public void onFailure(Call call, Throwable t) {
                     call.cancel();
-                    Toast.makeText(getContext(), "Evenement niet verwijderd", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -722,13 +722,13 @@ public class AgendaEditItemFragment extends Fragment {
 
                     //
                 } else {
-                    Toast.makeText(getContext(), "Could not retrieve categories", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.get_category_neg, Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
-                Toast.makeText(getContext(), "Could not connect to server", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
                 call.cancel();
             }
         });

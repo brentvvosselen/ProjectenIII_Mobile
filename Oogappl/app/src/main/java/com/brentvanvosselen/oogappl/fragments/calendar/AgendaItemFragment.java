@@ -121,13 +121,13 @@ public class AgendaItemFragment extends Fragment{
                     title.setText(event.getCategory().getType());
 
                 }else{
-                    Toast.makeText(getContext(),"Could not retrieve event",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.get_event_neg,Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
-                Toast.makeText(getContext(),"Could not connect to the server",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),R.string.geen_verbinding,Toast.LENGTH_SHORT).show();
                 call.cancel();
             }
         });
