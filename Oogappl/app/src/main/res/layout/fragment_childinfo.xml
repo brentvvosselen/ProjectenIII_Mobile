@@ -41,8 +41,7 @@
                 app:civ_border="false"
                 app:civ_shadow="true"
                 app:civ_shadow_radius="10"
-                app:civ_shadow_color="#616161"
-                android:src="@raw/img_man" />
+                app:civ_shadow_color="#616161" />
 
             <ImageButton
                 android:id="@+id/imageButton_childinfo_add_category"
@@ -57,9 +56,9 @@
 
             <Spinner
                 android:id="@+id/spinner_child"
-                android:layout_width="wrap_content"
-                android:layout_height="24dp"
-                android:layout_marginEnd="24dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -70,9 +69,9 @@
                 android:id="@+id/linearLayout_childinfo_child"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:layout_marginTop="16dp"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"

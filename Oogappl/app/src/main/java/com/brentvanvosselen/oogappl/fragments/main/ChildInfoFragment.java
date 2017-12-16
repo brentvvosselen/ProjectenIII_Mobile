@@ -32,6 +32,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -346,7 +347,7 @@ public class ChildInfoFragment extends Fragment {
     }
 
     private void initSpinner() {
-        ArrayAdapter<String> childAdapter = new ArrayAdapter<>(getContext(), R.layout.support_simple_spinner_dropdown_item, getChildNames());
+        ArrayAdapter<String> childAdapter = new ArrayAdapter<>(getContext(), R.layout.custom_spinner_blue, getChildNames());
         Spinner s = getView().findViewById(R.id.spinner_child);
         s.setAdapter(childAdapter);
 
@@ -384,7 +385,7 @@ public class ChildInfoFragment extends Fragment {
             }
 
             for (final ChildinfoCategory c : categories) {
-                CardView cat = (CardView) getActivity().getLayoutInflater().inflate(R.layout.childinfo_category, null);
+                RelativeLayout cat = (RelativeLayout) getActivity().getLayoutInflater().inflate(R.layout.childinfo_category, null);
                 TextView title = cat.findViewById(R.id.textView_catName);
                 title.setText(c.getName());
 
@@ -422,7 +423,7 @@ public class ChildInfoFragment extends Fragment {
         }
     }
 
-    private void initItems(CardView cat, ChildinfoCategory c) {
+    private void initItems(RelativeLayout cat, ChildinfoCategory c) {
         List<Info> items = c.getInfo();
         ViewGroup categoryItems = cat.findViewById(R.id.linearLayout_catItems);
 

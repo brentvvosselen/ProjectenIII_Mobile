@@ -12,6 +12,10 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSnapHelper;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SnapHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,7 +32,6 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -42,13 +45,14 @@ import com.brentvanvosselen.oogappl.RestClient.models.Child;
 import com.brentvanvosselen.oogappl.RestClient.models.Event;
 import com.brentvanvosselen.oogappl.RestClient.models.Parent;
 import com.brentvanvosselen.oogappl.RestClient.models.User;
+import com.brentvanvosselen.oogappl.adapters.CategoriesHorizontalPickerAdapter;
+import com.brentvanvosselen.oogappl.adapters.ChildrenHorizontalPickerAdapter;
 import com.brentvanvosselen.oogappl.util.ObjectSerializer;
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
-import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -60,6 +64,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import travel.ithaka.android.horizontalpickerlib.PickerLayoutManager;
 
 /**
  * Created by brentvanvosselen on 05/11/2017.
@@ -74,6 +79,9 @@ public class AgendaEditItemFragment extends Fragment {
     //use this variable to edit an event, if this is null you want to create an event
     private String itemId = null;
 
+    private int selectedChild = 0;
+    private int selectedCategory = 0;
+
     APIInterface apiInterface;
     SharedPreferences sharedPreferences;
     User currentUser;
@@ -84,6 +92,12 @@ public class AgendaEditItemFragment extends Fragment {
     Spinner vSpinnerCategory, vSpinnerWederkerendFrequenty, vSpinnerChild;
     CheckBox vCheckboxWederkerend;
     TextView vTextViewWederkerendEinddatum;
+
+    RecyclerView vRecyclerChildren, vRecyclerCategories;
+    ChildrenHorizontalPickerAdapter mChildrenAdapter;
+    CategoriesHorizontalPickerAdapter mCategoriesAdapter;
+    PickerLayoutManager pickerLayoutManagerChildren;
+    PickerLayoutManager pickerLayoutManagerCategories;
 
     List<Category> categories;
     List<Child> children;
@@ -191,9 +205,6 @@ public class AgendaEditItemFragment extends Fragment {
         vSpinnerWederkerendFrequenty = getView().findViewById(R.id.spinner_wederkerend_frequenty);
         vTextViewWederkerendEinddatum = getView().findViewById(R.id.textview_wederkerend_enddate);
         vEdittextWederkerendEinddatum = getView().findViewById(R.id.editText_wederkerend_einddatum);
-        vSpinnerChild = getView().findViewById(R.id.spinner_edit_event_child);
-
-
 
 
 
@@ -472,7 +483,13 @@ public class AgendaEditItemFragment extends Fragment {
                 }
 
                 List<Child> myChildren = new ArrayList<>();
-                try{
+
+                if(selectedChild == children.size() + 1){
+                    myChildren = children;
+                }else if (selectedChild > 0 && selectedChild <= children.size()){
+                    myChildren.add(children.get(selectedChild - 1));
+                }
+                /*try{
                     int index = vSpinnerChild.getSelectedItemPosition();
                     if(index == children.size()){
                         myChildren = children;
@@ -481,7 +498,7 @@ public class AgendaEditItemFragment extends Fragment {
                     }
                 }catch(IndexOutOfBoundsException ex){
                     Toast.makeText(getContext(),"Verkeerde index",Toast.LENGTH_SHORT).show();
-                }
+                }*/
 
                 SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_TIME_FORMAT);
                 Date start = new Date();
@@ -503,9 +520,7 @@ public class AgendaEditItemFragment extends Fragment {
                 if(category == null){
                     correctForm = false;
                 }
-                if(myChildren.size() == 0 || myChildren == null){
-                    correctForm = false;
-                }
+
                 if(start == null || end == null){
                     correctForm = false;
                 }else if(start.after(end)){
@@ -576,15 +591,33 @@ public class AgendaEditItemFragment extends Fragment {
                 if (response.isSuccessful()){
                     Parent p = (Parent) response.body();
                     children = Arrays.asList(p.getChildren());
-                    Log.i("parent",p.toString());
-                    Log.i("children",children.toString());
-                    List<String> childNames = new ArrayList<>();
-                    for (Child child:children) {
-                        childNames.add(child.getFirstname() + " " + child.getLastname());
-                    }
-                    childNames.add("Alle kinderen");
-                    ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(getContext(),R.layout.custom_spinner_item,childNames);
-                    vSpinnerChild.setAdapter(mAdapter);
+
+                    vRecyclerChildren = getView().findViewById(R.id.recycler_agenda_edit_children);
+
+                    pickerLayoutManagerChildren = new PickerLayoutManager(getContext(),PickerLayoutManager.HORIZONTAL,false);
+                    pickerLayoutManagerChildren.setChangeAlpha(true);
+                    pickerLayoutManagerChildren.setScaleDownBy(0.7f);
+                    pickerLayoutManagerChildren.setScaleDownDistance(0.8f);
+
+
+                    mChildrenAdapter = new ChildrenHorizontalPickerAdapter(getContext(),children,vRecyclerChildren);
+
+                    SnapHelper snapHelper = new LinearSnapHelper();
+                    snapHelper.attachToRecyclerView(vRecyclerChildren);
+
+                    vRecyclerChildren.setLayoutManager(pickerLayoutManagerChildren);
+                    vRecyclerChildren.setAdapter(mChildrenAdapter);
+
+                    pickerLayoutManagerChildren.setOnScrollStopListener(new PickerLayoutManager.onScrollStopListener() {
+                        @Override
+                        public void selectedView(View view) {
+                            selectedChild = pickerLayoutManagerChildren.getPosition(view);
+
+                        }
+                    });
+
+
+
                 }
             }
 
@@ -661,13 +694,33 @@ public class AgendaEditItemFragment extends Fragment {
             public void onResponse(Call call, Response response) {
                 if (response.isSuccessful()) {
                     categories = (List<Category>) response.body();
-                    List<String> categorynames = new ArrayList<>();
-                    for (Category c : categories) {
-                        categorynames.add(c.getType());
-                    }
-                    categorynames.add(getResources().getString(R.string.new_category));
-                    ArrayAdapter<String> categoryAdapter = new ArrayAdapter<String>(getContext(), R.layout.custom_spinner_item, categorynames);
-                    vSpinnerCategory.setAdapter(categoryAdapter);
+
+                    //picker
+                    vRecyclerCategories = getView().findViewById(R.id.recycler_agenda_edit_categories);
+
+                    pickerLayoutManagerCategories = new PickerLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL,false);
+                    pickerLayoutManagerCategories.setChangeAlpha(true);
+                    pickerLayoutManagerCategories.setScaleDownBy(0.8f);
+                    pickerLayoutManagerCategories.setScaleDownDistance(0.9f);
+
+                    mCategoriesAdapter = new CategoriesHorizontalPickerAdapter(getContext(),categories,vRecyclerCategories,getActivity().getSupportFragmentManager().findFragmentById(R.id.content_main));
+
+                    SnapHelper snapHelper = new LinearSnapHelper();
+                    snapHelper.attachToRecyclerView(vRecyclerChildren);
+
+                    vRecyclerCategories.setLayoutManager(pickerLayoutManagerCategories);
+                    vRecyclerCategories.setAdapter(mCategoriesAdapter);
+
+                    pickerLayoutManagerCategories.setOnScrollStopListener(new PickerLayoutManager.onScrollStopListener() {
+                        @Override
+                        public void selectedView(View view) {
+                            selectedCategory = pickerLayoutManagerCategories.getPosition(view);
+                            Log.i("selected",String.valueOf(selectedCategory));
+                        }
+                    });
+
+
+                    //
                 } else {
                     Toast.makeText(getContext(), "Could not retrieve categories", Toast.LENGTH_SHORT).show();
                 }
@@ -684,5 +737,12 @@ public class AgendaEditItemFragment extends Fragment {
     private void updateLabel(String format, Calendar calendar, EditText editText) {
         SimpleDateFormat sdf = new SimpleDateFormat(format);
         editText.setText(sdf.format(calendar.getTime()));
+    }
+
+    public void rerenderCategories(List<Category> categories){
+        Log.i("rerender","true");
+        mCategoriesAdapter = new CategoriesHorizontalPickerAdapter(getContext(),categories,vRecyclerCategories,this);
+        vRecyclerCategories.setAdapter(mCategoriesAdapter);
+
     }
 }
