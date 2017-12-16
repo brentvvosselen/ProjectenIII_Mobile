@@ -94,6 +94,7 @@
     <string name="overview">Overzicht</string>
     <string name="no_next_event">Geen volgende evenement</string>
     <string name="returning">Wederkerend</string>
+    <string name="startdate">Startdatum</string>
     <string name="Enddate">Einddatum</string>
     <string name="retrieve_items_neg">Kan items niet ophalen voor </string>
     <string name="get_event_neg">Kan evenementen niet ophalen van de server</string>
@@ -147,4 +148,11 @@
     <string name="new_category_neg">Categorie NIET toegevoegd</string>
     <string name="no_children">Geen kinderen</string>
     <string name="all_children">Alle kinderen</string>
+
+    <string name="children">Kinderen</string>
+    <string name="pick_category">Kies een categorie</string>
+    <string name="greeting">Hallo</string>
+    <string name="greeting2">Welkom bij onze app.\nOm te beginnen moet je eerst de setup doorlopen. Je kan deze doorlopen door op de knop hieronder te drukken.</string>
+    <string name="begin_setup">Start de setup</string>
+    <string name="Oogappl">OOGAPPL</string>
 </resources>

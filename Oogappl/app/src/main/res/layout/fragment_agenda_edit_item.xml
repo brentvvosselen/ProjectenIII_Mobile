@@ -28,7 +28,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/poppins_medium"
-                android:text="Wijzig"
+                android:text="@string/edit"
                 android:textAllCaps="true"
                 android:textColor="@color/dark_gray_text"
                 android:textSize="32dp"
@@ -66,7 +66,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/poppins_medium"
-                android:text="Titel"
+                android:text="@string/title"
                 android:textColor="@color/dim_gray_text"
                 app:layout_constraintStart_toStartOf="@+id/edittext_edit_event_title"
                 app:layout_constraintTop_toBottomOf="@+id/edittext_edit_event_endDate" />
@@ -90,7 +90,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_medium"
-                android:text="Startdatum"
+                android:text="@string/startdate"
                 android:textColor="@color/dim_gray_text"
                 app:layout_constraintStart_toStartOf="@+id/edittext_edit_event_startDate"
                 app:layout_constraintTop_toBottomOf="@+id/recycler_agenda_edit_categories" />
@@ -100,7 +100,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_medium"
-                android:text="Starttijd"
+                android:text="@string/startdate"
                 android:textColor="@color/dim_gray_text"
                 app:layout_constraintStart_toStartOf="@+id/edittext_edit_event_startTime"
                 app:layout_constraintTop_toTopOf="@+id/textview_edit_event_label_startdate" />
@@ -140,7 +140,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/poppins_medium"
-                android:text="Einddatum"
+                android:text="@string/Enddate"
                 android:textColor="@color/dim_gray_text"
                 app:layout_constraintStart_toStartOf="@+id/edittext_edit_event_endDate"
                 app:layout_constraintTop_toBottomOf="@+id/edittext_edit_event_startDate" />
@@ -151,7 +151,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/poppins_medium"
-                android:text="Eindtijd"
+                android:text="@string/Enddate"
                 android:textColor="@color/dim_gray_text"
                 app:layout_constraintStart_toStartOf="@+id/edittext_edit_event_endTime"
                 app:layout_constraintTop_toBottomOf="@+id/edittext_edit_event_startTime" />
@@ -194,7 +194,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/poppins_medium"
-                android:text="Categorie"
+                android:text="@string/Category"
                 android:textColor="@color/dim_gray_text"
                 app:layout_constraintStart_toStartOf="@+id/imageview_edit_event_category"
                 app:layout_constraintTop_toBottomOf="@+id/edittext_edit_event_title" />
@@ -229,7 +229,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/poppins_medium"
-                android:text="Beschrijving"
+                android:text="@string/description"
                 android:textColor="@color/dim_gray_text"
                 app:layout_constraintStart_toStartOf="@+id/edittext_edit_event_description"
                 app:layout_constraintTop_toBottomOf="@+id/imageview_edit_event_category" />

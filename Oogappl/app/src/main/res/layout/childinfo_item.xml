@@ -9,17 +9,15 @@
         android:id="@+id/textView_item_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:fontFamily="@font/poppins_semibold"
         android:layout_marginLeft="16dp"
-        android:text="TextView" />
+        android:fontFamily="@font/poppins_semibold"
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/textView_item_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="right"
         android:layout_marginLeft="16dp"
-        android:text="TextView"
+        android:gravity="right"
         android:textAlignment="gravity" />
 </LinearLayout>

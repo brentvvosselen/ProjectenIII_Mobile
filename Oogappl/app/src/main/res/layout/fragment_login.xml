@@ -17,15 +17,13 @@
         android:layout_marginRight="24dp"
         android:layout_marginTop="48dp"
         android:fontFamily="sans-serif-light"
-        android:text="OOGAPPL."
+        android:text="@string/Oogappl"
         android:textColor="@color/white"
         android:textSize="48dp"
+        app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        app:layout_constraintHorizontal_bias="0.505" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.v7.widget.CardView
         android:id="@+id/cardView2"

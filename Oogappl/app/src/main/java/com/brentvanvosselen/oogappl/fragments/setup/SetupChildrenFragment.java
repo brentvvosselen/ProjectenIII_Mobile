@@ -123,12 +123,12 @@ public class SetupChildrenFragment extends Fragment {
                     String firstname = vEdittextFirstname.getText().toString();
                     String lastname = vEdittextLastname.getText().toString();
 
-                    if(firstname.trim().equals("") || firstname.trim().length() < 3 ){
-                        vEdittextFirstname.setError("De voornaam moet minstens 3 karakters bevatten");
+                    if(firstname.trim().equals("")){
+                        vEdittextFirstname.setError(getResources().getString(R.string.err_firstname_empty));
                         correctForm = false;
                     }
-                    if(lastname.trim().equals("") || lastname.trim().length() < 3 ){
-                        vEdittextLastname.setError("De achternaam moet minstens 3 karakters bevatten");
+                    if(lastname.trim().equals("")){
+                        vEdittextLastname.setError( getResources().getString(R.string.err_lastname_empty));
                         correctForm = false;
                     }
 

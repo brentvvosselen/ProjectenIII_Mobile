@@ -17,7 +17,6 @@
         android:id="@+id/textview_days_list_child"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Jess"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -38,7 +37,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:fontFamily="@font/poppins_semibold"
-        android:text="24 september 2017"
         app:layout_constraintStart_toEndOf="@+id/textview_days_list_child"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -50,7 +48,6 @@
         android:fontFamily="@font/poppins_light"
         android:maxLines="2"
         android:minLines="2"
-        android:text="Deze dag is jess naar tante gegaan."
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/textview_days_list_date"
         app:layout_constraintTop_toBottomOf="@+id/textview_days_list_date" />

@@ -23,9 +23,8 @@
         android:id="@+id/textview_category_picker_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="14dp"
         android:layout_gravity="center"
-        android:text="Josephina"
         android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"/>
+        android:layout_marginRight="8dp"
+        android:textSize="14dp" />
 </LinearLayout>

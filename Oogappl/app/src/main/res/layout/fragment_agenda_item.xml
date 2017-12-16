@@ -32,7 +32,6 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
                 android:fontFamily="sans-serif-black"
-                android:text="21"
                 android:textSize="36dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -43,7 +42,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
                 android:fontFamily="@font/poppins_semibold"
-                android:text="September"
                 android:textAppearance="@style/TextAppearance.AppCompat"
                 android:textColor="@color/dim_gray_text"
                 android:textSize="18dp"
@@ -56,7 +54,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:fontFamily="@font/poppins_medium"
-                android:text="13:00"
                 android:textColor="@color/dark_gray_text"
                 android:textSize="18dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -68,9 +65,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="22"
-                android:textSize="36dp"
                 android:fontFamily="sans-serif-black"
+                android:textSize="36dp"
                 app:layout_constraintStart_toStartOf="@+id/textview_calendar_item_end_month"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -81,7 +77,6 @@
                 android:layout_marginEnd="24dp"
                 android:layout_marginTop="40dp"
                 android:fontFamily="@font/poppins_semibold"
-                android:text="September"
                 android:textColor="@color/dim_gray_text"
                 android:textSize="18dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -93,7 +88,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:fontFamily="@font/poppins_medium"
-                android:text="14:00"
                 android:textColor="@color/dark_gray_text"
                 android:textSize="18dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -126,7 +120,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/poppins_semibold"
-        android:text="Voetbal"
         android:textSize="22sp"
         app:layout_constraintStart_toStartOf="@+id/cardView"
         app:layout_constraintTop_toBottomOf="@+id/cardView" />
@@ -138,7 +131,6 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
         android:fontFamily="@font/poppins_light"
-        android:text="Vandaag gaat jantje spelen met korneeltje op het school met de voetbal enzo"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/textview_calendar_item_title"
@@ -156,8 +148,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Kinderen"
         android:fontFamily="@font/poppins_bold"
+        android:text="@string/children"
         app:layout_constraintStart_toStartOf="@+id/textview_calendar_item_description"
         app:layout_constraintTop_toBottomOf="@+id/textview_calendar_item_description" />
 </android.support.constraint.ConstraintLayout>
