@@ -206,7 +206,7 @@ public class ChildInfoView extends ScrollView {
 
                 @Override
                 public void onFailure(Call call, Throwable t) {
-                    Toast.makeText(getContext(), "Failed to connect to server", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
                     call.cancel();
                 }
             });

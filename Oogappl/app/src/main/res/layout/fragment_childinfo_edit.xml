@@ -43,7 +43,6 @@
             android:layout_weight="2"
             android:fontFamily="sans-serif-light"
             android:gravity="center"
-            android:text="TextView"
             android:textColor="@color/black"
             android:textSize="24sp"
             app:layout_constraintLeft_toLeftOf="parent"

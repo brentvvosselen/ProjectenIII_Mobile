@@ -69,7 +69,6 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="24dp"
         android:layout_marginTop="24dp"
-        android:text="TextView"
         android:textSize="18sp"
         app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintLeft_toRightOf="@+id/textView19"
@@ -82,7 +81,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="24dp"
         android:layout_marginTop="24dp"
-        android:text="TextView"
         android:textSize="18sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_accept_type" />
@@ -93,7 +91,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="24dp"
-        android:text="TextView"
         android:textSize="18sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/textView_accept_extra_info_title"
         app:layout_constraintHorizontal_bias="0.0"

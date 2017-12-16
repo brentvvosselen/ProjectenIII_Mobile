@@ -31,8 +31,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Kies Categorie"
                 android:fontFamily="@font/poppins_medium"
+                android:text="@string/pick_category"
                 app:layout_constraintStart_toStartOf="@+id/textview_heenenweer_item_edit_title"
                 app:layout_constraintTop_toBottomOf="@+id/textview_heenenweer_item_edit_title" />
 
