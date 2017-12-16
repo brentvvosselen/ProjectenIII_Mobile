@@ -20,6 +20,14 @@
     <string name="Category">Categorie</string>
     <string name="get_parent_neg">Er is iets fout gelopen. Kan ouder niet vinden</string>
 
+    <!-- progress -->
+    <string name="loading">Laden</string>
+    <string name="logging_in">Inloggen</string>
+    <string name="registreren">Registreren</string>
+    <string name="getting_data">Ophalen gegevens</string>
+    <string name="getting_children">Ophalen kinderen</string>
+
+
     <!--navigation drawer-->
     <string name="home">Start</string>
     <string name="childinfo">Kindinfo</string>

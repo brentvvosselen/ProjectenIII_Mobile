@@ -1,6 +1,7 @@
 package com.brentvanvosselen.oogappl.fragments.finance;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -80,6 +81,14 @@ public class FinanceFragment extends Fragment {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
         currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
         Call call = RetrofitClient.getClient(getContext()).create(APIInterface.class).getParentByEmail("bearer "+ sharedPreferences.getString("token",null),currentUser.getEmail());
+        //progress
+        final ProgressDialog progressDialog;
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage(getResources().getString(R.string.getting_data));
+        progressDialog.setTitle(getResources().getString(R.string.loading));
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
+
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
@@ -104,11 +113,13 @@ public class FinanceFragment extends Fragment {
                         noneAccepted();
                     }
                 }
+                progressDialog.setProgress(50);
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
                 Toast.makeText(getContext(),  R.string.get_parent_neg, Toast.LENGTH_SHORT).show();
+
             }
         });
 
@@ -126,12 +137,15 @@ public class FinanceFragment extends Fragment {
                 } else {
                     Toast.makeText(getContext(), "BAD RESPONSE", Toast.LENGTH_SHORT).show();
                 }
+                progressDialog.dismiss();
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
                 Toast.makeText(getContext(), getResources().getString(R.string.geen_verbinding), Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
             }
+
         });
     }
 

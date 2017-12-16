@@ -1,5 +1,6 @@
 package com.brentvanvosselen.oogappl.fragments.login;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -115,6 +116,14 @@ public class LoginFragment extends Fragment {
 
     private void login(final User u) {
         Call call = apiInterface.loginUser(u);
+
+        //progress
+        final ProgressDialog progressDialog;
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage(getResources().getString(R.string.logging_in));
+        progressDialog.setTitle(getResources().getString(R.string.loading));
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
@@ -136,6 +145,8 @@ public class LoginFragment extends Fragment {
                     Toast.makeText(context, R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
                     Log.i("LOGIN", "FAIL: " + response.message());
                 }
+
+                progressDialog.dismiss();
             }
 
             @Override
@@ -143,7 +154,10 @@ public class LoginFragment extends Fragment {
                 Log.i("API event", t.getMessage());
                 Toast.makeText(context,  R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
                 call.cancel();
+                progressDialog.dismiss();
             }
+
+
         });
     }
 

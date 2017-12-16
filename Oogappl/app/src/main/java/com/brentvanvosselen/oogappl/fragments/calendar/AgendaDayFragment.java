@@ -1,5 +1,6 @@
 package com.brentvanvosselen.oogappl.fragments.calendar;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -99,10 +100,18 @@ public class AgendaDayFragment extends Fragment{
 
         User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
 
+        //progress
+        final ProgressDialog progressDialog;
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage(getResources().getString(R.string.getting_data));
+        progressDialog.setTitle(getResources().getString(R.string.loading));
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
         Call itemsCall = apiInterface.getEventsFromDate("bearer " + sharedPreferences.getString("token",null), currentUser.getEmail(),dateShown);
         itemsCall.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
+
                 if(response.isSuccessful()){
                     events = (List<Event>) response.body();
                     renderLayout();
@@ -112,6 +121,7 @@ public class AgendaDayFragment extends Fragment{
                 }else{
                     Toast.makeText(getContext(), R.string.retrieve_items_neg + dateString,Toast.LENGTH_SHORT).show();
                 }
+                progressDialog.setProgress(50);
             }
 
             @Override
@@ -125,18 +135,21 @@ public class AgendaDayFragment extends Fragment{
         childrenCall.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
+
                 if(response.isSuccessful()){
                     childrenBooks = (List<HeenEnWeerDag>)response.body();
                     renderChildren();
                 }else{
                     Toast.makeText(getContext(),R.string.retrieve_items_neg + dateString,Toast.LENGTH_SHORT).show();
                 }
+                progressDialog.dismiss();
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
                 Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
                 call.cancel();
+                progressDialog.dismiss();
             }
         });
 

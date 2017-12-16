@@ -1,6 +1,7 @@
 package com.brentvanvosselen.oogappl.fragments.main;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -104,6 +105,14 @@ public class ProfileFragment extends Fragment {
 
         //get the user from the api-server
         Call call = apiInterface.getParentByEmail("bearer "+ sharedPreferences.getString("token",null),((MainActivity) getActivity()).getUserEmail());
+        //progress
+        final ProgressDialog progressDialog;
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage(getResources().getString(R.string.getting_data));
+        progressDialog.setTitle(getResources().getString(R.string.loading));
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
+
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
@@ -154,6 +163,7 @@ public class ProfileFragment extends Fragment {
                     Toast.makeText(getContext(), R.string.get_profileinfo_neg, Toast.LENGTH_SHORT).show();
                     Log.i("USER","FAIL: "+ response.message());
                 }
+                progressDialog.dismiss();
             }
 
             @Override
@@ -161,6 +171,7 @@ public class ProfileFragment extends Fragment {
                 Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
                 Log.i("API EVENT", t.getMessage());
                 call.cancel();
+                progressDialog.dismiss();
             }
          });
 

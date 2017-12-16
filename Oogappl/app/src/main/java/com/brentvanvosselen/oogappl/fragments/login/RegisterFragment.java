@@ -1,5 +1,6 @@
 package com.brentvanvosselen.oogappl.fragments.login;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -103,6 +104,14 @@ public class RegisterFragment extends Fragment{
 
     private void Register(final User u) {
         Call call = apiInterface.createUser(u);
+        //progress
+        final ProgressDialog progressDialog;
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage(getResources().getString(R.string.registreren));
+        progressDialog.setTitle(getResources().getString(R.string.loading));
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
+
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
@@ -122,6 +131,7 @@ public class RegisterFragment extends Fragment{
                 } else {
                     Toast.makeText(context, R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
                 }
+                progressDialog.dismiss();
             }
 
             @Override
@@ -129,7 +139,9 @@ public class RegisterFragment extends Fragment{
                 Log.i("API event", t.getMessage());
                 Toast.makeText(context, R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
                 call.cancel();
+                progressDialog.dismiss();
             }
+
         });
     }
 

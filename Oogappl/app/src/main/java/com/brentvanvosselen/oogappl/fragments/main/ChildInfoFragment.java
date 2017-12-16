@@ -4,6 +4,7 @@ package com.brentvanvosselen.oogappl.fragments.main;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -294,6 +295,14 @@ public class ChildInfoFragment extends Fragment {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
         User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser", null));
         Call call = RetrofitClient.getClient(getContext()).create(APIInterface.class).getParentByEmail("bearer "+ sharedPreferences.getString("token",null),currentUser.getEmail());
+        //progress
+        final ProgressDialog progressDialog;
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage(getResources().getString(R.string.getting_children));
+        progressDialog.setTitle(getResources().getString(R.string.loading));
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
+
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
@@ -305,6 +314,7 @@ public class ChildInfoFragment extends Fragment {
                     Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
                     Log.i("LOGIN", "FAIL: " + response.message());
                 }
+                progressDialog.dismiss();
             }
 
             @Override
@@ -312,6 +322,7 @@ public class ChildInfoFragment extends Fragment {
                 Log.i("API event", t.getMessage());
                 Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
                 call.cancel();
+                progressDialog.dismiss();
             }
         });
 

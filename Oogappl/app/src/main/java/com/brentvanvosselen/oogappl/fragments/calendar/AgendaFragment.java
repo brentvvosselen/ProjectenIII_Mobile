@@ -1,6 +1,7 @@
 package com.brentvanvosselen.oogappl.fragments.calendar;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -205,6 +206,14 @@ public class AgendaFragment extends Fragment {
 
         //get events
         Call call = apiInterface.getEvents("bearer " + sharedPreferences.getString("token",null), currentUser.getEmail());
+        //progress
+        final ProgressDialog progressDialog;
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage(getResources().getString(R.string.getting_data));
+        progressDialog.setTitle(getResources().getString(R.string.loading));
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
+
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
@@ -233,12 +242,14 @@ public class AgendaFragment extends Fragment {
                 }else{
                     //Toast.makeText(getContext(),"events could not be retrieved",Toast.LENGTH_SHORT).show();
                 }
+                progressDialog.dismiss();
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
                 call.cancel();
                 Toast.makeText(getContext(), R.string.geen_verbinding,Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
             }
         });
 

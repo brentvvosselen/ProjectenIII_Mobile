@@ -1,6 +1,7 @@
 package com.brentvanvosselen.oogappl.fragments.main;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -60,6 +61,15 @@ public class HomeFragment extends Fragment {
         User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
         Log.i("API:", currentUser.getEmail());
         Call call = RetrofitClient.getClient(getContext()).create(APIInterface.class).getParentByEmail("bearer "+ sharedPreferences.getString("token",null),currentUser.getEmail());
+
+        //progress
+        final ProgressDialog progressDialog;
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage(getResources().getString(R.string.getting_data));
+        progressDialog.setTitle(getResources().getString(R.string.loading));
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
+
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
@@ -72,12 +82,14 @@ public class HomeFragment extends Fragment {
                 } else {
                     Toast.makeText(getContext(), R.string.get_parent_neg, Toast.LENGTH_SHORT).show();
                 }
+                progressDialog.dismiss();
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
                 Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
                 Log.i("API:", "could not find parent (home-setup)");
+                progressDialog.dismiss();
             }
         });
     }
@@ -99,6 +111,14 @@ public class HomeFragment extends Fragment {
         User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
 
         Call call = RetrofitClient.getClient(getContext()).create(APIInterface.class).getParentByEmail("bearer "+ sharedPreferences.getString("token",null),currentUser.getEmail());
+        //progress
+        final ProgressDialog progressDialog;
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage(getResources().getString(R.string.getting_data));
+        progressDialog.setTitle(getResources().getString(R.string.loading));
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
+
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
@@ -111,12 +131,14 @@ public class HomeFragment extends Fragment {
                         vCardSetup.setVisibility(View.VISIBLE);
                     }
                 }
+                progressDialog.dismiss();
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
                 Toast.makeText(getContext(), R.string.get_parent_neg, Toast.LENGTH_SHORT).show();
                 Log.i("API:", "could not find parent (home-setup)");
+                progressDialog.dismiss();
             }
         });
     }

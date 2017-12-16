@@ -1,5 +1,6 @@
 package com.brentvanvosselen.oogappl.fragments.heenenweer;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -81,6 +82,15 @@ public class HeenEnWeerDayFragment extends Fragment {
 
         //get day
         Call dayCall = apiInterface.getHeenEnWeerDay("bearer " + sharedPreferences.getString("token",null), dayId);
+
+        //progress
+        final ProgressDialog progressDialog;
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage(getResources().getString(R.string.getting_data));
+        progressDialog.setTitle(getResources().getString(R.string.loading));
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
+
         dayCall.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
@@ -115,11 +125,13 @@ public class HeenEnWeerDayFragment extends Fragment {
                     }
 
                 }
+                progressDialog.dismiss();
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
-
+                call.cancel();
+                progressDialog.dismiss();
             }
         });
     }

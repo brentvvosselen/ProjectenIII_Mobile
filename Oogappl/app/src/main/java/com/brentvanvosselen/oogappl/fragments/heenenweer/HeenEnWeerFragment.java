@@ -1,5 +1,6 @@
 package com.brentvanvosselen.oogappl.fragments.heenenweer;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -90,6 +91,14 @@ public class HeenEnWeerFragment extends Fragment {
         User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
 
         final Call booksCall = apiInterface.getAllBooks("bearer " + sharedPreferences.getString("token",null), currentUser.getEmail());
+        //progress
+        final ProgressDialog progressDialog;
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage(getResources().getString(R.string.getting_data));
+        progressDialog.setTitle(getResources().getString(R.string.loading));
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
+
         booksCall.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
@@ -110,42 +119,19 @@ public class HeenEnWeerFragment extends Fragment {
                         sectionAdapter.addSection(new BookSection(book.getChild().getFirstname(),Arrays.asList(book.getDays()),book.getChild().getPicture()));
                     }
 
-
-
-                    //mAdapter = new DaysAdapter(days);
-
-
-
-
                     RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
                     recyclerView.setLayoutManager(mLayoutManager);
                     recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),LinearLayoutManager.VERTICAL));
                     recyclerView.setItemAnimator(new DefaultItemAnimator());
-                   /* recyclerView.setItemAnimator(new DefaultItemAnimator());
-                    recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),LinearLayoutManager.VERTICAL));
-                    recyclerView.setHasFixedSize(true);*/
-                    //recyclerView.setAdapter(mAdapter);
                     recyclerView.setAdapter(sectionAdapter);
-                   /* recyclerView.addOnItemTouchListener(new DayRecyclerTouchListener(getContext(), recyclerView, new ClickListener() {
-                        @Override
-                        public void onClick(View view, int position) {
-                            HeenEnWeerDag dag = days.get(position);
-                            OnHeenEnWeerAction mCallback = (OnHeenEnWeerAction)getActivity();
-                            mCallback.showDay(dag.getId());
-                        }
-
-                        @Override
-                        public void onLongClick(View view, int position) {
-
-                        }
-                    }));
-                    Log.i("VALUES",books.toString());*/
                 }
+                progressDialog.dismiss();
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
-
+                call.cancel();
+                progressDialog.dismiss();
             }
         });
 
