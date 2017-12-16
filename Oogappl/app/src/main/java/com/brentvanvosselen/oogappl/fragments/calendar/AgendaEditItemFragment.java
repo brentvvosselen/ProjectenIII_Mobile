@@ -90,7 +90,7 @@ public class AgendaEditItemFragment extends Fragment {
     EditText vEdittextTitle, vEdittextDescription, vEdittextStartDate, vEdittextEndDate, vEdittextStartTime, vEdittextEndTime, vEdittextWederkerendEinddatum;
     Button vButtonSave;
     CircularImageView vImageViewCategory;
-    Spinner vSpinnerCategory, vSpinnerWederkerendFrequenty, vSpinnerChild;
+    Spinner vSpinnerWederkerendFrequenty;
     CheckBox vCheckboxWederkerend;
     TextView vTextViewWederkerendEinddatum;
 
@@ -138,7 +138,7 @@ public class AgendaEditItemFragment extends Fragment {
 
 
         try {
-            Thread.sleep(200);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -168,18 +168,22 @@ public class AgendaEditItemFragment extends Fragment {
                             if (categories.get(i).getType().equals(e.getCategory().getType()))
                                 categoryIndex = i;
                         }
-                        vSpinnerCategory.setSelection(categoryIndex);
+                        vRecyclerCategories.scrollToPosition(categoryIndex);
 
                         int childIndex = -1;
-                        for(int i = 0; i <  children.size(); i ++){
-                            if(children.get(i).get_id().equals(e.getchildren()[0])){
-                                childIndex = i;
+                        if(e.getchildren().length > 0){
+                            for(int i = 0; i <  children.size(); i ++){
+                                if(children.get(i).get_id().equals(e.getchildren()[0].get_id())){
+                                    childIndex = i;
+                                }
+                            }
+                            if(e.getchildren().length == children.size()){
+                                childIndex = children.size();
                             }
                         }
-                        if(e.getchildren().length == children.size()){
-                            childIndex = children.size();
-                        }
-                        vSpinnerChild.setSelection(childIndex);
+
+
+                        vRecyclerChildren.scrollToPosition(childIndex + 1);
                     } else {
                         Toast.makeText(getContext(), R.string.get_event_neg, Toast.LENGTH_SHORT).show();
                     }
@@ -198,7 +202,6 @@ public class AgendaEditItemFragment extends Fragment {
         vEdittextStartDate = getView().findViewById(R.id.edittext_edit_event_startDate);
         vEdittextEndDate = getView().findViewById(R.id.edittext_edit_event_endDate);
         vImageViewCategory = getView().findViewById(R.id.imageview_edit_event_category);
-        vSpinnerCategory = getView().findViewById(R.id.spinner_edit_event_category);
         vButtonSave = getView().findViewById(R.id.button_edit_event_save);
         vEdittextStartTime = getView().findViewById(R.id.edittext_edit_event_startTime);
         vEdittextEndTime = getView().findViewById(R.id.edittext_edit_event_endTime);
@@ -606,6 +609,7 @@ public class AgendaEditItemFragment extends Fragment {
                     mCategoriesAdapter = new CategoriesHorizontalPickerAdapter(getContext(),categories,vRecyclerCategories,getActivity().getSupportFragmentManager().findFragmentById(R.id.content_main),"agenda_edit");
 
                     SnapHelper snapHelper = new LinearSnapHelper();
+                    vRecyclerCategories.setOnFlingListener(null);
                     snapHelper.attachToRecyclerView(vRecyclerChildren);
 
                     vRecyclerCategories.setLayoutManager(pickerLayoutManagerCategories);
