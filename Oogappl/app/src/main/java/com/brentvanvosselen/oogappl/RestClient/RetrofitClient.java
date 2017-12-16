@@ -38,9 +38,10 @@ public class RetrofitClient {
         Cache cache = new Cache(httpCacheDirectory, 10 * 1024 * 1024);
 
         OkHttpClient client = new OkHttpClient.Builder()
-                .addNetworkInterceptor(new ResponeCacheInterceptor())
-                .addInterceptor(new OfflineResponseCacheInterceptor(context))
-                .cache(cache)
+               // .addNetworkInterceptor(new ResponeCacheInterceptor())
+               // .addInterceptor(new OfflineResponseCacheInterceptor(context))
+               // .cache(cache)
+                .addInterceptor(interceptor)
                 .build();
 
         retrofit = new Retrofit.Builder()
