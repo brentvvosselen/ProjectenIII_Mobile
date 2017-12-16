@@ -9,7 +9,12 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSnapHelper;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SnapHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +34,7 @@ import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
 import com.brentvanvosselen.oogappl.RestClient.models.Category;
 import com.brentvanvosselen.oogappl.RestClient.models.HeenEnWeerItem;
 import com.brentvanvosselen.oogappl.RestClient.models.User;
+import com.brentvanvosselen.oogappl.adapters.CategoriesHorizontalPickerAdapter;
 import com.brentvanvosselen.oogappl.util.ObjectSerializer;
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
@@ -40,6 +46,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import travel.ithaka.android.horizontalpickerlib.PickerLayoutManager;
 
 /**
  * Created by brentvanvosselen on 21/11/2017.
@@ -54,12 +61,15 @@ public class HeenEnWeerItemEditFragment extends Fragment{
     private EditText vEditTextValue;
     private Spinner vSpinnerCategory;
     private Button vButtonSave;
+    private RecyclerView vRecyclerCategories;
+    private PickerLayoutManager categoriesPickerLayoutManager;
+    private CategoriesHorizontalPickerAdapter mCategoryAdapter;
 
     APIInterface apiInterface;
     SharedPreferences sharedPreferences;
 
     private User currentUser;
-
+    private int selectedCategory = 0;
 
     private List<Category> categories;
 
@@ -95,7 +105,6 @@ public class HeenEnWeerItemEditFragment extends Fragment{
 
         currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
 
-        vSpinnerCategory = getView().findViewById(R.id.spinner_heenenweer_item_edit_category);
         vButtonSave = getView().findViewById(R.id.button_heenenweer_item_edit_save);
         vEditTextValue = getView().findViewById(R.id.edittext_heenenweer_item_edit_value);
         vTextViewTitle = getView().findViewById(R.id.textview_heenenweer_item_edit_title);
@@ -111,7 +120,7 @@ public class HeenEnWeerItemEditFragment extends Fragment{
         }
 
 
-        vSpinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+       /* vSpinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if(i == categories.size()){
@@ -204,7 +213,7 @@ public class HeenEnWeerItemEditFragment extends Fragment{
 
             }
         });
-
+*/
         vButtonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -212,11 +221,14 @@ public class HeenEnWeerItemEditFragment extends Fragment{
 
                 String value = vEditTextValue.getText().toString();
                 Category category = null;
-                try{
-                    category = categories.get(vSpinnerCategory.getSelectedItemPosition());
-                }catch(IndexOutOfBoundsException ex){
-                    Toast.makeText(getContext(),"Categorie niet gevonden",Toast.LENGTH_SHORT).show();
+
+                if(selectedCategory == categories.size()){
+                    correctForm = false;
+                    Snackbar.make(getView(),"Geen categorie geselecteerd",Snackbar.LENGTH_SHORT).show();
+                }else{
+                    category = categories.get(selectedCategory);
                 }
+
 
                 if(!value.isEmpty() && value != null && category != null){
                     if(item != null){
@@ -307,19 +319,39 @@ public class HeenEnWeerItemEditFragment extends Fragment{
             public void onResponse(Call call, Response response) {
                 if(response.isSuccessful()){
                     categories = (List<Category>) response.body();
-                    List<String> categorynames = new ArrayList<>();
-                    for (Category c: categories) {
-                        categorynames.add(c.getType());
-                    }
-                    categorynames.add(getResources().getString(R.string.new_category));
-                    ArrayAdapter<String> categoryAdapter = new ArrayAdapter<String>(getContext(),R.layout.custom_spinner_item,categorynames);
-                    vSpinnerCategory.setAdapter(categoryAdapter);int categoryIndex = -1;
+
+                    vRecyclerCategories = getView().findViewById(R.id.recycler_heenenweer_item_categories);
+
+                    categoriesPickerLayoutManager = new PickerLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL,false);
+                    categoriesPickerLayoutManager.setChangeAlpha(true);
+                    categoriesPickerLayoutManager.setScaleDownBy(0.8f);
+                    categoriesPickerLayoutManager.setScaleDownDistance(0.99f);
+
+                    mCategoryAdapter = new CategoriesHorizontalPickerAdapter(getContext(),categories,vRecyclerCategories,getActivity().getSupportFragmentManager().findFragmentById(R.id.content_main),"heen_en_weer_item");
+
+                    SnapHelper snapHelper = new LinearSnapHelper();
+                    snapHelper.attachToRecyclerView(vRecyclerCategories);
+
+                    vRecyclerCategories.setLayoutManager(categoriesPickerLayoutManager);
+                    vRecyclerCategories.setAdapter(mCategoryAdapter);
+
+                    categoriesPickerLayoutManager.setOnScrollStopListener(new PickerLayoutManager.onScrollStopListener() {
+                        @Override
+                        public void selectedView(View view) {
+                            selectedCategory = categoriesPickerLayoutManager.getPosition(view);
+
+                        }
+                    });
+
+
+
                     if(item != null){
                         for(int i = 0 ; i<categories.size();i++){
                             if(categories.get(i).getType().equals(item.getCategory().getType()))
-                                categoryIndex = i;
+                                selectedCategory = i;
                         }
-                        vSpinnerCategory.setSelection(categoryIndex);
+
+                        //vSpinnerCategory.setSelection(categoryIndex);
                     }
 
                 }else{
@@ -333,5 +365,10 @@ public class HeenEnWeerItemEditFragment extends Fragment{
                 call.cancel();
             }
         });
+    }
+
+    public void rerenderCategories(List<Category> categories){
+        mCategoryAdapter = new CategoriesHorizontalPickerAdapter(getContext(),categories,vRecyclerCategories,this,"heen_en_weer_item");
+        vRecyclerCategories.setAdapter(mCategoryAdapter);
     }
 }

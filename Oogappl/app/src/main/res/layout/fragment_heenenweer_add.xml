@@ -19,14 +19,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Spinner
-        android:id="@+id/spinner_heenenweer_add_child"
-        android:layout_width="0dp"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_heenenweer_add_children"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textview_heenenweer_add_title" />
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:clipToPadding="false"
+        android:paddingLeft="183dp"
+        android:paddingRight="183dp"
+        app:layout_constraintTop_toBottomOf="@+id/textview_heenenweer_add_title"></android.support.v7.widget.RecyclerView>
+
 
     <EditText
         android:id="@+id/edittext_heenenweer_add_date"
@@ -39,8 +42,8 @@
         android:hint="@string/Date"
         android:editable="false"
         android:clickable="true"
-        app:layout_constraintStart_toStartOf="@+id/spinner_heenenweer_add_child"
-        app:layout_constraintTop_toBottomOf="@+id/spinner_heenenweer_add_child" />
+        app:layout_constraintStart_toStartOf="@+id/textview_heenenweer_add_title"
+        app:layout_constraintTop_toBottomOf="@+id/recycler_heenenweer_add_children" />
 
     <EditText
         android:id="@+id/edittext_heenenweer_add_description"

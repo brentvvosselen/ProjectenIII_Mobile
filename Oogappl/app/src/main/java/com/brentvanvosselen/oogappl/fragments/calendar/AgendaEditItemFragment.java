@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
@@ -208,100 +209,8 @@ public class AgendaEditItemFragment extends Fragment {
 
 
 
-        vSpinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i == categories.size()) {
-                    //create an alert dialog
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    final LayoutInflater inflater = getActivity().getLayoutInflater();
-                    //inflate custom dialog
-                    final View mView = inflater.inflate(R.layout.dialog_add_category, null);
-
-                    final ImageView vImageviewAddCategory = mView.findViewById(R.id.imageview_dialog_add_category_color);
-                    vImageviewAddCategory.setBackgroundColor(Color.parseColor(currentColor));
-
-                    final EditText vEdittextAddCategoryType = mView.findViewById(R.id.edittext_dialog_add_category_type);
-
-                    vImageviewAddCategory.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            ColorPickerDialogBuilder
-                                    .with(getContext())
-                                    .setTitle(R.string.choose_color)
-                                    .initialColor(Color.parseColor(currentColor))
-                                    .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
-                                    .density(8)
-                                    .setPositiveButton(R.string.ok, new ColorPickerClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int color, Integer[] colors) {
-                                            vImageviewAddCategory.setBackgroundColor(Color.parseColor("#" + Integer.toHexString(color)));
-                                            currentColor = "#" + Integer.toHexString(color);
-                                        }
-                                    })
-                                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-
-                                        }
-                                    })
-                                    .build()
-                                    .show();
-                        }
-                    });
 
 
-                    builder.setView(mView)
-                            .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    Log.i("event", "add category");
-                                    Category newCategory = new Category(vEdittextAddCategoryType.getText().toString(), currentColor);
-
-                                    Call addCategoryCall = apiInterface.addCategory("bearer " + sharedPreferences.getString("token",null), currentUser.getEmail(),newCategory);
-                                    addCategoryCall.enqueue(new Callback() {
-                                        @Override
-                                        public void onResponse(Call call, Response response) {
-                                            if (response.isSuccessful()) {
-                                                Toast.makeText(getContext(), R.string.new_category_pos, Toast.LENGTH_SHORT).show();
-
-                                            } else {
-                                                Toast.makeText(getContext(), R.string.new_category_neg, Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onFailure(Call call, Throwable t) {
-                                            //Toast.makeText(getContext(),"Kon geen connectie maken met server",Toast.LENGTH_SHORT).show();
-                                            call.cancel();
-                                        }
-                                    });
-
-                                }
-                            })
-                            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    Log.i("event", "cancel category");
-                                }
-                            }).setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialogInterface) {
-                            fillSpinner();
-                        }
-                    }).show();
-                } else {
-                    ColorDrawable color = new ColorDrawable(Color.parseColor(categories.get(i).getColor()));
-                    vImageViewCategory.setBackground(color);
-                }
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
 
         ArrayAdapter<String> frequentyArrayAdapter = new ArrayAdapter<String>(getContext(), R.layout.support_simple_spinner_dropdown_item, this.frequenties);
         vSpinnerWederkerendFrequenty.setAdapter(frequentyArrayAdapter);
@@ -476,10 +385,11 @@ public class AgendaEditItemFragment extends Fragment {
                 String title = vEdittextTitle.getText().toString();
                 String description = vEdittextDescription.getText().toString();
                 Category category = null;
-                try{
-                    category = categories.get(vSpinnerCategory.getSelectedItemPosition());
-                }catch(IndexOutOfBoundsException ex){
-                    Toast.makeText(getContext(),"Nog op te lossen bug met toevoegen categorie",Toast.LENGTH_SHORT).show();
+                if(selectedCategory == categories.size()){
+                    correctForm = false;
+                    Snackbar.make(getView(),"Geen categorie geselecteerd",Snackbar.LENGTH_SHORT).show();
+                }else{
+                    category = categories.get(selectedCategory);
                 }
 
                 List<Child> myChildren = new ArrayList<>();
@@ -489,16 +399,6 @@ public class AgendaEditItemFragment extends Fragment {
                 }else if (selectedChild > 0 && selectedChild <= children.size()){
                     myChildren.add(children.get(selectedChild - 1));
                 }
-                /*try{
-                    int index = vSpinnerChild.getSelectedItemPosition();
-                    if(index == children.size()){
-                        myChildren = children;
-                    }else{
-                        myChildren.add(children.get(index));
-                    }
-                }catch(IndexOutOfBoundsException ex){
-                    Toast.makeText(getContext(),"Verkeerde index",Toast.LENGTH_SHORT).show();
-                }*/
 
                 SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_TIME_FORMAT);
                 Date start = new Date();
@@ -600,7 +500,7 @@ public class AgendaEditItemFragment extends Fragment {
                     pickerLayoutManagerChildren.setScaleDownDistance(0.8f);
 
 
-                    mChildrenAdapter = new ChildrenHorizontalPickerAdapter(getContext(),children,vRecyclerChildren);
+                    mChildrenAdapter = new ChildrenHorizontalPickerAdapter(getContext(),children,vRecyclerChildren,true,true);
 
                     SnapHelper snapHelper = new LinearSnapHelper();
                     snapHelper.attachToRecyclerView(vRecyclerChildren);
@@ -703,7 +603,7 @@ public class AgendaEditItemFragment extends Fragment {
                     pickerLayoutManagerCategories.setScaleDownBy(0.8f);
                     pickerLayoutManagerCategories.setScaleDownDistance(0.9f);
 
-                    mCategoriesAdapter = new CategoriesHorizontalPickerAdapter(getContext(),categories,vRecyclerCategories,getActivity().getSupportFragmentManager().findFragmentById(R.id.content_main));
+                    mCategoriesAdapter = new CategoriesHorizontalPickerAdapter(getContext(),categories,vRecyclerCategories,getActivity().getSupportFragmentManager().findFragmentById(R.id.content_main),"agenda_edit");
 
                     SnapHelper snapHelper = new LinearSnapHelper();
                     snapHelper.attachToRecyclerView(vRecyclerChildren);
@@ -741,7 +641,7 @@ public class AgendaEditItemFragment extends Fragment {
 
     public void rerenderCategories(List<Category> categories){
         Log.i("rerender","true");
-        mCategoriesAdapter = new CategoriesHorizontalPickerAdapter(getContext(),categories,vRecyclerCategories,this);
+        mCategoriesAdapter = new CategoriesHorizontalPickerAdapter(getContext(),categories,vRecyclerCategories,this,"agenda_edit");
         vRecyclerCategories.setAdapter(mCategoriesAdapter);
 
     }

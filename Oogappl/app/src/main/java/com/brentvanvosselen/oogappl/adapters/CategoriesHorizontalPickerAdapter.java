@@ -27,6 +27,7 @@ import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
 import com.brentvanvosselen.oogappl.RestClient.models.Category;
 import com.brentvanvosselen.oogappl.RestClient.models.User;
 import com.brentvanvosselen.oogappl.fragments.calendar.AgendaEditItemFragment;
+import com.brentvanvosselen.oogappl.fragments.heenenweer.HeenEnWeerItemEditFragment;
 import com.brentvanvosselen.oogappl.util.ObjectSerializer;
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
@@ -50,6 +51,7 @@ public class CategoriesHorizontalPickerAdapter extends  RecyclerView.Adapter<Cat
     private List<Category> categories;
     private RecyclerView recyclerView;
     private Fragment fragment;
+    private String fragment_tag;
 
 
 
@@ -58,11 +60,12 @@ public class CategoriesHorizontalPickerAdapter extends  RecyclerView.Adapter<Cat
     SharedPreferences sharedPreferences;
     User currentUser;
 
-    public CategoriesHorizontalPickerAdapter(Context context, List<Category> categories, RecyclerView recyclerView, Fragment fragment) {
+    public CategoriesHorizontalPickerAdapter(Context context, List<Category> categories, RecyclerView recyclerView, Fragment fragment, String fragment_tag) {
         this.context = context;
         this.categories = categories;
         this.recyclerView = recyclerView;
         this.fragment = fragment;
+        this.fragment_tag = fragment_tag;
 
         apiInterface = RetrofitClient.getClient(context).create(APIInterface.class);
         sharedPreferences = context.getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
@@ -197,7 +200,16 @@ public class CategoriesHorizontalPickerAdapter extends  RecyclerView.Adapter<Cat
                             }).setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @Override
                         public void onDismiss(DialogInterface dialogInterface) {
-                            ((AgendaEditItemFragment)fragment).rerenderCategories(categories);
+                            switch(fragment_tag){
+                                case "agenda_edit":
+                                    ((AgendaEditItemFragment)fragment).rerenderCategories(categories);
+                                    break;
+                                case "heen_en_weer_item":
+                                    ((HeenEnWeerItemEditFragment)fragment).rerenderCategories(categories);
+                                    break;
+                                default:
+                            }
+
                         }
                     }).show();
 

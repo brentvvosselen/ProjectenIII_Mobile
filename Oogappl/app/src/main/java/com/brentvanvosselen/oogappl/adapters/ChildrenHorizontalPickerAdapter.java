@@ -27,12 +27,16 @@ public class ChildrenHorizontalPickerAdapter extends RecyclerView.Adapter<Childr
     private Context context;
     private List<Child> children;
     private RecyclerView recyclerView;
+    private boolean noChildrenAllowed,allChildrenAllowed;
 
-    public ChildrenHorizontalPickerAdapter(Context context, List<Child> children, RecyclerView rv){
+    public ChildrenHorizontalPickerAdapter(Context context, List<Child> children, RecyclerView rv, boolean noChildrenAllowed, boolean allChildrenAllowed){
         this.context = context;
         this.children = children;
         Log.i("childrenr", children.toString());
         this.recyclerView = rv;
+
+        this.noChildrenAllowed = noChildrenAllowed;
+        this.allChildrenAllowed = allChildrenAllowed;
     }
 
     @Override
@@ -46,14 +50,14 @@ public class ChildrenHorizontalPickerAdapter extends RecyclerView.Adapter<Childr
     @Override
     public void onBindViewHolder(ChildViewHolder holder, final int position) {
         ChildViewHolder cvh = holder;
-        if(position == 0){
+        if(noChildrenAllowed && position == 0){
             cvh.pickerTxt.setText(R.string.no_children);
             cvh.imageView.setVisibility(View.INVISIBLE);
-        }else if(position == children.size() + 1){
+        }else if(position == children.size() + ((noChildrenAllowed)?1:0) && allChildrenAllowed){
             cvh.pickerTxt.setText(R.string.all_children);
             cvh.imageView.setVisibility(View.INVISIBLE);
         }else{
-            Child selectedChild = children.get(position - 1);
+            Child selectedChild = children.get(position - ((noChildrenAllowed)?1:0));
             cvh.pickerTxt.setText(selectedChild.getFirstname());
 
             if(selectedChild.getPicture() != null){
@@ -80,7 +84,7 @@ public class ChildrenHorizontalPickerAdapter extends RecyclerView.Adapter<Childr
 
     @Override
     public int getItemCount() {
-        return children.size() + 2;
+        return children.size() + ((allChildrenAllowed)?1:0) + ((noChildrenAllowed)?1:0);
     }
 
 
