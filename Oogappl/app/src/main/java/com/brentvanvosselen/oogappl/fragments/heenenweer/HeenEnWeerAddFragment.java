@@ -6,6 +6,10 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSnapHelper;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SnapHelper;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -26,11 +30,13 @@ import com.brentvanvosselen.oogappl.RestClient.models.HeenEnWeerDag;
 import com.brentvanvosselen.oogappl.RestClient.models.HeenEnWeerItem;
 import com.brentvanvosselen.oogappl.RestClient.models.Parent;
 import com.brentvanvosselen.oogappl.RestClient.models.User;
+import com.brentvanvosselen.oogappl.adapters.ChildrenHorizontalPickerAdapter;
 import com.brentvanvosselen.oogappl.util.ObjectSerializer;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -39,6 +45,7 @@ import java.util.Locale;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import travel.ithaka.android.horizontalpickerlib.PickerLayoutManager;
 
 /**
  * Created by brentvanvosselen on 25/11/2017.
@@ -47,10 +54,13 @@ import retrofit2.Response;
 public class HeenEnWeerAddFragment extends Fragment{
 
     private EditText vEdittextDate, vEdittextDescription;
-    private Spinner vSpinnerChild;
     private Button vButtonSave;
+    private RecyclerView vRecyclerChildren;
+    private PickerLayoutManager pickerLayoutManagerChildren;
+    private ChildrenHorizontalPickerAdapter mChildrenAdapter;
 
-    private Child[] children;
+
+    private List<Child> children;
     private SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
     private Calendar myCalendar = Calendar.getInstance();
 
@@ -58,7 +68,7 @@ public class HeenEnWeerAddFragment extends Fragment{
     SharedPreferences sharedPreferences;
 
     private User currentUser;
-
+    private int selectedChild;
 
 
     @Override
@@ -76,7 +86,6 @@ public class HeenEnWeerAddFragment extends Fragment{
 
         vEdittextDate = getView().findViewById(R.id.edittext_heenenweer_add_date);
         vEdittextDescription = getView().findViewById(R.id.edittext_heenenweer_add_description);
-        vSpinnerChild = getView().findViewById(R.id.spinner_heenenweer_add_child);
         vButtonSave = getView().findViewById(R.id.button_heenenweer_add_save);
 
         //datepicker
@@ -113,13 +122,32 @@ public class HeenEnWeerAddFragment extends Fragment{
             public void onResponse(Call call, Response response) {
                 if(response.isSuccessful()){
                     Parent p = (Parent) response.body();
-                    children = p.getChildren();
-                    String[] childNames = new String[children.length];
-                    for(int i = 0; i<children.length; i++){
-                        childNames[i] = children[i].getFirstname();
-                    }
-                    ArrayAdapter<String> childAdapter = new ArrayAdapter<String>(getContext(),R.layout.custom_spinner_item,childNames);
-                    vSpinnerChild.setAdapter(childAdapter);
+                    children = Arrays.asList(p.getChildren());
+
+                    vRecyclerChildren = getView().findViewById(R.id.recycler_heenenweer_add_children);
+
+                    pickerLayoutManagerChildren = new PickerLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+                    pickerLayoutManagerChildren.setChangeAlpha(true);
+                    pickerLayoutManagerChildren.setScaleDownBy(0.7f);
+                    pickerLayoutManagerChildren.setScaleDownDistance(0.8f);
+
+                    mChildrenAdapter = new ChildrenHorizontalPickerAdapter(getContext(),children,vRecyclerChildren,false,false);
+
+                    SnapHelper snapHelper = new LinearSnapHelper();
+                    snapHelper.attachToRecyclerView(vRecyclerChildren);
+
+                    vRecyclerChildren.setLayoutManager(pickerLayoutManagerChildren);
+                    vRecyclerChildren.setAdapter(mChildrenAdapter);
+
+                    pickerLayoutManagerChildren.setOnScrollStopListener(new PickerLayoutManager.onScrollStopListener() {
+                        @Override
+                        public void selectedView(View view) {
+                            selectedChild = pickerLayoutManagerChildren.getPosition(view);
+                        }
+                    });
+
+
+
                 }
             }
 
@@ -134,7 +162,7 @@ public class HeenEnWeerAddFragment extends Fragment{
                 boolean correctform = true;
                 String description = vEdittextDescription.getText().toString();
                 Date day = null;
-                Child child = children[vSpinnerChild.getSelectedItemPosition()];
+                Child child = children.get(selectedChild);
                 try {
                     day = DATE_FORMAT.parse(vEdittextDate.getText().toString());
                 } catch (ParseException e) {
