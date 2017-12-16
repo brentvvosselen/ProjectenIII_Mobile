@@ -90,22 +90,18 @@ public class FinanceFragment extends Fragment {
                     if(parent.getGroup().bothParentsAccepted()) {
                         // Beide parents hebben de financien geaccepteerd
                         bothAccepted();
-                        Log.i("TYPE", "BOTH");
 
                     } else if(parent.getGroup().parentHasAccepted(parent)) {
                         // Ene parent heeft setup doorlopen, andere nog niet
                         currentAccepted();
-                        Log.i("TYPE", "CURRENT");
 
                     } else if(parent.getGroup().otherParentHasAccepted(parent)) {
                         // Andere parent heeft setup doorlopen, huidige nog niet
                         otherAccepted();
-                        Log.i("TYPE", "OTHER");
 
                     } else if(parent.hasDoneSetup()){
                         //Indien de gebruiker de financien setup nog niet doorlopen heeft, krijgt hij dit kaartje te zien
                         noneAccepted();
-                        Log.i("TYPE", "NONE");
                     }
                 }
             }
@@ -113,7 +109,6 @@ public class FinanceFragment extends Fragment {
             @Override
             public void onFailure(Call call, Throwable t) {
                 Toast.makeText(getContext(), "Could not find parent", Toast.LENGTH_SHORT).show();
-                Log.i("API:", "could not find parent (finance-setup)");
             }
         });
 
@@ -323,7 +318,6 @@ public class FinanceFragment extends Fragment {
                             String childName = (String) spinnerChildren.getSelectedItem();
 
                             Cost temp = new Cost(title, desciption, amount, new Date(year, month, day), category, parent.getGroup().getChildByName(childName));
-                            Log.i("DATE", temp.getDate().toString());
                             addCost(temp);
                             dialog.dismiss();
                         }
@@ -365,7 +359,6 @@ public class FinanceFragment extends Fragment {
             @Override
             public void onResponse(Call call, Response response) {
                 if(response.isSuccessful()){
-                    Log.i("ADD CAT", "SUCCESFULL");
                     CostCategory cat = (CostCategory) response.body();
                     categories.add(cat);
                     categorieNames.remove(categorieNames.size() - 1);
@@ -392,7 +385,6 @@ public class FinanceFragment extends Fragment {
                 if(response.isSuccessful()){
                     Cost cost = (Cost) response.body();
                     costs.add(cost);
-                    Log.i("RESPONSE", cost.getTitle());
 
                     initCostscards();
                 } else {
@@ -403,7 +395,7 @@ public class FinanceFragment extends Fragment {
             @Override
             public void onFailure(Call call, Throwable t) {
                 // Toast.makeText(getContext(), getResources().getString(R.string.geen_verbinding), Toast.LENGTH_SHORT).show();
-                Log.i("FOUT", t.getMessage());
+                Log.i("ERROR", t.getMessage());
 
                 costs.add(c);
 

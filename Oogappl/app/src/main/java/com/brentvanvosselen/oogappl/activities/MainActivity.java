@@ -49,7 +49,9 @@ import com.brentvanvosselen.oogappl.fragments.finance.FinanceFragment;
 import com.brentvanvosselen.oogappl.fragments.main.HomeFragment;
 import com.brentvanvosselen.oogappl.fragments.main.ProfileFragment;
 import com.brentvanvosselen.oogappl.util.ObjectSerializer;
+import com.brentvanvosselen.oogappl.util.Utils;
 import com.mikhaellopez.circularimageview.CircularImageView;
+import com.squareup.leakcanary.LeakCanary;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -71,6 +73,12 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if(LeakCanary.isInAnalyzerProcess(this)) {
+            return;
+        }
+
+        LeakCanary.install(getApplication());
+
         this.apiInterface = RetrofitClient.getClient(this).create(APIInterface.class);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -129,6 +137,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 sharedPrefs.edit().remove("currentUser").commit();
+                Utils.deleteCache(getApplicationContext());
                 goToLogin();
             }
         });

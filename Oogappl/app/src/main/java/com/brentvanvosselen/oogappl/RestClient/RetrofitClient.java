@@ -12,6 +12,7 @@ import okhttp3.Cache;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -37,8 +38,8 @@ public class RetrofitClient {
         Cache cache = new Cache(httpCacheDirectory, 10 * 1024 * 1024);
 
         OkHttpClient client = new OkHttpClient.Builder()
-                .addNetworkInterceptor(new ResponeCacheInterceptor())
                 .addInterceptor(new OfflineResponseCacheInterceptor(context))
+                .addInterceptor(interceptor)
                 .cache(cache)
                 .build();
 
@@ -49,18 +50,6 @@ public class RetrofitClient {
                 .build();
 
         return retrofit;
-    }
-
-    private static class ResponeCacheInterceptor implements Interceptor {
-
-        @Override
-        public okhttp3.Response intercept(Chain chain) throws IOException {
-            okhttp3.Response originalResponse = chain.proceed(chain.request());
-
-            return originalResponse.newBuilder()
-                    .header("Cache-Control", "public, max-age=" + 300)
-                    .build();
-        }
     }
 
     private static class OfflineResponseCacheInterceptor implements Interceptor {
@@ -74,8 +63,8 @@ public class RetrofitClient {
         @Override
         public okhttp3.Response intercept(Chain chain) throws IOException {
             Request request = chain.request();
+
             if(!Utils.isNetworkAvailable(context)) {
-                Log.i("CACHE", "NO NETWORK");
                 request = request.newBuilder()
                         .header("Cache-Control", "public, only-if-cached, max-stale=" + 2419200)
                         .build();
