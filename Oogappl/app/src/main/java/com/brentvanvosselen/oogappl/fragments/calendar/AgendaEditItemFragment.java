@@ -3,6 +3,7 @@ package com.brentvanvosselen.oogappl.fragments.calendar;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -82,32 +83,35 @@ public class AgendaEditItemFragment extends Fragment {
     //use this variable to edit an event, if this is null you want to create an event
     private String itemId = null;
 
+    private TextView title;
+    private ProgressDialog progressDialog;
+
     private int selectedChild = 0;
     private int selectedCategory = 0;
 
-    APIInterface apiInterface;
-    SharedPreferences sharedPreferences;
-    User currentUser;
+    private APIInterface apiInterface;
+    private SharedPreferences sharedPreferences;
+    private User currentUser;
 
-    EditText vEdittextTitle, vEdittextDescription, vEdittextStartDate, vEdittextEndDate, vEdittextStartTime, vEdittextEndTime, vEdittextWederkerendEinddatum;
-    Button vButtonSave;
-    CircularImageView vImageViewCategory;
-    Spinner vSpinnerWederkerendFrequenty;
-    CheckBox vCheckboxWederkerend;
-    TextView vTextViewWederkerendEinddatum;
-    ImageButton vButtonAddCategory;
+    private EditText vEdittextTitle, vEdittextDescription, vEdittextStartDate, vEdittextEndDate, vEdittextStartTime, vEdittextEndTime, vEdittextWederkerendEinddatum;
+    private Button vButtonSave;
+    private CircularImageView vImageViewCategory;
+    private Spinner vSpinnerWederkerendFrequenty;
+    private CheckBox vCheckboxWederkerend;
+    private TextView vTextViewWederkerendEinddatum;
+    private ImageButton vButtonAddCategory;
 
-    RecyclerView vRecyclerChildren, vRecyclerCategories;
-    ChildrenHorizontalPickerAdapter mChildrenAdapter;
-    CategoriesHorizontalPickerAdapter mCategoriesAdapter;
-    PickerLayoutManager pickerLayoutManagerChildren;
-    PickerLayoutManager pickerLayoutManagerCategories;
+    private RecyclerView vRecyclerChildren, vRecyclerCategories;
+    private ChildrenHorizontalPickerAdapter mChildrenAdapter;
+    private CategoriesHorizontalPickerAdapter mCategoriesAdapter;
+    private PickerLayoutManager pickerLayoutManagerChildren;
+    private PickerLayoutManager pickerLayoutManagerCategories;
 
-    List<Category> categories;
-    List<Child> children;
-    String[] frequenties = {"Dagelijks", "Wekelijks", "Maandelijks"};
+    private List<Category> categories;
+    private List<Child> children;
+    private String[] frequenties = {"Dagelijks", "Wekelijks", "Maandelijks"};
 
-    String currentColor = "#2CA49D";
+    private String currentColor = "#2CA49D";
 
 
     //method to create a new instance and fill the currentEvent
@@ -132,73 +136,15 @@ public class AgendaEditItemFragment extends Fragment {
         final Calendar myCalendar = Calendar.getInstance();
 
         //set title
-        final TextView title = getActivity().findViewById(getResources().getIdentifier("action_bar_title", "id", getActivity().getPackageName()));
+        title = getActivity().findViewById(getResources().getIdentifier("action_bar_title", "id", getActivity().getPackageName()));
         title.setText(R.string.add_item);
 
         //make a call for the categories and fill the adapter
         fillSpinner();
-        fillChildSpinner();
 
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        //get event
-        if(itemId != null){
-            Call itemCall = apiInterface.getEvent("bearer " + sharedPreferences.getString("token",null), itemId);
-            itemCall.enqueue(new Callback() {
-                @Override
-                public void onResponse(Call call, Response response) {
-                    if (response.isSuccessful()) {
-                        Event e = (Event) response.body();
-                        title.setText(R.string.edit_item);
 
 
-                        vEdittextTitle.setText(e.getTitle());
-                        vEdittextDescription.setText(e.getDescription());
-                        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
-                        SimpleDateFormat timeFormat = new SimpleDateFormat(TIME_FORMAT);
-                        vEdittextStartDate.setText(dateFormat.format(e.getStart()));
-                        vEdittextStartTime.setText(timeFormat.format(e.getStart()));
-                        vEdittextEndDate.setText(dateFormat.format(e.getEnd()));
-                        vEdittextEndTime.setText(timeFormat.format(e.getEnd()));
-                        vButtonSave.setText(R.string.save);
-                        int categoryIndex = -1;
-                        for (int i = 0; i < categories.size(); i++) {
-                            if (categories.get(i).getType().equals(e.getCategory().getType()))
-                                categoryIndex = i;
-                        }
-                        vRecyclerCategories.scrollToPosition(categoryIndex);
-
-                        int childIndex = -1;
-                        if(e.getchildren().length > 0){
-                            for(int i = 0; i <  children.size(); i ++){
-                                if(children.get(i).get_id().equals(e.getchildren()[0].get_id())){
-                                    childIndex = i;
-                                }
-                            }
-                            if(e.getchildren().length == children.size()){
-                                childIndex = children.size();
-                            }
-                        }
-
-
-                        vRecyclerChildren.scrollToPosition(childIndex + 1);
-                    } else {
-                        Toast.makeText(getContext(), R.string.get_event_neg, Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call call, Throwable t) {
-                    Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
-                    call.cancel();
-                }
-            });
-        }
 
         vEdittextTitle = getView().findViewById(R.id.edittext_edit_event_title);
         vEdittextDescription = getView().findViewById(R.id.edittext_edit_event_description);
@@ -606,11 +552,12 @@ public class AgendaEditItemFragment extends Fragment {
                     });
 
                 }
+                getEvent();
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
-
+                call.cancel();
             }
         });
     }
@@ -676,6 +623,13 @@ public class AgendaEditItemFragment extends Fragment {
 
 
         Call categoriesCall = apiInterface.getCategoriesFromUser("bearer " + sharedPreferences.getString("token",null), currentUser.getEmail());
+        //progress
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage(getResources().getString(R.string.getting_data));
+        progressDialog.setTitle(getResources().getString(R.string.loading));
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
+
         categoriesCall.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
@@ -712,6 +666,7 @@ public class AgendaEditItemFragment extends Fragment {
                 } else {
                     Toast.makeText(getContext(), R.string.get_category_neg, Toast.LENGTH_SHORT).show();
                 }
+                fillChildSpinner();
             }
 
             @Override
@@ -720,6 +675,65 @@ public class AgendaEditItemFragment extends Fragment {
                 call.cancel();
             }
         });
+    }
+
+    private void getEvent(){
+        //get event
+        if(itemId != null){
+            Call itemCall = apiInterface.getEvent("bearer " + sharedPreferences.getString("token",null), itemId);
+            itemCall.enqueue(new Callback() {
+                @Override
+                public void onResponse(Call call, Response response) {
+                    if (response.isSuccessful()) {
+                        Event e = (Event) response.body();
+                        title.setText(R.string.edit_item);
+
+
+                        vEdittextTitle.setText(e.getTitle());
+                        vEdittextDescription.setText(e.getDescription());
+                        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+                        SimpleDateFormat timeFormat = new SimpleDateFormat(TIME_FORMAT);
+                        vEdittextStartDate.setText(dateFormat.format(e.getStart()));
+                        vEdittextStartTime.setText(timeFormat.format(e.getStart()));
+                        vEdittextEndDate.setText(dateFormat.format(e.getEnd()));
+                        vEdittextEndTime.setText(timeFormat.format(e.getEnd()));
+                        vButtonSave.setText(R.string.save);
+                        int categoryIndex = -1;
+                        for (int i = 0; i < categories.size(); i++) {
+                            if (categories.get(i).getType().equals(e.getCategory().getType()))
+                                categoryIndex = i;
+                        }
+                        vRecyclerCategories.scrollToPosition(categoryIndex);
+
+                        int childIndex = -1;
+                        if(e.getchildren().length > 0){
+                            for(int i = 0; i <  children.size(); i ++){
+                                if(children.get(i).get_id().equals(e.getchildren()[0].get_id())){
+                                    childIndex = i;
+                                }
+                            }
+                            if(e.getchildren().length == children.size()){
+                                childIndex = children.size();
+                            }
+                        }
+
+
+                        vRecyclerChildren.scrollToPosition(childIndex + 1);
+                    } else {
+                        Toast.makeText(getContext(), R.string.get_event_neg, Toast.LENGTH_SHORT).show();
+                    }
+                    progressDialog.dismiss();
+
+                }
+
+                @Override
+                public void onFailure(Call call, Throwable t) {
+                    Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
+                    call.cancel();
+                    progressDialog.dismiss();
+                }
+            });
+        }
     }
 
     private void updateLabel(String format, Calendar calendar, EditText editText) {
