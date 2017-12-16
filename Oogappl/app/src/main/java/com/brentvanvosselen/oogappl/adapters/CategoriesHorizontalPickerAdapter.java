@@ -55,22 +55,12 @@ public class CategoriesHorizontalPickerAdapter extends  RecyclerView.Adapter<Cat
 
 
 
-    String currentColor = "#2CA49D";
-    APIInterface apiInterface;
-    SharedPreferences sharedPreferences;
-    User currentUser;
 
-    public CategoriesHorizontalPickerAdapter(Context context, List<Category> categories, RecyclerView recyclerView, Fragment fragment, String fragment_tag) {
+
+    public CategoriesHorizontalPickerAdapter(Context context, List<Category> categories, RecyclerView recyclerView) {
         this.context = context;
         this.categories = categories;
         this.recyclerView = recyclerView;
-        this.fragment = fragment;
-        this.fragment_tag = fragment_tag;
-
-        apiInterface = RetrofitClient.getClient(context).create(APIInterface.class);
-        sharedPreferences = context.getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
-        currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
-
 
     }
 
@@ -86,20 +76,15 @@ public class CategoriesHorizontalPickerAdapter extends  RecyclerView.Adapter<Cat
     public void onBindViewHolder(CategoryViewHolder holder, final int position) {
         CategoryViewHolder cvh = holder;
 
-        if(position == categories.size()){
-            cvh.pickerTxt.setText(R.string.new_category_plus);
-            cvh.imageView.setVisibility(View.INVISIBLE);
-        }else{
             Category selectedCategory = categories.get(position);
             cvh.pickerTxt.setText(selectedCategory.getType());
             int color = Color.parseColor(selectedCategory.getColor());
             int[] colors = {color};
             Bitmap colorBm =  Bitmap.createBitmap(colors,1,1, Bitmap.Config.ARGB_8888);
             cvh.imageView.setImageBitmap(colorBm);
-        }
 
 
-        cvh.pickerTxt.setOnClickListener(new View.OnClickListener() {
+        cvh.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(recyclerView != null){
@@ -109,121 +94,14 @@ public class CategoriesHorizontalPickerAdapter extends  RecyclerView.Adapter<Cat
             }
         });
 
-        cvh.linearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(position == categories.size()){
-                    Snackbar.make(view,R.string.new_category_press,Snackbar.LENGTH_SHORT).show();
-
-                }
-            }
-        });
-
-        cvh.linearLayout.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                if(position == categories.size()){
-                    Log.i("event","add category");
-
-                    //create an alert dialog
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    final LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
-                    //inflate custom dialog
-                    final View mView = inflater.inflate(R.layout.dialog_add_category, null);
-
-                    final ImageView vImageviewAddCategory = mView.findViewById(R.id.imageview_dialog_add_category_color);
-                    vImageviewAddCategory.setBackgroundColor(Color.parseColor(currentColor));
-
-                    final EditText vEdittextAddCategoryType = mView.findViewById(R.id.edittext_dialog_add_category_type);
-
-                    vImageviewAddCategory.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            ColorPickerDialogBuilder
-                                    .with(context)
-                                    .setTitle(R.string.choose_color)
-                                    .initialColor(Color.parseColor(currentColor))
-                                    .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
-                                    .density(8)
-                                    .setPositiveButton(R.string.ok, new ColorPickerClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int color, Integer[] colors) {
-                                            vImageviewAddCategory.setBackgroundColor(Color.parseColor("#" + Integer.toHexString(color)));
-                                            currentColor = "#" + Integer.toHexString(color);
-                                        }
-                                    })
-                                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-
-                                        }
-                                    })
-                                    .build()
-                                    .show();
-                        }
-                    });
-
-
-                    builder.setView(mView)
-                            .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    Log.i("event", "add category");
-                                    Category newCategory = new Category(vEdittextAddCategoryType.getText().toString(), currentColor);
-                                    categories.add(newCategory);
-                                    Call addCategoryCall = apiInterface.addCategory("bearer " + sharedPreferences.getString("token",null), currentUser.getEmail(),newCategory);
-                                    addCategoryCall.enqueue(new Callback() {
-                                        @Override
-                                        public void onResponse(Call call, Response response) {
-                                            if (response.isSuccessful()) {
-                                                Toast.makeText(context, R.string.new_category_pos, Toast.LENGTH_SHORT).show();
-
-                                            } else {
-                                                Toast.makeText(context, R.string.new_category_neg, Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onFailure(Call call, Throwable t) {
-                                            //Toast.makeText(getContext(),"Kon geen connectie maken met server",Toast.LENGTH_SHORT).show();
-                                            call.cancel();
-                                        }
-                                    });
-
-                                }
-                            })
-                            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    Log.i("event", "cancel category");
-                                }
-                            }).setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialogInterface) {
-                            switch(fragment_tag){
-                                case "agenda_edit":
-                                    ((AgendaEditItemFragment)fragment).rerenderCategories(categories);
-                                    break;
-                                case "heen_en_weer_item":
-                                    ((HeenEnWeerItemEditFragment)fragment).rerenderCategories(categories);
-                                    break;
-                                default:
-                            }
-
-                        }
-                    }).show();
-
-                }
-
-                return true;
-            }
-        });
 
     }
 
+
+
     @Override
     public int getItemCount() {
-        return categories.size() + 1 ;
+        return categories.size();
     }
 
     class CategoryViewHolder extends RecyclerView.ViewHolder{

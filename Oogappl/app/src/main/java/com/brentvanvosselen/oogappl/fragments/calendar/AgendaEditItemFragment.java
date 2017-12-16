@@ -32,6 +32,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -48,6 +49,7 @@ import com.brentvanvosselen.oogappl.RestClient.models.Parent;
 import com.brentvanvosselen.oogappl.RestClient.models.User;
 import com.brentvanvosselen.oogappl.adapters.CategoriesHorizontalPickerAdapter;
 import com.brentvanvosselen.oogappl.adapters.ChildrenHorizontalPickerAdapter;
+import com.brentvanvosselen.oogappl.fragments.heenenweer.HeenEnWeerItemEditFragment;
 import com.brentvanvosselen.oogappl.util.ObjectSerializer;
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
@@ -93,6 +95,7 @@ public class AgendaEditItemFragment extends Fragment {
     Spinner vSpinnerWederkerendFrequenty;
     CheckBox vCheckboxWederkerend;
     TextView vTextViewWederkerendEinddatum;
+    ImageButton vButtonAddCategory;
 
     RecyclerView vRecyclerChildren, vRecyclerCategories;
     ChildrenHorizontalPickerAdapter mChildrenAdapter;
@@ -201,7 +204,6 @@ public class AgendaEditItemFragment extends Fragment {
         vEdittextDescription = getView().findViewById(R.id.edittext_edit_event_description);
         vEdittextStartDate = getView().findViewById(R.id.edittext_edit_event_startDate);
         vEdittextEndDate = getView().findViewById(R.id.edittext_edit_event_endDate);
-        vImageViewCategory = getView().findViewById(R.id.imageview_edit_event_category);
         vButtonSave = getView().findViewById(R.id.button_edit_event_save);
         vEdittextStartTime = getView().findViewById(R.id.edittext_edit_event_startTime);
         vEdittextEndTime = getView().findViewById(R.id.edittext_edit_event_endTime);
@@ -209,8 +211,91 @@ public class AgendaEditItemFragment extends Fragment {
         vSpinnerWederkerendFrequenty = getView().findViewById(R.id.spinner_wederkerend_frequenty);
         vTextViewWederkerendEinddatum = getView().findViewById(R.id.textview_wederkerend_enddate);
         vEdittextWederkerendEinddatum = getView().findViewById(R.id.editText_wederkerend_einddatum);
+        vButtonAddCategory = getView().findViewById(R.id.imagebutton_agenda_edit_add_category);
+
+        vButtonAddCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //create an alert dialog
+                final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                final LayoutInflater inflater = (LayoutInflater) getContext().getSystemService( Context.LAYOUT_INFLATER_SERVICE );
+                //inflate custom dialog
+                final View mView = inflater.inflate(R.layout.dialog_add_category, null);
+
+                final ImageView vImageviewAddCategory = mView.findViewById(R.id.imageview_dialog_add_category_color);
+                vImageviewAddCategory.setBackgroundColor(Color.parseColor(currentColor));
+
+                final EditText vEdittextAddCategoryType = mView.findViewById(R.id.edittext_dialog_add_category_type);
+
+                vImageviewAddCategory.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ColorPickerDialogBuilder
+                                .with(getContext())
+                                .setTitle(R.string.choose_color)
+                                .initialColor(Color.parseColor(currentColor))
+                                .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
+                                .density(8)
+                                .setPositiveButton(R.string.ok, new ColorPickerClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int color, Integer[] colors) {
+                                        vImageviewAddCategory.setBackgroundColor(Color.parseColor("#" + Integer.toHexString(color)));
+                                        currentColor = "#" + Integer.toHexString(color);
+                                    }
+                                })
+                                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                                    }
+                                })
+                                .build()
+                                .show();
+                    }
+                });
 
 
+                builder.setView(mView)
+                        .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Log.i("event", "add category");
+                                Category newCategory = new Category(vEdittextAddCategoryType.getText().toString(), currentColor);
+                                categories.add(newCategory);
+                                Call addCategoryCall = apiInterface.addCategory("bearer " + sharedPreferences.getString("token",null), currentUser.getEmail(),newCategory);
+                                addCategoryCall.enqueue(new Callback() {
+                                    @Override
+                                    public void onResponse(Call call, Response response) {
+                                        if (response.isSuccessful()) {
+                                            Toast.makeText(getContext(), R.string.new_category_pos, Toast.LENGTH_SHORT).show();
+
+                                        } else {
+                                            Toast.makeText(getContext(), R.string.new_category_neg, Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call call, Throwable t) {
+                                        //Toast.makeText(getContext(),"Kon geen connectie maken met server",Toast.LENGTH_SHORT).show();
+                                        call.cancel();
+                                    }
+                                });
+
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Log.i("event", "cancel category");
+                            }
+                        }).setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        fillSpinner();
+                    }
+                }).show();
+            }
+        });
 
 
 
@@ -506,6 +591,7 @@ public class AgendaEditItemFragment extends Fragment {
                     mChildrenAdapter = new ChildrenHorizontalPickerAdapter(getContext(),children,vRecyclerChildren,true,true);
 
                     SnapHelper snapHelper = new LinearSnapHelper();
+                    vRecyclerChildren.setOnFlingListener(null);
                     snapHelper.attachToRecyclerView(vRecyclerChildren);
 
                     vRecyclerChildren.setLayoutManager(pickerLayoutManagerChildren);
@@ -518,8 +604,6 @@ public class AgendaEditItemFragment extends Fragment {
 
                         }
                     });
-
-
 
                 }
             }
@@ -604,13 +688,13 @@ public class AgendaEditItemFragment extends Fragment {
                     pickerLayoutManagerCategories = new PickerLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL,false);
                     pickerLayoutManagerCategories.setChangeAlpha(true);
                     pickerLayoutManagerCategories.setScaleDownBy(0.8f);
-                    pickerLayoutManagerCategories.setScaleDownDistance(0.9f);
+                    pickerLayoutManagerCategories.setScaleDownDistance(0.99f);
 
-                    mCategoriesAdapter = new CategoriesHorizontalPickerAdapter(getContext(),categories,vRecyclerCategories,getActivity().getSupportFragmentManager().findFragmentById(R.id.content_main),"agenda_edit");
+                    mCategoriesAdapter = new CategoriesHorizontalPickerAdapter(getContext(),categories,vRecyclerCategories);
 
                     SnapHelper snapHelper = new LinearSnapHelper();
                     vRecyclerCategories.setOnFlingListener(null);
-                    snapHelper.attachToRecyclerView(vRecyclerChildren);
+                    snapHelper.attachToRecyclerView(vRecyclerCategories);
 
                     vRecyclerCategories.setLayoutManager(pickerLayoutManagerCategories);
                     vRecyclerCategories.setAdapter(mCategoriesAdapter);
@@ -645,7 +729,7 @@ public class AgendaEditItemFragment extends Fragment {
 
     public void rerenderCategories(List<Category> categories){
         Log.i("rerender","true");
-        mCategoriesAdapter = new CategoriesHorizontalPickerAdapter(getContext(),categories,vRecyclerCategories,this,"agenda_edit");
+        mCategoriesAdapter = new CategoriesHorizontalPickerAdapter(getContext(),categories,vRecyclerCategories);
         vRecyclerCategories.setAdapter(mCategoriesAdapter);
 
     }

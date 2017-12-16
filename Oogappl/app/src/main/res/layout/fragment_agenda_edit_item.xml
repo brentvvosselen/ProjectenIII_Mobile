@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,11 +8,11 @@
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
 
         <android.support.constraint.ConstraintLayout
@@ -41,23 +40,12 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
+                android:layout_marginTop="8dp"
                 android:clipToPadding="false"
                 android:paddingLeft="183dp"
                 android:paddingRight="183dp"
-                app:layout_constraintTop_toBottomOf="@+id/textView"></android.support.v7.widget.RecyclerView>
-
-
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_agenda_edit_categories"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:clipToPadding="false"
-                android:paddingLeft="183dp"
-                android:paddingRight="183dp"
-                app:layout_constraintTop_toBottomOf="@+id/recycler_agenda_edit_children"></android.support.v7.widget.RecyclerView>
+                app:layout_constraintTop_toBottomOf="@+id/textView21"
+                tools:layout_editor_absoluteX="0dp"></android.support.v7.widget.RecyclerView>
 
 
             <TextView
@@ -83,12 +71,13 @@
                 android:inputType="textPersonName"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textview_edit_event_label_title"/>
+                app:layout_constraintTop_toBottomOf="@+id/textview_edit_event_label_title" />
 
             <TextView
                 android:id="@+id/textview_edit_event_label_startdate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:fontFamily="@font/poppins_medium"
                 android:text="@string/startdate"
                 android:textColor="@color/dim_gray_text"
@@ -188,62 +177,30 @@
                 app:layout_constraintStart_toStartOf="@+id/edittext_edit_event_startTime"
                 app:layout_constraintTop_toBottomOf="@+id/textview_edit_event_label_endtime" />
 
-            <TextView
-                android:id="@+id/textview_edit_event_label_category"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:fontFamily="@font/poppins_medium"
-                android:text="@string/Category"
-                android:textColor="@color/dim_gray_text"
-                app:layout_constraintStart_toStartOf="@+id/imageview_edit_event_category"
-                app:layout_constraintTop_toBottomOf="@+id/edittext_edit_event_title" />
-
-
-            <com.mikhaellopez.circularimageview.CircularImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/imageview_edit_event_category"
-                android:layout_width="40dp"
-                android:layout_height="41dp"
-                android:contentDescription="Profile picture"
-                android:paddingTop="@dimen/nav_header_vertical_spacing"
-                app:civ_border="true"
-                app:civ_border_color="#6B6B6B"
-                app:civ_border_width="2dp"
-                app:layout_constraintStart_toStartOf="@+id/edittext_edit_event_endDate"
-                app:layout_constraintTop_toBottomOf="@+id/textview_edit_event_label_category" />
-
-
-            <Spinner
-                android:id="@+id/spinner_edit_event_category"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="24dp"
-                android:layout_marginTop="8dp"
-                android:fontFamily="@font/poppins_medium"
-                app:layout_constraintLeft_toRightOf="@+id/imageview_edit_event_category"
-                app:layout_constraintTop_toBottomOf="@+id/textview_edit_event_label_category" />
 
             <TextView
                 android:id="@+id/textview_edit_event_label_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
                 android:fontFamily="@font/poppins_medium"
                 android:text="@string/description"
                 android:textColor="@color/dim_gray_text"
-                app:layout_constraintStart_toStartOf="@+id/edittext_edit_event_description"
-                app:layout_constraintTop_toBottomOf="@+id/imageview_edit_event_category" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/recycler_agenda_edit_children" />
 
             <EditText
                 android:id="@+id/edittext_edit_event_description"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:background="@drawable/edittext_form"
                 android:ems="10"
                 android:fontFamily="@font/poppins_medium"
                 android:inputType="textMultiLine"
                 app:layout_constraintEnd_toEndOf="@+id/edittext_edit_event_endTime"
-                app:layout_constraintStart_toStartOf="@+id/imageview_edit_event_category"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textview_edit_event_label_description" />
 
             <CheckBox
@@ -316,7 +273,52 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/editText_wederkerend_einddatum" />
 
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_agenda_edit_categories"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:clipToPadding="false"
+                android:paddingLeft="183dp"
+                android:paddingRight="183dp"
+                app:layout_constraintEnd_toStartOf="@+id/imagebutton_agenda_edit_add_category"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView12"></android.support.v7.widget.RecyclerView>
 
+            <ImageButton
+                android:id="@+id/imagebutton_agenda_edit_add_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@android:color/transparent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/recycler_agenda_edit_categories"
+                app:srcCompat="@drawable/ic_add_black" />
+
+            <TextView
+                android:id="@+id/textView12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:textColor="@color/dim_gray_text"
+                android:text="@string/choose_category"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+            <TextView
+                android:id="@+id/textView21"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/dim_gray_text"
+                android:text="@string/choose_child"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edittext_edit_event_title" />
 
 
         </android.support.constraint.ConstraintLayout>

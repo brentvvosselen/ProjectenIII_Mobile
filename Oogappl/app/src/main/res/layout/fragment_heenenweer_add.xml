@@ -28,7 +28,7 @@
         android:clipToPadding="false"
         android:paddingLeft="183dp"
         android:paddingRight="183dp"
-        app:layout_constraintTop_toBottomOf="@+id/textview_heenenweer_add_title"></android.support.v7.widget.RecyclerView>
+        app:layout_constraintTop_toBottomOf="@+id/textView22"></android.support.v7.widget.RecyclerView>
 
 
     <EditText
@@ -70,6 +70,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edittext_heenenweer_add_description" />
+
+    <TextView
+        android:id="@+id/textView22"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/choose_child"
+        android:textColor="@color/dim_gray_text"
+        app:layout_constraintStart_toStartOf="@+id/textview_heenenweer_add_title"
+        app:layout_constraintTop_toBottomOf="@+id/textview_heenenweer_add_title" />
 
 
 </android.support.constraint.ConstraintLayout>

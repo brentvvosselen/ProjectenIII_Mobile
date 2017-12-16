@@ -107,6 +107,8 @@
     <string name="del_event_pos">Evenement verwijderd</string>
     <string name="del_event_neg">Evenement NIET verwijderd</string>
     <string name="get_category_neg">Kan categorieën nog ophalen van de server</string>
+    <string name="choose_category">Kies een categorie</string>
+    <string name="choose_child">Kies een kind</string>
 
 
     <!-- finance -->

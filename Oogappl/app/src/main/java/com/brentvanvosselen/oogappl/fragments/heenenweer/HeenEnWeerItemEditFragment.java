@@ -23,6 +23,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -64,6 +65,7 @@ public class HeenEnWeerItemEditFragment extends Fragment{
     private RecyclerView vRecyclerCategories;
     private PickerLayoutManager categoriesPickerLayoutManager;
     private CategoriesHorizontalPickerAdapter mCategoryAdapter;
+    private ImageButton vButtonAddCategory;
 
     APIInterface apiInterface;
     SharedPreferences sharedPreferences;
@@ -108,6 +110,7 @@ public class HeenEnWeerItemEditFragment extends Fragment{
         vButtonSave = getView().findViewById(R.id.button_heenenweer_item_edit_save);
         vEditTextValue = getView().findViewById(R.id.edittext_heenenweer_item_edit_value);
         vTextViewTitle = getView().findViewById(R.id.textview_heenenweer_item_edit_title);
+        vButtonAddCategory = getView().findViewById(R.id.imagebutton_heenenweer_item_edit_add_category);
 
         fillSpinner();
 
@@ -120,100 +123,90 @@ public class HeenEnWeerItemEditFragment extends Fragment{
         }
 
 
-       /* vSpinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        vButtonAddCategory.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if(i == categories.size()){
-                    //create an alert dialog
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    final LayoutInflater inflater = getActivity().getLayoutInflater();
-                    //inflate custom dialog
-                    final View mView = inflater.inflate(R.layout.dialog_add_category, null);
+            public void onClick(View view) {
+                //create an alert dialog
+                final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                final LayoutInflater inflater = getActivity().getLayoutInflater();
+                //inflate custom dialog
+                final View mView = inflater.inflate(R.layout.dialog_add_category, null);
 
-                    final ImageView vImageviewAddCategory = mView.findViewById(R.id.imageview_dialog_add_category_color);
-                    vImageviewAddCategory.setBackgroundColor(Color.parseColor(currentColor));
+                final ImageView vImageviewAddCategory = mView.findViewById(R.id.imageview_dialog_add_category_color);
+                vImageviewAddCategory.setBackgroundColor(Color.parseColor(currentColor));
 
-                    final EditText vEdittextAddCategoryType = mView.findViewById(R.id.edittext_dialog_add_category_type);
+                final EditText vEdittextAddCategoryType = mView.findViewById(R.id.edittext_dialog_add_category_type);
 
-                    vImageviewAddCategory.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            ColorPickerDialogBuilder
-                                    .with(getContext())
-                                    .setTitle(R.string.choose_color)
-                                    .initialColor(Color.parseColor(currentColor))
-                                    .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
-                                    .density(8)
-                                    .setPositiveButton("ok", new ColorPickerClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int color, Integer[] colors) {
-                                            vImageviewAddCategory.setBackgroundColor(Color.parseColor("#" + Integer.toHexString(color)));
-                                            currentColor = "#" + Integer.toHexString(color);
+                vImageviewAddCategory.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ColorPickerDialogBuilder
+                                .with(getContext())
+                                .setTitle(R.string.choose_color)
+                                .initialColor(Color.parseColor(currentColor))
+                                .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
+                                .density(8)
+                                .setPositiveButton("ok", new ColorPickerClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int color, Integer[] colors) {
+                                        vImageviewAddCategory.setBackgroundColor(Color.parseColor("#" + Integer.toHexString(color)));
+                                        currentColor = "#" + Integer.toHexString(color);
+                                    }
+                                })
+                                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                                    }
+                                })
+                                .build()
+                                .show();
+                    }
+                });
+
+
+                builder.setView(mView)
+                        .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Log.i("event","add category");
+                                Category newCategory = new Category(vEdittextAddCategoryType.getText().toString(), currentColor);
+
+                                Call addCategoryCall = apiInterface.addCategory("bearer " + sharedPreferences.getString("token",null), currentUser.getEmail(),newCategory);
+                                addCategoryCall.enqueue(new Callback() {
+                                    @Override
+                                    public void onResponse(Call call, Response response) {
+                                        if(response.isSuccessful()){
+                                            Toast.makeText(getContext(),"Categorie toegevoegd.",Toast.LENGTH_SHORT).show();
+
+                                        }else{
+                                            Toast.makeText(getContext(),"Categorie NIET toegevoegd.",Toast.LENGTH_SHORT).show();
                                         }
-                                    })
-                                    .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                    }
 
-                                        }
-                                    })
-                                    .build()
-                                    .show();
-                        }
-                    });
+                                    @Override
+                                    public void onFailure(Call call, Throwable t) {
+                                        //Toast.makeText(getContext(),"Kon geen connectie maken met server",Toast.LENGTH_SHORT).show();
+                                        call.cancel();
+                                    }
+                                });
 
-
-                    builder.setView(mView)
-                            .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    Log.i("event","add category");
-                                    Category newCategory = new Category(vEdittextAddCategoryType.getText().toString(), currentColor);
-
-                                    Call addCategoryCall = apiInterface.addCategory("bearer " + sharedPreferences.getString("token",null), currentUser.getEmail(),newCategory);
-                                    addCategoryCall.enqueue(new Callback() {
-                                        @Override
-                                        public void onResponse(Call call, Response response) {
-                                            if(response.isSuccessful()){
-                                                Toast.makeText(getContext(),"Categorie toegevoegd.",Toast.LENGTH_SHORT).show();
-
-                                            }else{
-                                                Toast.makeText(getContext(),"Categorie NIET toegevoegd.",Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onFailure(Call call, Throwable t) {
-                                            //Toast.makeText(getContext(),"Kon geen connectie maken met server",Toast.LENGTH_SHORT).show();
-                                            call.cancel();
-                                        }
-                                    });
-
-                                }
-                            })
-                            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    Log.i("event","cancel category");
-                                }
-                            }).setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialogInterface) {
-                            fillSpinner();
-                        }
-                    }).show();
-                }else{
-                    //ColorDrawable color = new ColorDrawable(Color.parseColor(categories.get(i).getColor()));
-                    //vImageViewCategory.setBackground(color);
-                }
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Log.i("event","cancel category");
+                            }
+                        }).setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        fillSpinner();
+                    }
+                }).show();
             }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
         });
-*/
         vButtonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -327,13 +320,17 @@ public class HeenEnWeerItemEditFragment extends Fragment{
                     categoriesPickerLayoutManager.setScaleDownBy(0.8f);
                     categoriesPickerLayoutManager.setScaleDownDistance(0.99f);
 
-                    mCategoryAdapter = new CategoriesHorizontalPickerAdapter(getContext(),categories,vRecyclerCategories,getActivity().getSupportFragmentManager().findFragmentById(R.id.content_main),"heen_en_weer_item");
+                    mCategoryAdapter = new CategoriesHorizontalPickerAdapter(getContext(),categories,vRecyclerCategories);
 
                     SnapHelper snapHelper = new LinearSnapHelper();
+                    vRecyclerCategories.setOnFlingListener(null);
                     snapHelper.attachToRecyclerView(vRecyclerCategories);
 
                     vRecyclerCategories.setLayoutManager(categoriesPickerLayoutManager);
+
                     vRecyclerCategories.setAdapter(mCategoryAdapter);
+
+
 
                     categoriesPickerLayoutManager.setOnScrollStopListener(new PickerLayoutManager.onScrollStopListener() {
                         @Override
@@ -349,9 +346,9 @@ public class HeenEnWeerItemEditFragment extends Fragment{
                         for(int i = 0 ; i<categories.size();i++){
                             if(categories.get(i).getType().equals(item.getCategory().getType()))
                                 selectedCategory = i;
-                        }
 
-                        //vSpinnerCategory.setSelection(categoryIndex);
+                        }
+                        vRecyclerCategories.scrollToPosition(selectedCategory);
                     }
 
                 }else{
@@ -367,8 +364,4 @@ public class HeenEnWeerItemEditFragment extends Fragment{
         });
     }
 
-    public void rerenderCategories(List<Category> categories){
-        mCategoryAdapter = new CategoriesHorizontalPickerAdapter(getContext(),categories,vRecyclerCategories,this,"heen_en_weer_item");
-        vRecyclerCategories.setAdapter(mCategoryAdapter);
-    }
 }
