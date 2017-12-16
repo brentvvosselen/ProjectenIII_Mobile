@@ -119,13 +119,13 @@ public class ChildInfoEditFragment extends Fragment {
                 if(response.isSuccessful()){
                     Log.i("SAVE", "Save succesful");
                 } else {
-                    Toast.makeText(getContext(), "Cannot find child", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.get_child_neg, Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
-                Toast.makeText(getContext(), "Cannot connect to server", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
             }
         });
     }

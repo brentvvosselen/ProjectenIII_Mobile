@@ -108,7 +108,7 @@ public class ChildInfoFragment extends Fragment {
         vImageViewPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(getView(),"Duw lang om foto te wijzigen", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(getView(), R.string.new_picture_press, Snackbar.LENGTH_SHORT).show();
             }
         });
 
@@ -214,12 +214,12 @@ public class ChildInfoFragment extends Fragment {
                             //create new child
                             String firstname = vEdittextFirstname.getText().toString();
                             String lastname = vEdittextLastname.getText().toString();
-                            if(firstname.trim().equals("") || firstname.trim().length() < 3 ){
-                                vEdittextFirstname.setError("De voornaam moet minstens 3 karakters bevatten");
+                            if(firstname.trim().equals("")){
+                                vEdittextFirstname.setError(getResources().getString(R.string.err_firstname_empty));
                                 correctform = false;
                             }
-                            if(lastname.trim().equals("") || lastname.trim().length() < 3 ){
-                                vEdittextLastname.setError("De achternaam moet minstens 3 karakters bevatten");
+                            if(lastname.trim().equals("")){
+                                vEdittextLastname.setError(getResources().getString(R.string.err_lastname_empty));
                                 correctform = false;
                             }
 
@@ -243,9 +243,9 @@ public class ChildInfoFragment extends Fragment {
                                                 @Override
                                                 public void onResponse(Call call, Response response) {
                                                     if (response.isSuccessful()) {
-                                                        Toast.makeText(getContext(), "New child created", Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(getContext(), R.string.new_child_pos, Toast.LENGTH_SHORT).show();
                                                     } else {
-                                                        Toast.makeText(getContext(), "Not saved", Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(getContext(), R.string.new_child_neg, Toast.LENGTH_SHORT).show();
                                                     }
                                                     dialogInterface.dismiss();
                                                     initFragment();
@@ -253,28 +253,25 @@ public class ChildInfoFragment extends Fragment {
 
                                                 @Override
                                                 public void onFailure(Call call, Throwable t) {
-                                                    Toast.makeText(getContext(), "Failed1", Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
                                                     dialogInterface.dismiss();
                                                     initFragment();
                                                 }
                                             });
                                         } else {
                                             Log.i("CHILD CALL", "FAIL");
-                                            Toast.makeText(getContext(), "Not saved", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
                                         }
                                     }
 
                                     @Override
                                     public void onFailure(Call call, Throwable t) {
                                         Log.i("PARENT CALL", "FAIL");
-                                        Toast.makeText(getContext(), "Failed2", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
                                     }
                                 });
-                            }
-                            /*else {
-                                Log.i("FORM", "INCORRECT FORM");
-                            }*/ else{
-                                Toast.makeText(getContext(),"Kan niet toevoegen: ongeldige gegevens", Toast.LENGTH_SHORT).show();
+                            } else{
+                                Toast.makeText(getContext(),R.string.err_incomplete_form, Toast.LENGTH_SHORT).show();
                             }
                         }
                     })
@@ -305,7 +302,7 @@ public class ChildInfoFragment extends Fragment {
                     initSpinner();
                     initCategories();
                 } else {
-                    Toast.makeText(getContext(), "Call failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
                     Log.i("LOGIN", "FAIL: " + response.message());
                 }
             }
@@ -313,7 +310,7 @@ public class ChildInfoFragment extends Fragment {
             @Override
             public void onFailure(Call call, Throwable t) {
                 Log.i("API event", t.getMessage());
-                Toast.makeText(getContext(), "Failed to connect to server", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
                 call.cancel();
             }
         });
@@ -458,13 +455,13 @@ public class ChildInfoFragment extends Fragment {
                 if(response.isSuccessful()){
                     Log.i("SAVE", "Save succesful");
                 } else {
-                    Toast.makeText(getContext(), "Cannot find child", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.get_child_neg, Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
-                Toast.makeText(getContext(), "Cannot connect to server", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -494,17 +491,17 @@ public class ChildInfoFragment extends Fragment {
                 @Override
                 public void onResponse(Call call, Response response) {
                     if(response.isSuccessful()){
-                        Snackbar.make(getView(), "Profielfoto gewijzigd", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(getView(), R.string.change_picture_pos, Snackbar.LENGTH_SHORT).show();
 
                     }else{
-                        Snackbar.make(getView(), "Profielfoto niet gewijzigd", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(getView(), R.string.change_picture_neg, Snackbar.LENGTH_SHORT).show();
 
                     }
                 }
 
                 @Override
                 public void onFailure(Call call, Throwable t) {
-                    Snackbar.make(getView(), "Kon niet connecteren met de server", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(getView(), R.string.geen_verbinding, Snackbar.LENGTH_SHORT).show();
 
                 }
             });

@@ -63,27 +63,27 @@ public class RegisterFragment extends Fragment{
                 String passwordConfirm = vEditTextPasswordConfirm.getText().toString();
 
                 if (firstname.trim().equals("")) {
-                    vEditTextFirstname.setError("Firstname is required!");
+                    vEditTextFirstname.setError(getResources().getString(R.string.err_firstname_empty));
                     correctForm = false;
                 }
 
                 if (lastname.trim().equals("")) {
-                    vEditTextLastname.setError("Lastname is required");
+                    vEditTextLastname.setError(getResources().getString(R.string.err_lastname_empty));
                     correctForm = false;
                 }
 
                 if (email.trim().equals("")) {
-                    vEditTextEmail.setError("Email is required");
+                    vEditTextEmail.setError(getResources().getString(R.string.err_email_empty));
                     correctForm = false;
                 }
 
                 if (password.trim().equals("")) {
-                    vEditTextPassword.setError("Password is required");
+                    vEditTextPassword.setError(getResources().getString(R.string.err_password_empty));
                     correctForm = false;
                 }
 
                 if (!password.equals(passwordConfirm)) {
-                    vEditTextPasswordConfirm.setError("Password don't match");
+                    vEditTextPasswordConfirm.setError(getResources().getString(R.string.err_password_match));
                     correctForm = false;
                 }
 
@@ -120,13 +120,14 @@ public class RegisterFragment extends Fragment{
                         ft.commit();
                     }
                 } else {
-                    Toast.makeText(context, "Register failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
                 Log.i("API event", t.getMessage());
+                Toast.makeText(context, R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
                 call.cancel();
             }
         });

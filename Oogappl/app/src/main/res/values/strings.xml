@@ -18,6 +18,7 @@
     <string name="Amount">Bedrag</string>
     <string name="Date">Datum</string>
     <string name="Category">Categorie</string>
+    <string name="get_parent_neg">Er is iets fout gelopen. Kan ouder niet vinden</string>
 
     <!--navigation drawer-->
     <string name="home">Start</string>
@@ -26,7 +27,7 @@
     <string name="finance">Financiën</string>
     <string name="profile">Profiel</string>
 
-    <!-- Strings related to login and register-->
+    <!-- login and register-->
     <string name="login">Log in</string>
     <string name="create_new_account">Of, creëer een nieuw account</string>
     <string name="register">Registreer</string>
@@ -38,16 +39,12 @@
     <string name="personal_data">Persoonsgegevens</string>
     <string name="security_data">Beveiligingsgegevens</string>
     <string name="work_data">Werkgegevens</string>
-    <string name="get_event_neg">Kan evenementen niet ophalen van de server</string>
-    <string name="err_start_end_event">"Start en einde van evenement moet ingevuld zijn"</string>
-    <string name="err_title_event">De titel mag niet leeg zijn</string>
-    <string name="change_event_pos">Evenement gewijzigd</string>
-    <string name="change_event_neg">Evenement NIET gewijzigd</string>
-    <string name="add_event_pos">Evenement toegevoegd</string>
-    <string name="add_event_neg">Evenement NIET toegevoegd</string>
-    <string name="del_event_pos">Evenement verwijderd</string>
-    <string name="del_event_neg">Evenement NIET verwijderd</string>
-    <string name="get_category_neg">Kan categorieën nog ophalen van de server</string>
+    <string name="err_email_empty">Email is verplicht</string>
+    <string name="err_password_empty">Wachtwoord is verplicht</string>
+    <string name="err_firstname_empty">Voornaam is verplicht</string>
+    <string name="err_lastname_empty">Achternaam is verplicht</string>
+    <string name="err_password_match">Wachtwoorden komen niet overeen</string>
+
 
     <!-- Strings related to profile-->
     <string name="edit">Wijzig</string>
@@ -76,6 +73,16 @@
     <string name="add_category">Voeg een categorie toe:</string>
     <string name="name">Naam</string>
     <string name="value">Waarde</string>
+    <string name="get_child_neg">Er is iets fout gelopen. Kan kind niet vinden</string>
+    <string name="new_picture_press">Druk lang om foto te wijzigen</string>
+    <string name="new_child_pos">Kind toegevoegd</string>
+    <string name="new_child_neg">King NIET toegevoegd</string>
+    <string name="err_incomplete_form">Niet alle gegevens zijn ingevuld</string>
+    <string name="change_picture_pos">Profielfoto gewijzigd</string>
+    <string name="change_picture_neg">Profielfoto NIET gewijzigd</string>
+    <string name="get_profileinfo_neg">Er is iets fout gelopen. Kan profielinformatie niet ophalen</string>
+    <string name="change_profile_pos">Profiel is geüpdatet</string>
+    <string name="change_profile_neg">Profiel is NIET geüpdatet</string>
 
     <!--calendar-->
     <string name="next_item">Volgende item</string>
@@ -89,9 +96,19 @@
     <string name="returning">Wederkerend</string>
     <string name="Enddate">Einddatum</string>
     <string name="retrieve_items_neg">Kan items niet ophalen voor </string>
+    <string name="get_event_neg">Kan evenementen niet ophalen van de server</string>
+    <string name="err_start_end_event">"Start en einde van evenement moet ingevuld zijn"</string>
+    <string name="err_title_event">De titel mag niet leeg zijn</string>
+    <string name="change_event_pos">Evenement gewijzigd</string>
+    <string name="change_event_neg">Evenement NIET gewijzigd</string>
+    <string name="add_event_pos">Evenement toegevoegd</string>
+    <string name="add_event_neg">Evenement NIET toegevoegd</string>
+    <string name="del_event_pos">Evenement verwijderd</string>
+    <string name="del_event_neg">Evenement NIET verwijderd</string>
+    <string name="get_category_neg">Kan categorieën nog ophalen van de server</string>
 
 
-    <!--setup finance-->
+    <!-- finance -->
     <string name="setup_financial_description">Kies de financiele overeenkomst...</string>
     <string name="kindRekening">Kindrekening</string>
     <string name="use_max">Wij gebruiken max bedrag</string>
@@ -114,6 +131,11 @@
     <string name="add_cost">Voeg een kost toe:</string>
     <string name="add_cost_category">Voeg een categorie toe:</string>
     <string name="child">Kind</string>
+    <string name="amount_min">Het bedrag moet hogen liggen dan </string>
+    <string name="financemodule">KostenModule</string>
+    <string name="wait_other_parent">U heeft de gegevens al aangevuld. Wacht op de andere om deze te aanvaarden.</string>
+    <string name="accept_other">De andere heeft al gegevens ingevuld. Je kan deze aanvaarden of aanpassen.</string>
+    <string name="setup_costs">Vul eerst enkele gegevens in over jullie financiële overeenkomst</string>
 
     <!--heen en weer-->
     <string name="heenenweer">Heen en Weer</string>

@@ -69,12 +69,14 @@ public class HomeFragment extends Fragment {
                         CardView vCardSetup = getView().findViewById(R.id.card_home_setup);
                         vCardSetup.setVisibility(View.VISIBLE);
                     }
+                } else {
+                    Toast.makeText(getContext(), R.string.get_parent_neg, Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
-                Toast.makeText(getContext(), "Could not find parent", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
                 Log.i("API:", "could not find parent (home-setup)");
             }
         });
@@ -113,7 +115,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onFailure(Call call, Throwable t) {
-                Toast.makeText(getContext(), "Could not find parent", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.get_parent_neg, Toast.LENGTH_SHORT).show();
                 Log.i("API:", "could not find parent (home-setup)");
             }
         });

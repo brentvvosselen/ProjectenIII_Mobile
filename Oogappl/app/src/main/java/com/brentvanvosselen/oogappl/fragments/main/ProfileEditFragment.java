@@ -97,12 +97,13 @@ public class ProfileEditFragment extends Fragment {
                     vEditTextWorkName.setText(parent.getWorkName());
                     vEditTextWorkTelNumber.setText(parent.getWorkNumber());
                 }else{
-                    Toast.makeText(getContext(),"Could not load profile information",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),R.string.get_profileinfo_neg,Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
+                Toast.makeText(getContext(),R.string.geen_verbinding,Toast.LENGTH_SHORT).show();
                 Log.i("API EVENT",t.getMessage());
                 call.cancel();
             }
@@ -135,7 +136,7 @@ public class ProfileEditFragment extends Fragment {
                         @Override
                         public void onResponse(Call call, Response response) {
                             if(response.isSuccessful()){
-                                Toast.makeText(getContext(),"The profile is updated",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(),R.string.change_picture_pos,Toast.LENGTH_SHORT).show();
                                 Log.i("API-EVENT", "updated profile SUCESSFUL");
                                 //go back to profile
                                 Fragment fragment = new ProfileFragment();
@@ -145,19 +146,20 @@ public class ProfileEditFragment extends Fragment {
                                     ft.commit();
                                 }
                             }else{
-                                Toast.makeText(getContext(),"The profile is not updated, Something went wrong.",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(),R.string.change_picture_neg,Toast.LENGTH_SHORT).show();
                                 Log.i("API-EVENT", "updated profile FAILED");
                             }
                         }
 
                         @Override
                         public void onFailure(Call call, Throwable t) {
+                            Toast.makeText(getContext(), R.string.geen_verbinding,Toast.LENGTH_SHORT).show();
                             Log.i("API-EVENT", t.getMessage());
                             call.cancel();
                         }
                     });
                 }else{
-                    Toast.makeText(getContext(), "Getting user information failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
                     Log.i("USER","FAIL: "+ response.message());
                 }
             }

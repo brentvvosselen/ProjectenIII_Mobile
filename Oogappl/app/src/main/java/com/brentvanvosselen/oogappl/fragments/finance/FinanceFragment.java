@@ -108,7 +108,7 @@ public class FinanceFragment extends Fragment {
 
             @Override
             public void onFailure(Call call, Throwable t) {
-                Toast.makeText(getContext(), "Could not find parent", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),  R.string.get_parent_neg, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -122,7 +122,7 @@ public class FinanceFragment extends Fragment {
                     for(CostCategory c : categories) {
                         categorieNames.add(c.getType());
                     }
-                    categorieNames.add("+ Nieuwe categorie");
+                    categorieNames.add( getResources().getString(R.string.new_category_plus));
                 } else {
                     Toast.makeText(getContext(), "BAD RESPONSE", Toast.LENGTH_SHORT).show();
                 }
@@ -172,7 +172,7 @@ public class FinanceFragment extends Fragment {
                     costs = (List<Cost>) response.body();
                     initCostscards();
                 } else {
-                    Toast.makeText(getContext(), "BAD RESPONSE", Toast.LENGTH_SHORT).show();}
+                    Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();}
             }
 
             @Override
@@ -298,7 +298,7 @@ public class FinanceFragment extends Fragment {
                         if(type == FinancialType.KINDREKENING) {
                             double max = parent.getGroup().getFinType().getKindrekening().getMaxBedrag();
                             if(Double.parseDouble(editTextAmount.getText().toString()) < max) {
-                                editTextAmount.setError("Het bedrag moet hogen liggen dan " + max);
+                                editTextAmount.setError( getResources().getString(R.string.amount_min) + max);
                                 correct = false;
                             }
                         }
@@ -363,9 +363,9 @@ public class FinanceFragment extends Fragment {
                     categories.add(cat);
                     categorieNames.remove(categorieNames.size() - 1);
                     categorieNames.add(cat.getType());
-                    categorieNames.add("+ Nieuwe categorie");
+                    categorieNames.add( getResources().getString(R.string.new_category_plus));
                 } else {
-                    Toast.makeText(getContext(), "BAD RESPONSE", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -388,7 +388,7 @@ public class FinanceFragment extends Fragment {
 
                     initCostscards();
                 } else {
-                    Toast.makeText(getContext(), "BAD RESPONSE", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -408,10 +408,10 @@ public class FinanceFragment extends Fragment {
         vCardSetup.setVisibility(View.VISIBLE);
 
         TextView textViewCardTitle = vCardSetup.findViewById(R.id.textview_title_finance_setup);
-        textViewCardTitle.setText("Kostenmodule");
+        textViewCardTitle.setText(getResources().getString(R.string.financemodule));
 
         TextView textViewCardDesc = vCardSetup.findViewById(R.id.textview_desc_finance_setup);
-        textViewCardDesc.setText("Er zijn al gegevens ingevuld. Wacht op aanvaarding.");
+        textViewCardDesc.setText(R.string.wait_other_parent);
 
         Button button = vCardSetup.findViewById(R.id.button_finance_setup);
         button.setVisibility(View.GONE);
@@ -421,11 +421,10 @@ public class FinanceFragment extends Fragment {
         vCardSetup.setVisibility(View.VISIBLE);
 
         TextView textViewCardTitle = vCardSetup.findViewById(R.id.textview_title_finance_setup);
-        textViewCardTitle.setText("Kostenmodule");
+        textViewCardTitle.setText(getResources().getString(R.string.financemodule));
 
         TextView textViewCardDesc = vCardSetup.findViewById(R.id.textview_desc_finance_setup);
-        textViewCardDesc.setText("Er zijn al gegevens ingevuld. " +
-                "Aanvaard of pas deze aan om de kostenmodule te gebruiken");
+        textViewCardDesc.setText(R.string.accept_other);
 
         Button vButtonSetup = getView().findViewById(R.id.button_finance_setup);
         vButtonSetup.setOnClickListener(new View.OnClickListener() {
@@ -443,10 +442,10 @@ public class FinanceFragment extends Fragment {
         vCardSetup.setVisibility(View.VISIBLE);
 
         TextView textViewCardTitle = vCardSetup.findViewById(R.id.textview_title_finance_setup);
-        textViewCardTitle.setText("Kostenmodule");
+        textViewCardTitle.setText(getResources().getString(R.string.financemodule));
 
         TextView textViewCardDesc = vCardSetup.findViewById(R.id.textview_desc_finance_setup);
-        textViewCardDesc.setText("Vervolledig de setup om de kostenmodule te gebruiken");
+        textViewCardDesc.setText(R.string.setup_costs);
 
 
         Button vButtonSetup = getView().findViewById(R.id.button_finance_setup);

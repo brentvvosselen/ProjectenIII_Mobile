@@ -87,7 +87,7 @@ public class ProfileFragment extends Fragment {
         vImageViewProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(getView(), "Duw lang om foto te wijzigen", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(getView(), R.string.new_picture_press, Snackbar.LENGTH_SHORT).show();
             }
         });
 
@@ -131,12 +131,12 @@ public class ProfileFragment extends Fragment {
                         vTextViewTelephone.setVisibility(View.GONE);
                     }else{
 
-                        vTextViewTelephone.setText("Telefoonnummer: " + parent.getTelephoneNumber());
+                        vTextViewTelephone.setText(R.string.telephonenumber + ": " + parent.getTelephoneNumber());
                     }
                     if((parent.getWorkName() == null || parent.getWorkName().isEmpty()) && (parent.getWorkNumber() == null || parent.getWorkNumber().isEmpty())){
                         vTextViewWork.setVisibility(View.GONE);
                     }
-                    vTextViewWork.setText("Werkgegevens: " + parent.getWorkName() + "\n" + parent.getWorkNumber());
+                    vTextViewWork.setText(R.string.work_data + ": " + parent.getWorkName() + "\n" + parent.getWorkNumber());
                     if(parent.getType() != null){
                         switch (parent.getType()){
                             case "M": vTextViewType.setText(R.string.mother);
@@ -151,13 +151,14 @@ public class ProfileFragment extends Fragment {
                     }
 
                 }else{
-                    Toast.makeText(getContext(), "Getting user information failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.get_profileinfo_neg, Toast.LENGTH_SHORT).show();
                     Log.i("USER","FAIL: "+ response.message());
                 }
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
+                Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
                 Log.i("API EVENT", t.getMessage());
                 call.cancel();
             }
@@ -228,17 +229,17 @@ public class ProfileFragment extends Fragment {
                     @Override
                     public void onResponse(Call call, Response response) {
                         if(response.isSuccessful()){
-                            Snackbar.make(getView(), "Profielfoto gewijzigd", Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(getView(), R.string.change_picture_pos, Snackbar.LENGTH_SHORT).show();
 
                         }else{
-                            Snackbar.make(getView(), "Profielfoto niet gewijzigd", Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(getView(), R.string.change_picture_neg, Snackbar.LENGTH_SHORT).show();
 
                         }
                     }
 
                     @Override
                     public void onFailure(Call call, Throwable t) {
-                        Snackbar.make(getView(), "Kon niet connecteren met de server", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(getView(), R.string.geen_verbinding, Snackbar.LENGTH_SHORT).show();
 
                     }
                 });

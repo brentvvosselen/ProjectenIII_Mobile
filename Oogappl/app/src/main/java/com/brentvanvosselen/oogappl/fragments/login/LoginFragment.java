@@ -96,9 +96,9 @@ public class LoginFragment extends Fragment {
                 String password = vEditTextPassword.getText().toString();
 
                 if(email.trim().isEmpty()) {
-                    vEditTextEmail.setError("Email can't be empty");
+                    vEditTextEmail.setError(getResources().getString(R.string.err_email_empty));
                 } else if (password.trim().isEmpty()) {
-                    vEditTextPassword.setError("Password can't be empty");
+                    vEditTextPassword.setError(getResources().getString(R.string.err_password_empty));
                 } else {
                     User u = new User(email, password);
                     login(u);
@@ -133,7 +133,7 @@ public class LoginFragment extends Fragment {
 
                     startActivity(intent);
                 } else {
-                    Toast.makeText(context, "Login failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
                     Log.i("LOGIN", "FAIL: " + response.message());
                 }
             }
@@ -141,7 +141,7 @@ public class LoginFragment extends Fragment {
             @Override
             public void onFailure(Call call, Throwable t) {
                 Log.i("API event", t.getMessage());
-                Toast.makeText(context, "Failed to connect to server", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context,  R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
                 call.cancel();
             }
         });
