@@ -15,30 +15,27 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="24dp"
         android:layout_marginRight="24dp"
-        android:layout_marginTop="48dp"
-        android:fontFamily="sans-serif-light"
+        android:fontFamily="@font/poppins_extralight"
         android:text="@string/Oogappl"
         android:textColor="@color/white"
-        android:textSize="48dp"
+        android:textSize="36dp"
         app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
     <android.support.v7.widget.CardView
         android:id="@+id/cardView2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
         android:layout_marginLeft="24dp"
         android:layout_marginRight="24dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="24dp"
         app:cardCornerRadius="4dp"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textview_title_login"
-        app:layout_constraintHorizontal_bias="0.0">
+        app:layout_constraintTop_toBottomOf="@+id/textview_title_login">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -46,14 +43,14 @@
 
             <EditText
                 android:id="@+id/edittext_login_email"
-                android:background="@drawable/edittext_bottom_border"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:background="@drawable/edittext_bottom_border"
                 android:ems="10"
-                android:padding="15dp"
-                android:inputType="textPersonName"
-                android:hint="Email"
                 android:fontFamily="sans-serif-light"
+                android:hint="Email"
+                android:inputType="textPersonName"
+                android:padding="15dp"
 
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -61,14 +58,14 @@
 
             <EditText
                 android:id="@+id/edittext_login_password"
-                android:background="@drawable/edittext_square"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:background="@drawable/edittext_square"
                 android:ems="10"
-                android:padding="15dp"
-                android:inputType="textPassword"
-                android:hint="Password"
                 android:fontFamily="sans-serif-light"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:padding="15dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/edittext_login_email" />
@@ -82,18 +79,16 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="24dp"
         android:layout_marginRight="24dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="24dp"
         android:background="@drawable/button_white_square_big"
+        android:elevation="2dp"
         android:text="@string/login"
         android:textColor="@color/blue_mid"
         android:textStyle="bold"
-        android:elevation="2dp"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView2"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        app:layout_constraintHorizontal_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/cardView2" />
 
     <TextView
         android:id="@+id/textview_button_createaccount"
@@ -106,5 +101,17 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button_login" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@raw/oogappl_wit" />
 
 </android.support.constraint.ConstraintLayout>
