@@ -1,11 +1,13 @@
 package com.brentvanvosselen.oogappl.RestClient.models;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
 public class Costbill {
 
+    @Expose
     @SerializedName("costs")
     private List<Cost> costsMonth;
     @SerializedName("totalCostToPay")

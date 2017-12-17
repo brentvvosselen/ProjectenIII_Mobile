@@ -119,6 +119,9 @@ public interface APIInterface {
     @POST("/api/costs/addCategory/{email}")
     Call<CostCategory> addCategory(@Header("authorization") String token, @Path("email") String email, @Body CostCategory category);
 
+    @GET("/api/costs/bill/small/{email}")
+    Call<Costbill> GetSmallBill(@Header("authorization") String token, @Path("email") String email);
+
     @DELETE("/api/event/delete/{email}/{id}")
     Call<String> deleteEvent(@Header("authorization") String token, @Path("email")String email, @Path("id")String id);
 
@@ -142,6 +145,8 @@ public interface APIInterface {
 
     @POST("/api/children/picture/{id}")
     Call<Child> changeChildPicture(@Header("authorization")String token, @Path("id") String id, @Body Image image);
+
+
     /*
     Voorbeeld van API call
 
