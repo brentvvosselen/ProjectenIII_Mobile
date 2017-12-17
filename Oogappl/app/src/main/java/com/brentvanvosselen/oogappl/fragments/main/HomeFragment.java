@@ -39,6 +39,11 @@ public class HomeFragment extends Fragment {
 
     SharedPreferences sharedPreferences;
 
+    public interface OnHideNavigationItems {
+        public void hideNavItems();
+        public void showNavItems();
+    }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -74,10 +79,14 @@ public class HomeFragment extends Fragment {
             @Override
             public void onResponse(Call call, Response response) {
                 if(response.isSuccessful()){
+                    OnHideNavigationItems mCallback = (OnHideNavigationItems)getActivity();
                     parent = (Parent) response.body();
                     if(!parent.hasDoneSetup()){
                         CardView vCardSetup = getView().findViewById(R.id.card_home_setup);
                         vCardSetup.setVisibility(View.VISIBLE);
+                        mCallback.hideNavItems();
+                    }else{
+                        mCallback.showNavItems();
                     }
                 } else {
                     Snackbar.make(getView(), R.string.get_parent_neg, Snackbar.LENGTH_SHORT).show();

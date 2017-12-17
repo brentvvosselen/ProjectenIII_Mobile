@@ -2,14 +2,17 @@ package com.brentvanvosselen.oogappl.activities;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.widget.Toast;
 
+import com.brentvanvosselen.oogappl.fragments.main.HomeFragment;
 import com.brentvanvosselen.oogappl.util.ObjectSerializer;
 import com.brentvanvosselen.oogappl.R;
 import com.brentvanvosselen.oogappl.RestClient.APIInterface;
@@ -107,6 +110,7 @@ public class SetupActivity extends AppCompatActivity implements
             public void onResponse(Call call, Response response) {
                 if(response.isSuccessful()){
                     finish();
+
                 }else{
                     Toast.makeText(getApplicationContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
                     finish();
@@ -120,4 +124,6 @@ public class SetupActivity extends AppCompatActivity implements
             }
         });
     }
+
+
 }

@@ -1,6 +1,7 @@
 package com.brentvanvosselen.oogappl.activities;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -61,7 +62,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, AgendaFragment.OnCalendarItemSelected, HeenEnWeerFragment.OnHeenEnWeerAction, ProfileFragment.OnNavigationChange{
+        implements NavigationView.OnNavigationItemSelectedListener, AgendaFragment.OnCalendarItemSelected, HeenEnWeerFragment.OnHeenEnWeerAction, ProfileFragment.OnNavigationChange, HomeFragment.OnHideNavigationItems {
 
     // private Boolean loggedIn = false;
     private User currentUser;
@@ -148,6 +149,13 @@ public class MainActivity extends AppCompatActivity
             final TextView vTextViewProfileType = headerView.findViewById(R.id.profile_type);
             SharedPreferences sharedPreferences = this.getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
             Call call = apiInterface.getParentByEmail("bearer " + sharedPreferences.getString("token",null), currentUser.getEmail());
+            //progress
+            final ProgressDialog progressDialog;
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setMessage(getResources().getString(R.string.getting_data));
+            progressDialog.setTitle(getResources().getString(R.string.loading));
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.show();
             call.enqueue(new Callback() {
                 @Override
                 public void onResponse(Call call, Response response) {
@@ -172,9 +180,11 @@ public class MainActivity extends AppCompatActivity
                                     vTextViewProfileType.setText("");
                             }
                         }
+
                     }else{
                         Log.i("API event", "not succesful to get user");
                     }
+                    progressDialog.dismiss();
                 }
 
                 @Override
@@ -182,6 +192,7 @@ public class MainActivity extends AppCompatActivity
                     Log.i("API event", getResources().getString(R.string.geen_verbinding));
                     sharedPrefs.edit().remove("currentUser").commit();
                     goToLogin();
+                    progressDialog.dismiss();
                 }
             });
         }
@@ -280,33 +291,6 @@ public class MainActivity extends AppCompatActivity
 
         return true;
     }
-    private void centerTitle() {
-        ArrayList<View> textViews = new ArrayList<>();
-
-        getWindow().getDecorView().findViewsWithText(textViews, getTitle(), View.FIND_VIEWS_WITH_TEXT);
-
-        if(textViews.size() > 0) {
-            AppCompatTextView appCompatTextView = null;
-            if(textViews.size() == 1) {
-                appCompatTextView = (AppCompatTextView) textViews.get(0);
-            } else {
-                for(View v : textViews) {
-                    if(v.getParent() instanceof Toolbar) {
-                        appCompatTextView = (AppCompatTextView) v;
-                        break;
-                    }
-                }
-            }
-
-            if(appCompatTextView != null) {
-                ViewGroup.LayoutParams params = appCompatTextView.getLayoutParams();
-                params.width = ViewGroup.LayoutParams.MATCH_PARENT;
-                appCompatTextView.setLayoutParams(params);
-                appCompatTextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            }
-        }
-    }
-
 
     public String getUserEmail(){
         return currentUser.getEmail();
@@ -403,4 +387,27 @@ public class MainActivity extends AppCompatActivity
     public void profilePictureChanged(Bitmap b) {
         vImageViewProfile.setImageBitmap(b);
     }
+
+    @Override
+    public void hideNavItems() {
+
+        NavigationView navView = findViewById(R.id.nav_view);
+        Menu navMenu = navView.getMenu();
+        navMenu.findItem(R.id.nav_childInfo).setVisible(false);
+        navMenu.findItem(R.id.nav_agenda).setVisible(false);
+        navMenu.findItem(R.id.nav_finance).setVisible(false);
+        navMenu.findItem(R.id.nav_heenenweer).setVisible(false);
+    }
+
+    @Override
+    public void showNavItems() {
+        NavigationView navView = findViewById(R.id.nav_view);
+        Menu navMenu = navView.getMenu();
+        navMenu.findItem(R.id.nav_childInfo).setVisible(true);
+        navMenu.findItem(R.id.nav_agenda).setVisible(true);
+        navMenu.findItem(R.id.nav_finance).setVisible(true);
+        navMenu.findItem(R.id.nav_heenenweer).setVisible(true);
+    }
+
+
 }
