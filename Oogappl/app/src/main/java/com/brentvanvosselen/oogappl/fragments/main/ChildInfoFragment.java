@@ -11,6 +11,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
@@ -52,6 +54,7 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -65,7 +68,8 @@ import retrofit2.Response;
 
 public class ChildInfoFragment extends Fragment {
 
-    private final int PICTURE_REQUEST = 1;
+    private int GALLERY_REQUEST = 1;
+    private int CAMERA_REQUEST = 2;
 
     final String DATE_FORMAT = "dd/MM/yyyy";
     final String[] GENDERS = {"MAN","VROUW"};
@@ -115,14 +119,46 @@ public class ChildInfoFragment extends Fragment {
         vImageViewPicture.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                if(takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null){
-                    startActivityForResult(takePictureIntent,PICTURE_REQUEST);
-                }
+                showPictureDialog();
                 return true;
             }
         });
     }
+
+    private void showPictureDialog() {
+        AlertDialog.Builder pictureDialog = new AlertDialog.Builder(getContext());
+        pictureDialog.setTitle(getString(R.string.choose_picture));
+        String[] items = {
+                getString(R.string.select_gallery),
+                getString(R.string.capture_camera)
+        };
+        pictureDialog.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                switch(i){
+                    case 0:
+                        choosePictureFromGallery();
+                        break;
+                    case 1:
+                        takePhotoFromCamera();
+                        break;
+                }
+            }
+        });
+        pictureDialog.show();
+    }
+
+    private void takePhotoFromCamera() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE_SECURE);
+        startActivityForResult(intent, CAMERA_REQUEST);
+    }
+
+    private void choosePictureFromGallery() {
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(galleryIntent, GALLERY_REQUEST);
+    }
+    
 
     @Nullable
     @Override
@@ -479,43 +515,64 @@ public class ChildInfoFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if(requestCode == PICTURE_REQUEST && resultCode == Activity.RESULT_OK){
-            Bundle extras = data.getExtras();
-                Bitmap bitmap = (Bitmap) extras.get("data");
-
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG,50,out);
-            Bitmap compressed = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
-            vImageViewPicture.setImageBitmap(compressed);
-
-            byte[] byteArray = out.toByteArray();
-            String value = Base64.encodeToString(byteArray,Base64.DEFAULT);
-            String name = String.valueOf(new Date().getTime());
-            String type = "image/jpeg";
-
-            Image image = new Image(name,type,value);
-
-            Call changeChildPictureCall = apiInterface.changeChildPicture("bearer " + sharedPreferences.getString("token",null),this.parent.getChildren()[selectedChild].get_id(),image);
-            changeChildPictureCall.enqueue(new Callback() {
-                @Override
-                public void onResponse(Call call, Response response) {
-                    if(response.isSuccessful()){
-                        Snackbar.make(getView(), R.string.change_picture_pos, Snackbar.LENGTH_SHORT).show();
-
-                    }else{
-                        Snackbar.make(getView(), R.string.change_picture_neg, Snackbar.LENGTH_SHORT).show();
-
-                    }
-                }
-
-                @Override
-                public void onFailure(Call call, Throwable t) {
-                    Snackbar.make(getView(), R.string.geen_verbinding, Snackbar.LENGTH_SHORT).show();
-
-                }
-            });
-
+        
+        if(resultCode == getActivity().RESULT_CANCELED){
+            return;
         }
+        if(requestCode == GALLERY_REQUEST){
+            if(data != null){
+                Uri contentURI = data.getData();
+                try{
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), contentURI);
+                    saveImage(bitmap);
+                }catch(IOException e){
+                    e.printStackTrace();
+                    Snackbar.make(getView(),R.string.fail_picture,Snackbar.LENGTH_SHORT).show();
+
+                }
+            }
+        }else if (requestCode == CAMERA_REQUEST){
+            Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+            saveImage(thumbnail);
+        }
+    }
+
+    private void saveImage(Bitmap bitmap) {
+        final int THUMBSIZE = 150;
+
+        Bitmap thumbImage = ThumbnailUtils.extractThumbnail(bitmap,THUMBSIZE,THUMBSIZE);
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        thumbImage.compress(Bitmap.CompressFormat.JPEG,100,out);
+
+        byte[] byteArray = out.toByteArray();
+        String value = Base64.encodeToString(byteArray,Base64.DEFAULT);
+        String name = String.valueOf(new Date().getTime());
+        String type = "image/jpeg";
+
+        Image image = new Image(name, type, value);
+
+        User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
+        Call changeChildPictureCall = apiInterface.changeChildPicture("bearer " + sharedPreferences.getString("token",null),this.parent.getChildren()[selectedChild].get_id(),image);
+        changeChildPictureCall.enqueue(new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) {
+                if(response.isSuccessful()){
+                    Snackbar.make(getView(), R.string.change_picture_pos, Snackbar.LENGTH_SHORT).show();
+
+                }else{
+                    Snackbar.make(getView(), R.string.change_picture_neg, Snackbar.LENGTH_SHORT).show();
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call call, Throwable t) {
+                Snackbar.make(getView(), R.string.geen_verbinding, Snackbar.LENGTH_SHORT).show();
+            }
+        });
+
+        vImageViewPicture.setImageBitmap(thumbImage);
+
     }
 }
