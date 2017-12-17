@@ -12,6 +12,9 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -55,19 +58,22 @@ import retrofit2.Response;
 
 public class FinanceFragment extends Fragment {
 
+    APIInterface apiInterface;
+    SharedPreferences sharedPreferences;
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
     private User currentUser;
     private Parent parent;
     private FinancialType type;
     private List<Cost> costs = new ArrayList<>();
     private double toPay;
-    private CardView vCardSetup;
     private List<CostCategory> categories;
     private List<String> categorieNames;
 
-    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-    APIInterface apiInterface;
-    SharedPreferences sharedPreferences;
+    private CardView vCardSetup;
+    private CardView vCardTotal;
+    private RecyclerView vCostList;
+    private CostItemAdapter mAdapter;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -80,6 +86,8 @@ public class FinanceFragment extends Fragment {
         title.setText(R.string.finance);
 
         vCardSetup = getView().findViewById(R.id.card_finance_setup);
+        vCardTotal = getView().findViewById(R.id.card_finance_total);
+        vCostList = getView().findViewById(R.id.recyclerView_cost_list);
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("com.brentvanvosselen.oogappl.fragments", Context.MODE_PRIVATE);
         currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
@@ -205,20 +213,17 @@ public class FinanceFragment extends Fragment {
     }
 
     private void initCostscards() {
-        LinearLayout container = getView().findViewById(R.id.lineairlayout_costs);
-        container.removeAllViews();
+        vCardTotal.setVisibility(View.VISIBLE);
+        TextView totalTitle = vCardTotal.findViewById(R.id.textview_finance_total_title);
+        TextView totalAmount = vCardTotal.findViewById(R.id.textview_finance_total_amount);
+        totalTitle.setText("Totaal te betalen bedrag: ");
+        totalAmount.setText("€ " + toPay);
 
-        for(Cost c : costs) {
-            final LayoutInflater inflater = getActivity().getLayoutInflater();
-            final View costCard = inflater.inflate(R.layout.cost_item, null);
-
-            ((TextView) costCard.findViewById(R.id.textView_card_cost_title)).setText(c.getTitle());
-            ((TextView) costCard.findViewById(R.id.textView_card_cost_date)).setText(dateFormat.format(c.getDate()));
-            ((TextView) costCard.findViewById(R.id.textView_card_cost_amount)).setText("€ " + String.valueOf(c.getAmount()));
-            ((TextView) costCard.findViewById(R.id.textView_card_cost_description)).setText(c.getDescription());
-
-            container.addView(costCard);
-        }
+        mAdapter = new CostItemAdapter(costs);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        vCostList.setLayoutManager(mLayoutManager);
+        vCostList.setItemAnimator(new DefaultItemAnimator());
+        vCostList.setAdapter(mAdapter);
     }
 
     private void createDialog() {
