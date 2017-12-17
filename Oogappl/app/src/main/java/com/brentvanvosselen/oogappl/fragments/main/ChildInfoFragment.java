@@ -291,6 +291,7 @@ public class ChildInfoFragment extends Fragment {
                                                 public void onFailure(Call call, Throwable t) {
                                                     Snackbar.make(getView(), R.string.geen_verbinding, Snackbar.LENGTH_SHORT).show();
                                                     dialogInterface.dismiss();
+                                                    Log.i("failure",t.getMessage());
                                                     initFragment();
                                                 }
                                             });
@@ -508,6 +509,7 @@ public class ChildInfoFragment extends Fragment {
             @Override
             public void onFailure(Call call, Throwable t) {
                 Snackbar.make(getView(), R.string.geen_verbinding, Snackbar.LENGTH_SHORT).show();
+                Log.i("throwable",t.getMessage());
             }
         });
     }

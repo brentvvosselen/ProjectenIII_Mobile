@@ -87,7 +87,7 @@ public interface APIInterface {
     Call<List<Category>> getCategoriesFromUser(@Header("authorization") String token, @Path("email")String email);
 
     @POST("/api/category/add/{email}")
-    Call<String> addCategory(@Header("authorization") String token, @Path("email") String email, @Body Category category);
+    Call<Category> addCategory(@Header("authorization") String token, @Path("email") String email, @Body Category category);
 
     @POST("/api/calendar/event/add/{email}")
     Call<String> addEvent(@Header("authorization") String token, @Path("email") String email, @Body Event event);

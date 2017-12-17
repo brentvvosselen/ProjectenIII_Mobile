@@ -127,6 +127,7 @@ public class ChildInfoEditFragment extends Fragment {
             @Override
             public void onFailure(Call call, Throwable t) {
                 Snackbar.make(getView(), R.string.geen_verbinding, Snackbar.LENGTH_SHORT).show();
+                Log.i("throwable",t.getMessage());
             }
         });
     }
