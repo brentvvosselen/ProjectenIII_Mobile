@@ -36,7 +36,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.brentvanvosselen.oogappl.RestClient.models.Image;
 import com.brentvanvosselen.oogappl.util.ObjectSerializer;
@@ -244,9 +243,9 @@ public class ChildInfoFragment extends Fragment {
                                                 @Override
                                                 public void onResponse(Call call, Response response) {
                                                     if (response.isSuccessful()) {
-                                                        Toast.makeText(getContext(), R.string.new_child_pos, Toast.LENGTH_SHORT).show();
+                                                        Snackbar.make(getView(), R.string.new_child_pos, Snackbar.LENGTH_SHORT).show();
                                                     } else {
-                                                        Toast.makeText(getContext(), R.string.new_child_neg, Toast.LENGTH_SHORT).show();
+                                                        Snackbar.make(getView(), R.string.new_child_neg, Snackbar.LENGTH_SHORT).show();
                                                     }
                                                     dialogInterface.dismiss();
                                                     initFragment();
@@ -254,25 +253,25 @@ public class ChildInfoFragment extends Fragment {
 
                                                 @Override
                                                 public void onFailure(Call call, Throwable t) {
-                                                    Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
+                                                    Snackbar.make(getView(), R.string.geen_verbinding, Snackbar.LENGTH_SHORT).show();
                                                     dialogInterface.dismiss();
                                                     initFragment();
                                                 }
                                             });
                                         } else {
                                             Log.i("CHILD CALL", "FAIL");
-                                            Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
+                                            Snackbar.make(getView(), R.string.geen_verbinding, Snackbar.LENGTH_SHORT).show();
                                         }
                                     }
 
                                     @Override
                                     public void onFailure(Call call, Throwable t) {
                                         Log.i("PARENT CALL", "FAIL");
-                                        Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
+                                        Snackbar.make(getView(), R.string.geen_verbinding, Snackbar.LENGTH_SHORT).show();
                                     }
                                 });
                             } else{
-                                Toast.makeText(getContext(),R.string.err_incomplete_form, Toast.LENGTH_SHORT).show();
+                                Snackbar.make(getView(),R.string.err_incomplete_form, Snackbar.LENGTH_SHORT).show();
                             }
                         }
                     })
@@ -311,7 +310,7 @@ public class ChildInfoFragment extends Fragment {
                     initSpinner();
                     initCategories();
                 } else {
-                    Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
+                    Snackbar.make(getView(), R.string.geen_verbinding, Snackbar.LENGTH_SHORT).show();
                     Log.i("LOGIN", "FAIL: " + response.message());
                 }
                 progressDialog.dismiss();
@@ -320,7 +319,7 @@ public class ChildInfoFragment extends Fragment {
             @Override
             public void onFailure(Call call, Throwable t) {
                 Log.i("API event", t.getMessage());
-                Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
+                Snackbar.make(getView(), R.string.geen_verbinding, Snackbar.LENGTH_SHORT).show();
                 call.cancel();
                 progressDialog.dismiss();
             }
@@ -466,13 +465,13 @@ public class ChildInfoFragment extends Fragment {
                 if(response.isSuccessful()){
                     Log.i("SAVE", "Save succesful");
                 } else {
-                    Toast.makeText(getContext(), R.string.get_child_neg, Toast.LENGTH_SHORT).show();
+                    Snackbar.make(getView(), R.string.get_child_neg, Snackbar.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
-                Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
+                Snackbar.make(getView(), R.string.geen_verbinding, Snackbar.LENGTH_SHORT).show();
             }
         });
     }

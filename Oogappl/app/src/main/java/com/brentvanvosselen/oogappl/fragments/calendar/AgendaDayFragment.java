@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.text.Layout;
 import android.util.Log;
@@ -16,7 +17,6 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.brentvanvosselen.oogappl.R;
 import com.brentvanvosselen.oogappl.RestClient.APIInterface;
@@ -119,14 +119,14 @@ public class AgendaDayFragment extends Fragment{
                         vTextViewUpcoming.setText(R.string.no_events);
 
                 }else{
-                    Toast.makeText(getContext(), R.string.retrieve_items_neg + dateString,Toast.LENGTH_SHORT).show();
+                    Snackbar.make(getView(), getResources().getString(R.string.retrieve_items_neg) + " " + dateString, Snackbar.LENGTH_SHORT).show();
                 }
                 progressDialog.setProgress(50);
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
-                Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
+                //Snackbar.make(getView(), R.string.geen_verbinding, Snackbar.LENGTH_SHORT).show();
                 call.cancel();
             }
         });
@@ -140,14 +140,15 @@ public class AgendaDayFragment extends Fragment{
                     childrenBooks = (List<HeenEnWeerDag>)response.body();
                     renderChildren();
                 }else{
-                    Toast.makeText(getContext(),R.string.retrieve_items_neg + dateString,Toast.LENGTH_SHORT).show();
+                    Snackbar.make(getView(), getResources().getString(R.string.retrieve_items_neg) + " " + dateString, Snackbar.LENGTH_SHORT).show();
                 }
                 progressDialog.dismiss();
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
-                Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
+                Log.i("ERROR", t.getMessage());
+                Snackbar.make(getView(), R.string.geen_verbinding, Snackbar.LENGTH_SHORT).show();
                 call.cancel();
                 progressDialog.dismiss();
             }

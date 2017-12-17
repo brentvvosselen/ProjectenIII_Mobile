@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.util.Log;
@@ -119,13 +120,13 @@ public class ChildInfoEditFragment extends Fragment {
                 if(response.isSuccessful()){
                     Log.i("SAVE", "Save succesful");
                 } else {
-                    Toast.makeText(getContext(), R.string.get_child_neg, Toast.LENGTH_SHORT).show();
+                    Snackbar.make(getView(), R.string.get_child_neg, Snackbar.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
-                Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
+                Snackbar.make(getView(), R.string.geen_verbinding, Snackbar.LENGTH_SHORT).show();
             }
         });
     }

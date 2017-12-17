@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -19,7 +20,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.brentvanvosselen.oogappl.R;
 import com.brentvanvosselen.oogappl.RestClient.APIInterface;
@@ -121,13 +121,14 @@ public class AgendaItemFragment extends Fragment{
                     title.setText(event.getCategory().getType());
 
                 }else{
-                    Toast.makeText(getContext(), R.string.get_event_neg,Toast.LENGTH_SHORT).show();
+                    Snackbar.make(getView(), R.string.get_event_neg,Snackbar.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
-                Toast.makeText(getContext(),R.string.geen_verbinding,Toast.LENGTH_SHORT).show();
+                Log.i("ERROR", t.getMessage());
+                Snackbar.make(getView(),R.string.geen_verbinding,Snackbar.LENGTH_SHORT).show();
                 call.cancel();
             }
         });

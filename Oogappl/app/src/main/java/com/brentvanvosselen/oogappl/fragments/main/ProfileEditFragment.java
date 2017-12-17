@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -13,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.brentvanvosselen.oogappl.activities.MainActivity;
 import com.brentvanvosselen.oogappl.R;
@@ -97,13 +97,13 @@ public class ProfileEditFragment extends Fragment {
                     vEditTextWorkName.setText(parent.getWorkName());
                     vEditTextWorkTelNumber.setText(parent.getWorkNumber());
                 }else{
-                    Toast.makeText(getContext(),R.string.get_profileinfo_neg,Toast.LENGTH_SHORT).show();
+                    Snackbar.make(getView(),R.string.get_profileinfo_neg,Snackbar.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
-                Toast.makeText(getContext(),R.string.geen_verbinding,Toast.LENGTH_SHORT).show();
+                Snackbar.make(getView(),R.string.geen_verbinding,Snackbar.LENGTH_SHORT).show();
                 Log.i("API EVENT",t.getMessage());
                 call.cancel();
             }
@@ -136,7 +136,7 @@ public class ProfileEditFragment extends Fragment {
                         @Override
                         public void onResponse(Call call, Response response) {
                             if(response.isSuccessful()){
-                                Toast.makeText(getContext(),R.string.change_picture_pos,Toast.LENGTH_SHORT).show();
+                                Snackbar.make(getView(),R.string.change_picture_pos,Snackbar.LENGTH_SHORT).show();
                                 Log.i("API-EVENT", "updated profile SUCESSFUL");
                                 //go back to profile
                                 Fragment fragment = new ProfileFragment();
@@ -146,20 +146,20 @@ public class ProfileEditFragment extends Fragment {
                                     ft.commit();
                                 }
                             }else{
-                                Toast.makeText(getContext(),R.string.change_picture_neg,Toast.LENGTH_SHORT).show();
+                                Snackbar.make(getView(),R.string.change_picture_neg,Snackbar.LENGTH_SHORT).show();
                                 Log.i("API-EVENT", "updated profile FAILED");
                             }
                         }
 
                         @Override
                         public void onFailure(Call call, Throwable t) {
-                            Toast.makeText(getContext(), R.string.geen_verbinding,Toast.LENGTH_SHORT).show();
+                            Snackbar.make(getView(), R.string.geen_verbinding,Snackbar.LENGTH_SHORT).show();
                             Log.i("API-EVENT", t.getMessage());
                             call.cancel();
                         }
                     });
                 }else{
-                    Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
+                    Snackbar.make(getView(), R.string.geen_verbinding, Snackbar.LENGTH_SHORT).show();
                     Log.i("USER","FAIL: "+ response.message());
                 }
             }

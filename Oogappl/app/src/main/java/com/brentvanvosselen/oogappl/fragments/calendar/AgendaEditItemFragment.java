@@ -38,7 +38,6 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.brentvanvosselen.oogappl.R;
 import com.brentvanvosselen.oogappl.RestClient.APIInterface;
@@ -213,16 +212,15 @@ public class AgendaEditItemFragment extends Fragment {
                                     @Override
                                     public void onResponse(Call call, Response response) {
                                         if (response.isSuccessful()) {
-                                            Toast.makeText(getContext(), R.string.new_category_pos, Toast.LENGTH_SHORT).show();
+                                            Snackbar.make(getView(), R.string.new_category_pos, Snackbar.LENGTH_SHORT).show();
 
                                         } else {
-                                            Toast.makeText(getContext(), R.string.new_category_neg, Toast.LENGTH_SHORT).show();
+                                            Snackbar.make(getView(), R.string.new_category_neg, Snackbar.LENGTH_SHORT).show();
                                         }
                                     }
 
                                     @Override
                                     public void onFailure(Call call, Throwable t) {
-                                        //Toast.makeText(getContext(),"Kon geen connectie maken met server",Toast.LENGTH_SHORT).show();
                                         call.cancel();
                                     }
                                 });
@@ -442,7 +440,7 @@ public class AgendaEditItemFragment extends Fragment {
                     end = dateFormat.parse(vEdittextEndDate.getText().toString() + " " + vEdittextEndTime.getText().toString());
                 } catch (ParseException e) {
                     e.printStackTrace();
-                    Toast.makeText(getContext(), R.string.err_start_end_event,Toast.LENGTH_SHORT).show();
+                    Snackbar.make(getView(), R.string.err_start_end_event, Snackbar.LENGTH_SHORT).show();
                     correctForm = false;
                 }
 
@@ -476,16 +474,18 @@ public class AgendaEditItemFragment extends Fragment {
                             @Override
                             public void onResponse(Call call, Response response) {
                                 if(response.isSuccessful()){
-                                    Toast.makeText(getContext(), R.string.change_event_pos,Toast.LENGTH_SHORT).show();
+                                    Snackbar.make(getView(), R.string.change_event_pos,Snackbar.LENGTH_SHORT).show();
+
                                     getActivity().onBackPressed();
                                 }else{
-                                    Toast.makeText(getContext(), R.string.change_event_neg,Toast.LENGTH_SHORT).show();
+                                    Snackbar.make(getView(), R.string.change_event_neg,Snackbar.LENGTH_SHORT).show();
                                 }
                             }
 
                             @Override
                             public void onFailure(Call call, Throwable t) {
-                                Toast.makeText(getContext(), R.string.geen_verbinding,Toast.LENGTH_SHORT).show();
+                                Log.i("ERROR EDIT", t.getMessage());
+                                Snackbar.make(getView(), R.string.geen_verbinding, Snackbar.LENGTH_SHORT).show();
                             }
                         });
                     }else{
@@ -495,17 +495,18 @@ public class AgendaEditItemFragment extends Fragment {
                             @Override
                             public void onResponse(Call call, Response response) {
                                 if(response.isSuccessful()){
-                                    Toast.makeText(getContext(), R.string.add_event_pos,Toast.LENGTH_SHORT).show();
+                                    Snackbar.make(getView(), R.string.add_event_pos,Snackbar.LENGTH_SHORT).show();
                                     getActivity().onBackPressed();
 
                                 }else{
-                                    Toast.makeText(getContext(), R.string.add_event_neg,Toast.LENGTH_SHORT).show();
+                                    Snackbar.make(getView(), R.string.add_event_neg,Snackbar.LENGTH_SHORT).show();
                                 }
                             }
 
                             @Override
                             public void onFailure(Call call, Throwable t) {
-                                Toast.makeText(getContext(),R.string.geen_verbinding,Toast.LENGTH_SHORT).show();
+                                Log.i("ERROR EDIT", t.getMessage());
+                                Snackbar.make(getView(),R.string.geen_verbinding,Snackbar.LENGTH_SHORT).show();
                             }
                         });
                     }
@@ -602,18 +603,19 @@ public class AgendaEditItemFragment extends Fragment {
                 @Override
                 public void onResponse(Call call, Response response) {
                     if (response.isSuccessful()) {
-                        Toast.makeText(getContext(), R.string.del_event_pos, Toast.LENGTH_SHORT).show();
+                        Snackbar.make(getView(), R.string.del_event_pos, Snackbar.LENGTH_SHORT).show();
                         AgendaFragment.OnCalendarItemSelected mCallback = (AgendaFragment.OnCalendarItemSelected) getActivity();
                         mCallback.onItemDeleted();
                     } else {
-                        Toast.makeText(getContext(), R.string.del_event_neg, Toast.LENGTH_SHORT).show();
+                        Snackbar.make(getView(), R.string.del_event_neg, Snackbar.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
                 public void onFailure(Call call, Throwable t) {
+                    Log.i("ERROR EDIT", t.getMessage());
+                    Snackbar.make(getView(), R.string.geen_verbinding, Snackbar.LENGTH_SHORT).show();
                     call.cancel();
-                    Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -667,7 +669,7 @@ public class AgendaEditItemFragment extends Fragment {
 
                     //
                 } else {
-                    Toast.makeText(getContext(), R.string.get_category_neg, Toast.LENGTH_SHORT).show();
+                    Snackbar.make(getView(), R.string.get_category_neg, Snackbar.LENGTH_SHORT).show();
                 }
                 progressDialog.dismiss();
                 fillChildSpinner();
@@ -675,7 +677,8 @@ public class AgendaEditItemFragment extends Fragment {
 
             @Override
             public void onFailure(Call call, Throwable t) {
-                Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
+                Log.i("ERROR EDIT", t.getMessage());
+                Snackbar.make(getView(), R.string.geen_verbinding, Snackbar.LENGTH_SHORT).show();
                 call.cancel();
                 progressDialog.dismiss();
             }
@@ -728,7 +731,7 @@ public class AgendaEditItemFragment extends Fragment {
 
                         vRecyclerChildren.scrollToPosition(childIndex + 1);
                     } else {
-                        Toast.makeText(getContext(), R.string.get_event_neg, Toast.LENGTH_SHORT).show();
+                        Snackbar.make(getView(), R.string.get_event_neg, Snackbar.LENGTH_SHORT).show();
                     }
                     progressDialog.dismiss();
 
@@ -736,7 +739,8 @@ public class AgendaEditItemFragment extends Fragment {
 
                 @Override
                 public void onFailure(Call call, Throwable t) {
-                    Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
+                    Log.i("ERROR EDIT", t.getMessage());
+                    Snackbar.make(getView(), R.string.geen_verbinding, Snackbar.LENGTH_SHORT).show();
                     call.cancel();
                     progressDialog.dismiss();
                 }

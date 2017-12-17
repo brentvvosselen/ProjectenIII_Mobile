@@ -177,16 +177,16 @@ public class HeenEnWeerItemEditFragment extends Fragment{
                                     @Override
                                     public void onResponse(Call call, Response response) {
                                         if(response.isSuccessful()){
-                                            Toast.makeText(getContext(),"Categorie toegevoegd.",Toast.LENGTH_SHORT).show();
+                                            Snackbar.make(getView(),R.string.new_category_pos,Snackbar.LENGTH_SHORT).show();
 
                                         }else{
-                                            Toast.makeText(getContext(),"Categorie NIET toegevoegd.",Toast.LENGTH_SHORT).show();
+                                            Snackbar.make(getView(),R.string.new_category_neg,Snackbar.LENGTH_SHORT).show();
                                         }
                                     }
 
                                     @Override
                                     public void onFailure(Call call, Throwable t) {
-                                        //Toast.makeText(getContext(),"Kon geen connectie maken met server",Toast.LENGTH_SHORT).show();
+                                        Snackbar.make(getView(),"Could not connect to server",Snackbar.LENGTH_SHORT).show();
                                         call.cancel();
                                     }
                                 });
@@ -232,16 +232,16 @@ public class HeenEnWeerItemEditFragment extends Fragment{
                             @Override
                             public void onResponse(Call call, Response response) {
                                 if(response.isSuccessful()){
-                                    Toast.makeText(getContext(),"Item gewijzigd",Toast.LENGTH_SHORT).show();
+                                    Snackbar.make(getView(),"Item gewijzigd",Snackbar.LENGTH_SHORT).show();
                                     getActivity().onBackPressed();
                                 }else{
-                                    Toast.makeText(getContext(),"Item niet gewijzigd",Toast.LENGTH_SHORT).show();
+                                    Snackbar.make(getView(),"Item niet gewijzigd",Snackbar.LENGTH_SHORT).show();
                                 }
                             }
 
                             @Override
                             public void onFailure(Call call, Throwable t) {
-                                Toast.makeText(getContext(),"Item niet gewijzigd",Toast.LENGTH_SHORT).show();
+                                Snackbar.make(getView(),"Item niet gewijzigd",Snackbar.LENGTH_SHORT).show();
                             }
                         });
                     }else{
@@ -251,22 +251,22 @@ public class HeenEnWeerItemEditFragment extends Fragment{
                             @Override
                             public void onResponse(Call call, Response response) {
                                 if(response.isSuccessful()){
-                                    Toast.makeText(getContext(),"item toegevoegd",Toast.LENGTH_SHORT).show();
+                                    Snackbar.make(getView(),"item toegevoegd",Snackbar.LENGTH_SHORT).show();
                                     getActivity().onBackPressed();
                                 }else{
-                                    Toast.makeText(getContext(), "item niet toegevoegd",Toast.LENGTH_SHORT).show();
+                                    Snackbar.make(getView(), "item niet toegevoegd",Snackbar.LENGTH_SHORT).show();
                                 }
                             }
 
                             @Override
                             public void onFailure(Call call, Throwable t) {
-                                Toast.makeText(getContext(),"Kon niet verbinden met server",Toast.LENGTH_SHORT).show();
+                                Snackbar.make(getView(),"Kon niet verbinden met server",Snackbar.LENGTH_SHORT).show();
                             }
                         });
                     }
 
                 }else{
-                    Toast.makeText(getContext(),"Velden niet ingevuld",Toast.LENGTH_SHORT).show();
+                    Snackbar.make(getView(),"Velden niet ingevuld",Snackbar.LENGTH_SHORT).show();
                 }
 
             }
@@ -288,15 +288,15 @@ public class HeenEnWeerItemEditFragment extends Fragment{
         try{
             item = (HeenEnWeerItem)getArguments().getSerializable("item");
         }catch(NullPointerException ex){
-            Toast.makeText(getContext(),"Geen item gevonden",Toast.LENGTH_SHORT).show();
+            Snackbar.make(getView(),"Geen item gevonden",Snackbar.LENGTH_SHORT).show();
         }catch(Exception e){
-            Toast.makeText(getContext(),"Geen item gevonden",Toast.LENGTH_SHORT).show();
+            Snackbar.make(getView(),"Geen item gevonden",Snackbar.LENGTH_SHORT).show();
         }
 
         try{
             dayid = getArguments().getString("dayid");
         }catch(Exception e){
-            Toast.makeText(getContext(),"Geen dag gevonden",Toast.LENGTH_SHORT).show();
+            Snackbar.make(getView(),"Geen dag gevonden",Snackbar.LENGTH_SHORT).show();
         }
 
 
@@ -352,13 +352,13 @@ public class HeenEnWeerItemEditFragment extends Fragment{
                     }
 
                 }else{
-                    Toast.makeText(getContext(),"Could not retrieve categories",Toast.LENGTH_SHORT).show();
+                    Snackbar.make(getView(),"Could not retrieve categories",Snackbar.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
-                Toast.makeText(getContext(),"Could not connect to server",Toast.LENGTH_SHORT).show();
+                Snackbar.make(getView(),"Could not connect to server",Snackbar.LENGTH_SHORT).show();
                 call.cancel();
             }
         });

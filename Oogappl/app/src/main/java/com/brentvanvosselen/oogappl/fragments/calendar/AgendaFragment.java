@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.util.Log;
@@ -19,7 +20,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.brentvanvosselen.oogappl.R;
 import com.brentvanvosselen.oogappl.RestClient.APIInterface;
@@ -148,13 +148,12 @@ public class AgendaFragment extends Fragment {
                     nextItemId = event.getId();
 
                 }else{
-                    Toast.makeText(getContext(), R.string.geen_verbinding,Toast.LENGTH_SHORT).show();
+                    Snackbar.make(getView(), R.string.geen_verbinding,Snackbar.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
-                //Toast.makeText(getContext(),"call failed",Toast.LENGTH_SHORT).show();
                 vCardViewNext.setVisibility(View.GONE);
                 vTextViewNextItem.setText(R.string.no_next_event);
                 call.cancel();
@@ -226,7 +225,6 @@ public class AgendaFragment extends Fragment {
                         while(!date.after(event.getEnd())){
                             mCalendar.setTime(date);
                             long timeInMIllis = mCalendar.getTimeInMillis();
-                            Log.i("time",String.valueOf(timeInMIllis));
                             String id = event.getId();
                             Event e = new Event(color,timeInMIllis,id);
                             parsedEvents.add(e);
@@ -248,7 +246,7 @@ public class AgendaFragment extends Fragment {
             @Override
             public void onFailure(Call call, Throwable t) {
                 call.cancel();
-                Toast.makeText(getContext(), R.string.geen_verbinding,Toast.LENGTH_SHORT).show();
+                Snackbar.make(getView(), R.string.geen_verbinding,Snackbar.LENGTH_SHORT).show();
                 progressDialog.dismiss();
             }
         });

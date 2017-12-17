@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
@@ -20,7 +21,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.brentvanvosselen.oogappl.R;
 import com.brentvanvosselen.oogappl.RestClient.APIInterface;
@@ -145,14 +145,12 @@ public class HeenEnWeerAddFragment extends Fragment{
                             selectedChild = pickerLayoutManagerChildren.getPosition(view);
                         }
                     });
-
-
-
                 }
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
+                Snackbar.make(getView(),"Kon server niet bereiken",Snackbar.LENGTH_SHORT).show();
             }
         });
 
@@ -180,16 +178,16 @@ public class HeenEnWeerAddFragment extends Fragment{
                         @Override
                         public void onResponse(Call call, Response response) {
                             if (response.isSuccessful()){
-                                Toast.makeText(getContext(),"Dag toegevoegd",Toast.LENGTH_SHORT).show();
+                                Snackbar.make(getView(),"Dag toegevoegd",Snackbar.LENGTH_SHORT).show();
                                 getActivity().onBackPressed();
                             }else{
-                                Toast.makeText(getContext(),"Dag niet toegevoegd",Toast.LENGTH_SHORT).show();
+                                Snackbar.make(getView(),"Dag niet toegevoegd",Snackbar.LENGTH_SHORT).show();
                             }
                         }
 
                         @Override
                         public void onFailure(Call call, Throwable t) {
-                            Toast.makeText(getContext(),"Kon server niet bereiken",Toast.LENGTH_SHORT).show();
+                            Snackbar.make(getView(),"Kon server niet bereiken",Snackbar.LENGTH_SHORT).show();
                         }
                     });
                 }

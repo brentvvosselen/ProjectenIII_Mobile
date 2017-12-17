@@ -2,6 +2,7 @@ package com.brentvanvosselen.oogappl.RestClient.models;
 
 import com.brentvanvosselen.oogappl.RestClient.ChildinfoCategory;
 import com.brentvanvosselen.oogappl.RestClient.models.Category;
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -23,6 +24,7 @@ public class Child implements Serializable {
     private Date birthdate;
     @SerializedName("categories")
     private List<ChildinfoCategory> category;
+    @Expose
     @SerializedName("picture")
     private Image picture;
 

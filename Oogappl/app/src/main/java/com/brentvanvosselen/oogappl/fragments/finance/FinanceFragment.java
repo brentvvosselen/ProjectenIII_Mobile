@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
@@ -35,6 +36,7 @@ import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
 import com.brentvanvosselen.oogappl.RestClient.models.Child;
 import com.brentvanvosselen.oogappl.RestClient.models.Cost;
 import com.brentvanvosselen.oogappl.RestClient.models.CostCategory;
+import com.brentvanvosselen.oogappl.RestClient.models.Costbill;
 import com.brentvanvosselen.oogappl.RestClient.models.FinancialType;
 import com.brentvanvosselen.oogappl.RestClient.models.Parent;
 import com.brentvanvosselen.oogappl.RestClient.models.User;
@@ -57,6 +59,7 @@ public class FinanceFragment extends Fragment {
     private Parent parent;
     private FinancialType type;
     private List<Cost> costs = new ArrayList<>();
+    private double toPay;
     private CardView vCardSetup;
     private List<CostCategory> categories;
     private List<String> categorieNames;
@@ -118,8 +121,7 @@ public class FinanceFragment extends Fragment {
 
             @Override
             public void onFailure(Call call, Throwable t) {
-                Toast.makeText(getContext(),  R.string.get_parent_neg, Toast.LENGTH_SHORT).show();
-
+                Snackbar.make(getView(),  R.string.get_parent_neg, Snackbar.LENGTH_SHORT).show();
             }
         });
 
@@ -135,14 +137,14 @@ public class FinanceFragment extends Fragment {
                     }
                     categorieNames.add( getResources().getString(R.string.new_category_plus));
                 } else {
-                    Toast.makeText(getContext(), "BAD RESPONSE", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(getView(), "BAD RESPONSE", Snackbar.LENGTH_SHORT).show();
                 }
                 progressDialog.dismiss();
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
-                Toast.makeText(getContext(), getResources().getString(R.string.geen_verbinding), Toast.LENGTH_SHORT).show();
+                Snackbar.make(getView(), getResources().getString(R.string.geen_verbinding), Snackbar.LENGTH_SHORT).show();
                 progressDialog.dismiss();
             }
 
@@ -178,23 +180,28 @@ public class FinanceFragment extends Fragment {
         vCardSetup.setVisibility(View.GONE);
         setHasOptionsMenu(true);
 
-        Call call = apiInterface.getAllCosts("bearer " + sharedPreferences.getString("token",null), currentUser.getEmail());
+        Call call = apiInterface.getCostbill("bearer " + sharedPreferences.getString("token",null), currentUser.getEmail());
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
-                if(response.isSuccessful()){
-                    costs = (List<Cost>) response.body();
+                if(response.isSuccessful()) {
+                    Costbill temp = (Costbill) response.body();
+                    costs = temp.getCostsMonth();
+                    toPay = temp.getToPay();
+
                     initCostscards();
                 } else {
-                    Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();}
+                    Snackbar.make(getView(), R.string.geen_verbinding, Snackbar.LENGTH_SHORT).show();
+                }
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
-                Toast.makeText(getContext(), getResources().getString(R.string.geen_verbinding), Toast.LENGTH_SHORT).show();
                 Log.i("ERROR", t.getMessage());
+                Snackbar.make(getView(), getResources().getString(R.string.geen_verbinding), Snackbar.LENGTH_SHORT).show();
             }
         });
+
     }
 
     private void initCostscards() {
@@ -379,7 +386,7 @@ public class FinanceFragment extends Fragment {
                     categorieNames.add(cat.getType());
                     categorieNames.add( getResources().getString(R.string.new_category_plus));
                 } else {
-                    Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
+                    Snackbar.make(getView(), R.string.geen_verbinding, Snackbar.LENGTH_SHORT).show();
                 }
             }
 
@@ -402,7 +409,7 @@ public class FinanceFragment extends Fragment {
 
                     initCostscards();
                 } else {
-                    Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
+                    Snackbar.make(getView(), R.string.geen_verbinding, Snackbar.LENGTH_SHORT).show();
                 }
             }
 
