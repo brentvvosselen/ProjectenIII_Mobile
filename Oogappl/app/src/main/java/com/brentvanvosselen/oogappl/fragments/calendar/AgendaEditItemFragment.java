@@ -519,6 +519,7 @@ public class AgendaEditItemFragment extends Fragment {
 
     private void fillChildSpinner() {
         Call parentCall = apiInterface.getParentByEmail("bearer " + sharedPreferences.getString("token",null),currentUser.getEmail());
+        progressDialog.show();
         parentCall.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
@@ -553,11 +554,13 @@ public class AgendaEditItemFragment extends Fragment {
 
                 }
                 getEvent();
+                progressDialog.dismiss();
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
                 call.cancel();
+                progressDialog.dismiss();
             }
         });
     }
@@ -666,6 +669,7 @@ public class AgendaEditItemFragment extends Fragment {
                 } else {
                     Toast.makeText(getContext(), R.string.get_category_neg, Toast.LENGTH_SHORT).show();
                 }
+                progressDialog.dismiss();
                 fillChildSpinner();
             }
 
@@ -673,6 +677,7 @@ public class AgendaEditItemFragment extends Fragment {
             public void onFailure(Call call, Throwable t) {
                 Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
                 call.cancel();
+                progressDialog.dismiss();
             }
         });
     }
@@ -681,6 +686,9 @@ public class AgendaEditItemFragment extends Fragment {
         //get event
         if(itemId != null){
             Call itemCall = apiInterface.getEvent("bearer " + sharedPreferences.getString("token",null), itemId);
+
+            progressDialog.show();
+
             itemCall.enqueue(new Callback() {
                 @Override
                 public void onResponse(Call call, Response response) {
