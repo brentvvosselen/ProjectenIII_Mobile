@@ -4,6 +4,7 @@ import com.brentvanvosselen.oogappl.RestClient.models.Category;
 import com.brentvanvosselen.oogappl.RestClient.models.Child;
 import com.brentvanvosselen.oogappl.RestClient.models.Cost;
 import com.brentvanvosselen.oogappl.RestClient.models.CostCategory;
+import com.brentvanvosselen.oogappl.RestClient.models.Costbill;
 import com.brentvanvosselen.oogappl.RestClient.models.Event;
 import com.brentvanvosselen.oogappl.RestClient.models.Group;
 import com.brentvanvosselen.oogappl.RestClient.models.HeenEnWeerBoek;
@@ -102,6 +103,12 @@ public interface APIInterface {
 
     @GET("/api/costs/{email}")
     Call<List<Cost>> getAllCosts(@Header("authorization") String token, @Path("email") String email);
+
+    @GET("api/costs/month/{email}")
+    Call<List<Cost>> getAllCostsMonth(@Header("authorization") String token, @Path("email") String email);
+
+    @GET("api/costs/bill/{email}")
+    Call<Costbill> getCostbill(@Header("authorization") String token, @Path("email") String email);
 
     @GET("/api/costs/categories/{email}")
     Call<List<CostCategory>> getAllCostCategories(@Header("authorization") String token, @Path("email") String email);

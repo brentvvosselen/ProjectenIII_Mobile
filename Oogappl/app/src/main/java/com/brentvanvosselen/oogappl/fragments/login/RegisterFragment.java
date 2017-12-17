@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -129,15 +130,14 @@ public class RegisterFragment extends Fragment{
                         ft.commit();
                     }
                 } else {
-                    Toast.makeText(context, R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
+                    Snackbar.make(getView(), R.string.geen_verbinding, Snackbar.LENGTH_SHORT).show();
                 }
                 progressDialog.dismiss();
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
-                Log.i("API event", t.getMessage());
-                Toast.makeText(context, R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
+                Snackbar.make(getView(), R.string.geen_verbinding, Snackbar.LENGTH_SHORT).show();
                 call.cancel();
                 progressDialog.dismiss();
             }

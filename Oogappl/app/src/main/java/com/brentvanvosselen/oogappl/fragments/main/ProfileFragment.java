@@ -25,7 +25,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.brentvanvosselen.oogappl.RestClient.models.Image;
 import com.brentvanvosselen.oogappl.RestClient.models.User;
@@ -160,7 +159,7 @@ public class ProfileFragment extends Fragment {
                     }
 
                 }else{
-                    Toast.makeText(getContext(), R.string.get_profileinfo_neg, Toast.LENGTH_SHORT).show();
+                    Snackbar.make(getView(), R.string.get_profileinfo_neg, Snackbar.LENGTH_SHORT).show();
                     Log.i("USER","FAIL: "+ response.message());
                 }
                 progressDialog.dismiss();
@@ -168,7 +167,7 @@ public class ProfileFragment extends Fragment {
 
             @Override
             public void onFailure(Call call, Throwable t) {
-                Toast.makeText(getContext(), R.string.geen_verbinding, Toast.LENGTH_SHORT).show();
+                Snackbar.make(getView(), R.string.geen_verbinding, Snackbar.LENGTH_SHORT).show();
                 Log.i("API EVENT", t.getMessage());
                 call.cancel();
                 progressDialog.dismiss();
