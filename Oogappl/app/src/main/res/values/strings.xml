@@ -23,6 +23,7 @@
     <string name="select_gallery">Kies een foto uit galerij</string>
     <string name="capture_camera">Neem een foto</string>
     <string name="fail_picture">Kan foto niet ophalen</string>
+    <string name="welcome">Welkom bij Oogappl.</string>
 
     <!-- progress -->
     <string name="loading">Laden</string>

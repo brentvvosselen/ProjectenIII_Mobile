@@ -141,6 +141,11 @@ public class HomeFragment extends Fragment {
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.show();
 
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+
+        View welcome = inflater.inflate(R.layout.welcome_message,null);
+        vLinearLayout.addView(welcome);
+
         nextItemCall.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
