@@ -19,6 +19,9 @@
     <string name="Date">Datum</string>
     <string name="Category">Categorie</string>
     <string name="get_parent_neg">Er is iets fout gelopen. Kan ouder niet vinden</string>
+    <string name="choose_picture">Kies een foto</string>
+    <string name="select_gallery">Kies een foto uit gallerij</string>
+    <string name="capture_camera">Neem een foto</string>
 
     <!-- progress -->
     <string name="loading">Laden</string>

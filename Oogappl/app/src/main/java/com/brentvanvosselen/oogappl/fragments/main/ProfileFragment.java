@@ -1,8 +1,10 @@
 package com.brentvanvosselen.oogappl.fragments.main;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -56,6 +58,7 @@ public class ProfileFragment extends Fragment {
     private APIInterface apiInterface;
     private SharedPreferences sharedPreferences;
     private int PICK_IMAGE_REQUEST = 1;
+    private int TAKE_IMAGE_REQUEST = 2;
 
     TextView vTextViewEmail, vTextViewFirstname, vTextViewAddress, vTextViewTelephone, vTextViewWork, vTextViewType;
     CircularImageView vImageViewProfile;
@@ -95,11 +98,8 @@ public class ProfileFragment extends Fragment {
         vImageViewProfile.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                if(takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null){
-                    startActivityForResult(takePictureIntent,PICK_IMAGE_REQUEST);
-                }
-                return true;
+               showPictureDialog();
+               return true;
             }
         });
 
@@ -175,6 +175,35 @@ public class ProfileFragment extends Fragment {
             }
          });
 
+
+    }
+
+    private void showPictureDialog() {
+        AlertDialog.Builder pictureDialog = new AlertDialog.Builder(getContext());
+        pictureDialog.setTitle(getString(R.string.choose_picture));
+        String[] items = {
+                getString(R.string.select_gallery),
+                getString(R.string.capture_camera)
+        };
+        pictureDialog.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                switch(i){
+                    case 0:
+                        choosePictureFromGallery();
+                        break;
+                    case 1:
+                        takePhotoFromCamera();
+                        break;
+                }
+            }
+        });
+        pictureDialog.show();
+    }
+
+    private void choosePictureFromGallery() {
+    }
+    private void takePhotoFromCamera(){
 
     }
 
