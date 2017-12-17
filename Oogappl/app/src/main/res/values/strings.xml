@@ -107,7 +107,10 @@
     <string name="no_next_event">Geen volgende evenement</string>
     <string name="returning">Wederkerend</string>
     <string name="startdate">Startdatum</string>
+    <string name="Endtime">Eindtijd</string>
+    <string name="starttime">Starttijd</string>
     <string name="Enddate">Einddatum</string>
+    <string name="err_endtime">Einddatum moet na startdatum liggen</string>
     <string name="retrieve_items_neg">Kan items niet ophalen voor </string>
     <string name="get_event_neg">Kan evenementen niet ophalen van de server</string>
     <string name="err_start_end_event">"Start en einde van evenement moet ingevuld zijn"</string>
