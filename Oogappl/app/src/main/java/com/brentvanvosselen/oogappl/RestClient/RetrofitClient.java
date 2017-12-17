@@ -21,7 +21,7 @@ public class RetrofitClient {
 
     private static Retrofit retrofit;
 
-    private static final String IPADRESS = "192.168.1.122";
+    private static final String IPADRESS = "https://oogappl-server.herokuapp.com";
 
     public static Retrofit getClient(Context context) {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
@@ -44,7 +44,8 @@ public class RetrofitClient {
                 .build();
 
         retrofit = new Retrofit.Builder()
-                .baseUrl("http://" + RetrofitClient.IPADRESS + ":5000/")
+                //.baseUrl("http://" + RetrofitClient.IPADRESS + ":5000/")
+                .baseUrl(IPADRESS)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build();
