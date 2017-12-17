@@ -32,8 +32,8 @@
         android:layout_marginRight="24dp"
         android:layout_marginTop="36dp"
         android:background="@drawable/button_white_square_big"
-        android:text="@string/onderhoudsbijdrage"
         android:textColor="@color/blue_mid"
+        android:text="@string/onderhoudsbijdrage"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button_finance_kindrekening" />

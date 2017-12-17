@@ -427,6 +427,7 @@ public class FinanceFragment extends Fragment {
         TextView textViewCardDesc = vCardSetup.findViewById(R.id.textview_desc_finance_setup);
         textViewCardDesc.setText(R.string.wait_other_parent);
 
+
         Button button = vCardSetup.findViewById(R.id.button_finance_setup);
         button.setVisibility(View.GONE);
     }

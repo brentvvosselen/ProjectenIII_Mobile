@@ -29,4 +29,7 @@
         <item name="android:windowCloseOnTouchOutside">true</item>
     </style>
 
+    <style name="WhiteCheck">
+        <item name="colorAccent">#fff</item>
+    </style>
 </resources>

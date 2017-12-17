@@ -17,6 +17,10 @@
         android:layout_marginRight="24dp"
         android:layout_marginTop="24dp"
         android:text="@string/complete_setup"
+        android:background="@drawable/button_white_square_big"
+        android:textColor="@color/blue_mid"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editText_bijdragepercentage" />
 
@@ -58,8 +62,9 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="24dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
+        android:background="@drawable/edittext_form_white"
         android:ems="10"
         android:inputType="number"
         android:textColor="@color/white"
