@@ -56,6 +56,7 @@
     <string name="err_firstname_empty">Voornaam is verplicht</string>
     <string name="err_lastname_empty">Achternaam is verplicht</string>
     <string name="err_password_match">Wachtwoorden komen niet overeen</string>
+    <string name="err_login">Email of wachtwoord incorrect</string>
 
 
     <!-- Strings related to profile-->
