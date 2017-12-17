@@ -144,8 +144,8 @@ public class LoginFragment extends Fragment {
                     startActivity(intent);
                     progressDialog.dismiss();
                 } else {
-                    Snackbar.make(getView(), R.string.geen_verbinding, Snackbar.LENGTH_SHORT).show();
-                    Log.i("LOGIN", "FAIL: " + response.message());
+                    Snackbar.make(getView(), R.string.err_login, Snackbar.LENGTH_SHORT).show();
+                    Log.i("LOGIN", response.message());
                     progressDialog.dismiss();
                 }
 

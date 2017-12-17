@@ -45,7 +45,7 @@ public class RetrofitClient {
 
         retrofit = new Retrofit.Builder()
                 //.baseUrl("http://" + RetrofitClient.IPADRESS + ":5000/")
-                .baseUrl(IPADRESS)
+                .baseUrl(RetrofitClient.IPADRESS)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build();
