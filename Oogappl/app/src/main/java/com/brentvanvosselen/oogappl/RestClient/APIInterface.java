@@ -138,7 +138,7 @@ public interface APIInterface {
     Call<String> addHeenEnWeerDay(@Header("authorization") String token, @Body HeenEnWeerDag item);
 
     @POST("/api/parents/picture/{email}")
-    Call<Parent> changeProfilePicture(@Header("authorization")String token, @Path("email")String email, @Body Image image);
+    Call<String> changeProfilePicture(@Header("authorization")String token, @Path("email")String email, @Body Image image);
 
     @POST("/api/children/picture/{id}")
     Call<Child> changeChildPicture(@Header("authorization")String token, @Path("id") String id, @Body Image image);

@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -201,9 +202,13 @@ public class ProfileFragment extends Fragment {
     }
 
     private void choosePictureFromGallery() {
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(galleryIntent, PICK_IMAGE_REQUEST);
     }
     private void takePhotoFromCamera(){
-
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE_SECURE);
+        startActivityForResult(intent, TAKE_IMAGE_REQUEST);
     }
 
     @Nullable
@@ -241,7 +246,27 @@ public class ProfileFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK){
+        if(resultCode == getActivity().RESULT_CANCELED){
+            return;
+        }
+        if(requestCode == PICK_IMAGE_REQUEST){
+            if (data != null){
+                Uri contentURI = data.getData();
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), contentURI);
+                    saveImage(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Snackbar.make(getView(),R.string.fail_picture,Snackbar.LENGTH_SHORT).show();
+                }
+            }
+        }else if (requestCode == TAKE_IMAGE_REQUEST){
+            Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+            saveImage(thumbnail);
+
+        }
+
+        /*if(requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK){
             Bundle extras = data.getExtras();
                 Bitmap bitmap = (Bitmap) extras.get("data");
                 // Log.d(TAG, String.valueOf(bitmap));
@@ -288,6 +313,59 @@ public class ProfileFragment extends Fragment {
             vImageViewProfile.setImageBitmap(smaller);
 
 
-        }
+        }*/
     }
-}
+
+    private void saveImage(Bitmap thumbnail) {
+        Log.i("size",String.valueOf(thumbnail.getByteCount()));
+        final int THUMBSIZE = 150;
+
+        Bitmap thumbImage = ThumbnailUtils.extractThumbnail(thumbnail,THUMBSIZE,THUMBSIZE);
+        Log.i("size",String.valueOf(thumbImage.getByteCount()));
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        thumbImage.compress(Bitmap.CompressFormat.JPEG,100, out);
+
+
+
+        byte[] byteArray = out.toByteArray();
+        String value = Base64.encodeToString(byteArray,Base64.DEFAULT);
+        String name = String.valueOf(new Date().getTime());
+        String type = "image/jpeg";
+
+        Image image = new Image(name,type,value);
+
+        User currentUser = ObjectSerializer.deserialize2(sharedPreferences.getString("currentUser",null));
+
+        Call changeProfilePictureCall = apiInterface.changeProfilePicture("bearer " + sharedPreferences.getString("token",null),currentUser.getEmail(),image);
+        changeProfilePictureCall.enqueue(new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) {
+                if(response.isSuccessful()){
+                    Snackbar.make(getView(), R.string.change_picture_pos, Snackbar.LENGTH_SHORT).show();
+
+                }else{
+                    Snackbar.make(getView(), R.string.change_picture_neg, Snackbar.LENGTH_SHORT).show();
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call call, Throwable t) {
+                Log.i("throwable",t.getMessage());
+                Snackbar.make(getView(), R.string.geen_verbinding, Snackbar.LENGTH_SHORT).show();
+
+            }
+        });
+
+        OnNavigationChange mCallback = (OnNavigationChange)getActivity();
+        mCallback.profilePictureChanged(thumbImage);
+        vImageViewProfile.setImageBitmap(thumbImage);
+
+
+    }
+
+
+    }
+
