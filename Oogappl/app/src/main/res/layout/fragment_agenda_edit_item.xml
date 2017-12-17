@@ -89,7 +89,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_medium"
-                android:text="@string/startdate"
+                android:text="@string/starttime"
                 android:textColor="@color/dim_gray_text"
                 app:layout_constraintStart_toStartOf="@+id/edittext_edit_event_startTime"
                 app:layout_constraintTop_toTopOf="@+id/textview_edit_event_label_startdate" />
@@ -140,7 +140,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/poppins_medium"
-                android:text="@string/Enddate"
+                android:text="@string/Endtime"
                 android:textColor="@color/dim_gray_text"
                 app:layout_constraintStart_toStartOf="@+id/edittext_edit_event_endTime"
                 app:layout_constraintTop_toBottomOf="@+id/edittext_edit_event_startTime" />

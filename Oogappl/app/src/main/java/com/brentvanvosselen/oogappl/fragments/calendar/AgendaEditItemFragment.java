@@ -444,24 +444,20 @@ public class AgendaEditItemFragment extends Fragment {
                     correctForm = false;
                 }
 
-
-                if(title.isEmpty() || title == null){
+                if(correctForm && start.after(end)) {
+                    correctForm = false;
+                    Snackbar.make(getView(), R.string.err_endtime, Snackbar.LENGTH_SHORT).show();
+                }
+                else if(correctForm && (title.isEmpty() || title == null)){
                     correctForm = false;
                     vEdittextTitle.setError( getResources().getString(R.string.err_title_event));
                 }
-                if(category == null){
+                else if(category == null){
                     correctForm = false;
-                }
-
-                if(start == null || end == null){
-                    correctForm = false;
-                }else if(start.after(end)){
-                    correctForm = false;
+                    Snackbar.make(getView(), R.string.err_endtime, Snackbar.LENGTH_SHORT).show();
                 }
 
                 if(correctForm){
-
-
                     Child[] childs = new Child[myChildren.size()];
                     for(int i = 0; i< myChildren.size();i++){
                         childs[i] = myChildren.get(i);
