@@ -47,15 +47,27 @@ public class Event{
         this.children = myChildren;
     }
 
-    public Event(String title, Date start, Date end, String description, Category category, int interval, String freq, Date until) {
+    public Event(String title, Date start, Date end, String description, Category category, Child[] myChildren, int interval, int freq, Date until) {
         this.title = title;
         this.start = start;
         this.end = end;
         this.description = description;
         this.category = category;
+        this.children = myChildren;
         this.interval = interval;
-        this.freq = freq;
         this.until = until;
+
+        switch(freq) {
+            case 0:
+                this.freq = "daily";
+                break;
+            case 1:
+                this.freq = "weekly";
+                break;
+            case 2:
+                this.freq = "monthly";
+                break;
+        }
     }
 
     public Date getStart() {

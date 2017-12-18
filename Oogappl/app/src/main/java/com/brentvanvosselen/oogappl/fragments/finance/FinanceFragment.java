@@ -6,7 +6,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.media.ThumbnailUtils;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -15,6 +19,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -41,11 +46,15 @@ import com.brentvanvosselen.oogappl.RestClient.models.Cost;
 import com.brentvanvosselen.oogappl.RestClient.models.CostCategory;
 import com.brentvanvosselen.oogappl.RestClient.models.Costbill;
 import com.brentvanvosselen.oogappl.RestClient.models.FinancialType;
+import com.brentvanvosselen.oogappl.RestClient.models.Image;
 import com.brentvanvosselen.oogappl.RestClient.models.Parent;
 import com.brentvanvosselen.oogappl.RestClient.models.User;
 import com.brentvanvosselen.oogappl.activities.FinanceSetupActivity;
+import com.brentvanvosselen.oogappl.fragments.main.ProfileFragment;
 import com.brentvanvosselen.oogappl.util.ObjectSerializer;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -74,6 +83,12 @@ public class FinanceFragment extends Fragment {
     private CardView vCardTotal;
     private RecyclerView vCostList;
     private CostItemAdapter mAdapter;
+
+    private Image image;
+    Button addPicture;
+    android.app.AlertDialog dialog;
+    private int GALLERY_REQUEST = 1;
+    private int CAMERA_REQUEST = 2;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -145,7 +160,7 @@ public class FinanceFragment extends Fragment {
                     }
                     categorieNames.add( getResources().getString(R.string.new_category_plus));
                 } else {
-                    Snackbar.make(getView(), "BAD RESPONSE", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(getView(), getResources().getString(R.string.geen_verbinding), Snackbar.LENGTH_SHORT).show();
                 }
                 progressDialog.dismiss();
             }
@@ -305,6 +320,15 @@ public class FinanceFragment extends Fragment {
                 })
                 .create();
 
+        addPicture = mView.findViewById(R.id.button_add_bewijs);
+
+        addPicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showPictureDialog();
+            }
+        });
+
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialogInterface) {
@@ -344,6 +368,12 @@ public class FinanceFragment extends Fragment {
                             String childName = (String) spinnerChildren.getSelectedItem();
 
                             Cost temp = new Cost(title, desciption, amount, new Date(year, month, day), category, parent.getGroup().getChildByName(childName));
+
+                            if(image != null) {
+                                Log.i("IMAGE", "ADD IMAGE");
+                                temp.setImage(image);
+                            }
+
                             addCost(temp);
                             dialog.dismiss();
                         }
@@ -485,5 +515,84 @@ public class FinanceFragment extends Fragment {
                 startActivity(intent);
             }
         });
+    }
+
+    private void showPictureDialog() {
+        android.app.AlertDialog.Builder pictureDialog = new android.app.AlertDialog.Builder(getContext());
+        pictureDialog.setTitle(getString(R.string.choose_picture));
+        String[] items = {
+                getString(R.string.select_gallery),
+                getString(R.string.capture_camera)
+        };
+        pictureDialog.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                switch(i){
+                    case 0:
+                        choosePictureFromGallery();
+                        break;
+                    case 1:
+                        takePhotoFromCamera();
+                        break;
+                }
+            }
+        });
+        dialog = pictureDialog.create();
+        dialog.show();
+    }
+
+    private void choosePictureFromGallery() {
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(galleryIntent, GALLERY_REQUEST);
+    }
+
+    private void takePhotoFromCamera(){
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE_SECURE);
+        startActivityForResult(intent, CAMERA_REQUEST);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode == getActivity().RESULT_CANCELED){
+            return;
+        }
+        if(requestCode == GALLERY_REQUEST){
+            if (data != null){
+                Uri contentURI = data.getData();
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), contentURI);
+                    saveImage(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Snackbar.make(getView(),R.string.fail_picture,Snackbar.LENGTH_SHORT).show();
+                }
+            }
+        } else if (requestCode == CAMERA_REQUEST){
+            Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+            saveImage(thumbnail);
+        }
+    }
+
+    private void saveImage(Bitmap thumbnail) {
+        Log.i("size",String.valueOf(thumbnail.getByteCount()));
+        final int THUMBSIZE = 150;
+
+        Bitmap thumbImage = ThumbnailUtils.extractThumbnail(thumbnail,THUMBSIZE,THUMBSIZE);
+        Log.i("size",String.valueOf(thumbImage.getByteCount()));
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        thumbImage.compress(Bitmap.CompressFormat.JPEG,100, out);
+
+        byte[] byteArray = out.toByteArray();
+        String value = Base64.encodeToString(byteArray,Base64.DEFAULT);
+        String name = String.valueOf(new Date().getTime());
+        String type = "image/jpeg";
+
+        image = new Image(name,type,value);
+        dialog.dismiss();
+        addPicture.setEnabled(false);
     }
 }

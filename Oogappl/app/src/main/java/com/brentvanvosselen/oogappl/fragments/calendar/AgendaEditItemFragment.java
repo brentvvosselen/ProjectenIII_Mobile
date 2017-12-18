@@ -51,6 +51,7 @@ import com.brentvanvosselen.oogappl.adapters.CategoriesHorizontalPickerAdapter;
 import com.brentvanvosselen.oogappl.adapters.ChildrenHorizontalPickerAdapter;
 import com.brentvanvosselen.oogappl.fragments.heenenweer.HeenEnWeerItemEditFragment;
 import com.brentvanvosselen.oogappl.util.ObjectSerializer;
+import com.brentvanvosselen.oogappl.util.Utils;
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
@@ -97,7 +98,8 @@ public class AgendaEditItemFragment extends Fragment {
     private CircularImageView vImageViewCategory;
     private Spinner vSpinnerWederkerendFrequenty;
     private CheckBox vCheckboxWederkerend;
-    private TextView vTextViewWederkerendEinddatum, vTextViewTitle;
+    private TextView vTextViewTitle;
+    private EditText vTextViewWederkerendEinddatum;
     private ImageButton vButtonAddCategory;
 
     private RecyclerView vRecyclerChildren, vRecyclerCategories;
@@ -154,7 +156,7 @@ public class AgendaEditItemFragment extends Fragment {
         vEdittextEndTime = getView().findViewById(R.id.edittext_edit_event_endTime);
         vCheckboxWederkerend = getView().findViewById(R.id.checkBox_wederkerend);
         vSpinnerWederkerendFrequenty = getView().findViewById(R.id.spinner_wederkerend_frequenty);
-        vTextViewWederkerendEinddatum = getView().findViewById(R.id.textview_wederkerend_enddate);
+        vTextViewWederkerendEinddatum = getView().findViewById(R.id.editText_wederkerend_einddatum);
         vEdittextWederkerendEinddatum = getView().findViewById(R.id.editText_wederkerend_einddatum);
         vButtonAddCategory = getView().findViewById(R.id.imagebutton_agenda_edit_add_category);
         vTextViewTitle = getView().findViewById(R.id.textview_agenda_edit_title);
@@ -436,6 +438,8 @@ public class AgendaEditItemFragment extends Fragment {
                 SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_TIME_FORMAT);
                 Date start = new Date();
                 Date end = new Date();
+                Date wederkerend = new Date();
+
                 try {
                     start = dateFormat.parse(vEdittextStartDate.getText().toString() + " " + vEdittextStartTime.getText().toString());
                     end = dateFormat.parse(vEdittextEndDate.getText().toString() + " " + vEdittextEndTime.getText().toString());
@@ -457,13 +461,40 @@ public class AgendaEditItemFragment extends Fragment {
                     correctForm = false;
                     Snackbar.make(getView(), R.string.err_endtime, Snackbar.LENGTH_SHORT).show();
                 }
+                else if(vCheckboxWederkerend.isChecked()) {
+                    String wederkerendString = vTextViewWederkerendEinddatum.getText().toString();
+                    if(wederkerendString == null || wederkerendString.isEmpty()) {
+                        Snackbar.make(getView(), "Einddatum wederkerend moet ingevuld zijn", Snackbar.LENGTH_SHORT).show();
+                        correctForm = false;
+                    } else {
+                        try {
+                            dateFormat = new SimpleDateFormat(DATE_FORMAT);
+                            wederkerend = dateFormat.parse(wederkerendString);
+
+                            if(start.after(wederkerend)) {
+                                Snackbar.make(getView(), "Einddatum moet na start event liggen", Snackbar.LENGTH_SHORT).show();
+                                correctForm = false;
+                            }
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
 
                 if(correctForm){
                     Child[] childs = new Child[myChildren.size()];
                     for(int i = 0; i< myChildren.size();i++){
                         childs[i] = myChildren.get(i);
                     }
-                    Event newEvent = new Event(title,start,end,description,category, childs);
+
+                    Event newEvent;
+
+                    if(vCheckboxWederkerend.isChecked()) {
+                        newEvent = new Event(title, start, end, description, category, childs, 1, vSpinnerWederkerendFrequenty.getSelectedItemPosition(), wederkerend);
+                    } else {
+                        newEvent = new Event(title,start,end,description,category, childs);
+                    }
+
                     if(itemId != null){
                         //edit event
                         Call editEventCall = apiInterface.editEvent("bearer " + sharedPreferences.getString("token",null), itemId,newEvent);
@@ -472,7 +503,6 @@ public class AgendaEditItemFragment extends Fragment {
                             public void onResponse(Call call, Response response) {
                                 if(response.isSuccessful()){
                                     Snackbar.make(getView(), R.string.change_event_pos,Snackbar.LENGTH_SHORT).show();
-
                                     getActivity().onBackPressed();
                                 }else{
                                     Snackbar.make(getView(), R.string.change_event_neg,Snackbar.LENGTH_SHORT).show();
@@ -494,7 +524,6 @@ public class AgendaEditItemFragment extends Fragment {
                                 if(response.isSuccessful()){
                                     Snackbar.make(getView(), R.string.add_event_pos,Snackbar.LENGTH_SHORT).show();
                                     getActivity().onBackPressed();
-
                                 }else{
                                     Snackbar.make(getView(), R.string.add_event_neg,Snackbar.LENGTH_SHORT).show();
                                 }
@@ -510,7 +539,6 @@ public class AgendaEditItemFragment extends Fragment {
                 }else{
                     Log.i("FORM","not correct");
                 }
-
             }
         });
     }
@@ -696,6 +724,11 @@ public class AgendaEditItemFragment extends Fragment {
                         Event e = (Event) response.body();
                         title.setText(R.string.edit_item);
                         vTextViewTitle.setText(R.string.edit_item);
+
+
+                        vSpinnerWederkerendFrequenty.setVisibility(View.GONE);
+                        vCheckboxWederkerend.setVisibility(View.GONE);
+                        vTextViewWederkerendEinddatum.setVisibility(View.GONE);
 
                         vEdittextTitle.setText(e.getTitle());
                         vEdittextDescription.setText(e.getDescription());
