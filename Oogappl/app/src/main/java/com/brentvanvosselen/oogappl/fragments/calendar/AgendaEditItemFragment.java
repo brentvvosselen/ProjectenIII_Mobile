@@ -722,6 +722,10 @@ public class AgendaEditItemFragment extends Fragment {
                         Event e = (Event) response.body();
                         title.setText(R.string.edit_item);
 
+                        vSpinnerWederkerendFrequenty.setVisibility(View.GONE);
+                        vCheckboxWederkerend.setVisibility(View.GONE);
+                        vTextViewWederkerendEinddatum.setVisibility(View.GONE);
+
 
                         vEdittextTitle.setText(e.getTitle());
                         vEdittextDescription.setText(e.getDescription());
