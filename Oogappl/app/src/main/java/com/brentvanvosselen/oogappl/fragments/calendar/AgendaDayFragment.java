@@ -131,7 +131,9 @@ public class AgendaDayFragment extends Fragment{
             }
         });
 
-        final Call childrenCall = apiInterface.getChildrenFromBookFromDate("bearer " + sharedPreferences.getString("token",null),currentUser.getEmail(),dateShown);
+        mCalendar.setTime(dateShown);
+        mCalendar.add(Calendar.DATE,1);
+        final Call childrenCall = apiInterface.getChildrenFromBookFromDate("bearer " + sharedPreferences.getString("token",null),currentUser.getEmail(),mCalendar.getTime());
         childrenCall.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {

@@ -156,6 +156,12 @@ public class HomeFragment extends Fragment {
                     LayoutInflater inflater = getActivity().getLayoutInflater();
                     final ViewGroup main = vLinearLayout;
 
+                    View titleView = inflater.inflate(R.layout.home_message,null);
+                    TextView tv = titleView.findViewById(R.id.textview_home_message);
+                    tv.setText(getText(R.string.next_item));
+
+                    main.addView(titleView);
+
                     View eventView = inflater.inflate(R.layout.calendar_day_item, null);
                     eventView.setOnClickListener(new View.OnClickListener() {
                         @Override
