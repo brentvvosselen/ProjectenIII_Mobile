@@ -98,7 +98,7 @@ public class AgendaEditItemFragment extends Fragment {
     private CircularImageView vImageViewCategory;
     private Spinner vSpinnerWederkerendFrequenty;
     private CheckBox vCheckboxWederkerend;
-    private EditText vTextViewWederkerendEinddatum;
+    private TextView vTextViewWederkerendEinddatum;
     private ImageButton vButtonAddCategory;
 
     private RecyclerView vRecyclerChildren, vRecyclerCategories;
@@ -155,7 +155,7 @@ public class AgendaEditItemFragment extends Fragment {
         vEdittextEndTime = getView().findViewById(R.id.edittext_edit_event_endTime);
         vCheckboxWederkerend = getView().findViewById(R.id.checkBox_wederkerend);
         vSpinnerWederkerendFrequenty = getView().findViewById(R.id.spinner_wederkerend_frequenty);
-        vTextViewWederkerendEinddatum = getView().findViewById(R.id.editText_wederkerend_einddatum);
+        vTextViewWederkerendEinddatum = getView().findViewById(R.id.textview_wederkerend_enddate);
         vEdittextWederkerendEinddatum = getView().findViewById(R.id.editText_wederkerend_einddatum);
         vButtonAddCategory = getView().findViewById(R.id.imagebutton_agenda_edit_add_category);
 
@@ -460,7 +460,8 @@ public class AgendaEditItemFragment extends Fragment {
                     Snackbar.make(getView(), R.string.err_endtime, Snackbar.LENGTH_SHORT).show();
                 }
                 else if(vCheckboxWederkerend.isChecked()) {
-                    String wederkerendString = vTextViewWederkerendEinddatum.getText().toString();
+                    String wederkerendString =vEdittextWederkerendEinddatum.getText().toString();
+                    Log.i("WEDERKEREND", wederkerendString);
                     if(wederkerendString == null || wederkerendString.isEmpty()) {
                         Snackbar.make(getView(), "Einddatum wederkerend moet ingevuld zijn", Snackbar.LENGTH_SHORT).show();
                         correctForm = false;
