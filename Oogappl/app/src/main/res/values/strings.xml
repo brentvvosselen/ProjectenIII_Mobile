@@ -23,6 +23,7 @@
     <string name="select_gallery">Kies een foto uit galerij</string>
     <string name="capture_camera">Neem een foto</string>
     <string name="fail_picture">Kan foto niet ophalen</string>
+    <string name="welcome">Welkom bij Oogappl.</string>
 
     <!-- progress -->
     <string name="loading">Laden</string>
@@ -155,6 +156,7 @@
     <string name="wait_other_parent">U heeft de gegevens al aangevuld. Wacht op de andere om deze te aanvaarden.</string>
     <string name="accept_other">De andere heeft al gegevens ingevuld. Je kan deze aanvaarden of aanpassen.</string>
     <string name="setup_costs">Vul eerst enkele gegevens in over jullie financiële overeenkomst</string>
+    <string name="te_betalen">Te betalen</string>
 
     <!--heen en weer-->
     <string name="heenenweer">Heen en Weer</string>
