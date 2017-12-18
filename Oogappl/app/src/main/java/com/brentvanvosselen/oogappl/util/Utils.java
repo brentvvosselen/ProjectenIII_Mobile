@@ -6,6 +6,10 @@ import android.net.NetworkInfo;
 import android.util.Log;
 
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class Utils {
 
@@ -39,5 +43,14 @@ public class Utils {
         } else {
             return false;
         }
+    }
+
+    public static Date addDay(Date d) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(d);
+        c.add(Calendar.DATE, 1);
+        SimpleDateFormat sdf1 = new SimpleDateFormat("MM-dd-yyyy");
+        Log.i("DATE", c.getTime() + "");
+        return c.getTime();
     }
 }
