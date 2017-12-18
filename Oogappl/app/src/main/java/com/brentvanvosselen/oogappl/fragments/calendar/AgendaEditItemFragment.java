@@ -468,7 +468,6 @@ public class AgendaEditItemFragment extends Fragment {
                         try {
                             dateFormat = new SimpleDateFormat(DATE_FORMAT);
                             wederkerend = dateFormat.parse(wederkerendString);
-                            Utils.addDay(wederkerend);
 
                             if(start.after(wederkerend)) {
                                 Snackbar.make(getView(), "Einddatum moet na start event liggen", Snackbar.LENGTH_SHORT).show();
