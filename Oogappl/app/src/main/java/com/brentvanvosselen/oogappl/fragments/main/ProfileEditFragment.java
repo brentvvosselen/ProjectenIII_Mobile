@@ -153,12 +153,19 @@ public class ProfileEditFragment extends Fragment {
 
                         @Override
                         public void onFailure(Call call, Throwable t) {
-                            Snackbar.make(getView(), R.string.geen_verbinding,Snackbar.LENGTH_SHORT).show();
+                            Log.i("throwable",t.getMessage());
+                            Fragment fragment = new ProfileFragment();
+                            if(fragment != null){
+                                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                                ft.replace(R.id.content_main,fragment);
+                                ft.commit();
+                            }
                             Log.i("API-EVENT", t.getMessage());
                             call.cancel();
                         }
                     });
                 }else{
+                    Log.i("event","no response succ");
                     Snackbar.make(getView(), R.string.geen_verbinding, Snackbar.LENGTH_SHORT).show();
                     Log.i("USER","FAIL: "+ response.message());
                 }

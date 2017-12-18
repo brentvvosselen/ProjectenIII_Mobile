@@ -98,6 +98,7 @@ public class AgendaEditItemFragment extends Fragment {
     private CircularImageView vImageViewCategory;
     private Spinner vSpinnerWederkerendFrequenty;
     private CheckBox vCheckboxWederkerend;
+    private TextView vTextViewTitle;
     private TextView vTextViewWederkerendEinddatum;
     private ImageButton vButtonAddCategory;
 
@@ -158,6 +159,7 @@ public class AgendaEditItemFragment extends Fragment {
         vTextViewWederkerendEinddatum = getView().findViewById(R.id.textview_wederkerend_enddate);
         vEdittextWederkerendEinddatum = getView().findViewById(R.id.editText_wederkerend_einddatum);
         vButtonAddCategory = getView().findViewById(R.id.imagebutton_agenda_edit_add_category);
+        vTextViewTitle = getView().findViewById(R.id.textview_agenda_edit_title);
 
         vButtonAddCategory.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -722,11 +724,12 @@ public class AgendaEditItemFragment extends Fragment {
                     if (response.isSuccessful()) {
                         Event e = (Event) response.body();
                         title.setText(R.string.edit_item);
+                        vTextViewTitle.setText(R.string.edit_item);
+
 
                         vSpinnerWederkerendFrequenty.setVisibility(View.GONE);
                         vCheckboxWederkerend.setVisibility(View.GONE);
                         vTextViewWederkerendEinddatum.setVisibility(View.GONE);
-
 
                         vEdittextTitle.setText(e.getTitle());
                         vEdittextDescription.setText(e.getDescription());
@@ -773,6 +776,8 @@ public class AgendaEditItemFragment extends Fragment {
                     progressDialog.dismiss();
                 }
             });
+        }else{
+            vTextViewTitle.setText(R.string.add_item);
         }
     }
 

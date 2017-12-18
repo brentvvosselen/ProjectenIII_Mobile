@@ -21,13 +21,12 @@
 
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/textview_agenda_edit_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/poppins_medium"
-                android:text="@string/edit"
                 android:textAllCaps="true"
                 android:textColor="@color/dark_gray_text"
                 android:textSize="32dp"
@@ -307,7 +306,7 @@
                 android:textColor="@color/dim_gray_text"
                 android:text="@string/choose_category"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView" />
+                app:layout_constraintTop_toBottomOf="@+id/textview_agenda_edit_title" />
 
             <TextView
                 android:id="@+id/textView21"

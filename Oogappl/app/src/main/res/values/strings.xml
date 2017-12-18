@@ -99,9 +99,9 @@
     <string name="change_profile_neg">Profiel is NIET geüpdatet</string>
 
     <!--calendar-->
-    <string name="next_item">Volgende item</string>
-    <string name="add_item">Voeg item toe</string>
-    <string name="edit_item">Wijzig item</string>
+    <string name="next_item">Volgend evenement</string>
+    <string name="add_item">Voeg evenement toe</string>
+    <string name="edit_item">Wijzig evenement</string>
     <string name="new_category">Nieuwe categorie</string>
     <string name="upcoming_events">Deze dag</string>
     <string name="no_events">Geen evenementen</string>
@@ -113,7 +113,7 @@
     <string name="starttime">Starttijd</string>
     <string name="Enddate">Einddatum</string>
     <string name="err_endtime">Einddatum moet na startdatum liggen</string>
-    <string name="retrieve_items_neg">Kan items niet ophalen voor </string>
+    <string name="retrieve_items_neg">Kan evenementen niet ophalen voor </string>
     <string name="get_event_neg">Kan evenementen niet ophalen van de server</string>
     <string name="err_start_end_event">"Start en einde van evenement moet ingevuld zijn"</string>
     <string name="err_title_event">De titel mag niet leeg zijn</string>

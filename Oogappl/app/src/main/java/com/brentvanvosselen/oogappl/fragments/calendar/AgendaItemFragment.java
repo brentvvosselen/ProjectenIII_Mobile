@@ -1,8 +1,12 @@
 package com.brentvanvosselen.oogappl.fragments.calendar;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -11,6 +15,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.brentvanvosselen.oogappl.R;
@@ -26,6 +32,7 @@ import com.brentvanvosselen.oogappl.RestClient.APIInterface;
 import com.brentvanvosselen.oogappl.RestClient.RetrofitClient;
 import com.brentvanvosselen.oogappl.RestClient.models.Child;
 import com.brentvanvosselen.oogappl.RestClient.models.Event;
+import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -47,6 +54,7 @@ public class AgendaItemFragment extends Fragment{
 
     private TextView vTextViewStartDate,vTextViewStartMonth, vTextViewStartTime,vTextViewEndDate,vTextViewEndMonth, vTextViewEndTime, vTextViewChildren,vTextViewDescription, vTextViewTitle;
     private ImageView vImageViewCategory;
+    private LinearLayout vLinearChildren;
 
     private SimpleDateFormat dateFormatForTime = new SimpleDateFormat("HH:mm",Locale.getDefault());
     private SimpleDateFormat dateFormatForDate = new SimpleDateFormat("dd",Locale.getDefault());
@@ -81,9 +89,14 @@ public class AgendaItemFragment extends Fragment{
 
         vTextViewDescription = content.findViewById(R.id.textview_calendar_item_description);
         vTextViewTitle = content.findViewById(R.id.textview_calendar_item_title);
-        vTextViewChildren = content.findViewById(R.id.textview_calendar_item_children);
+        vLinearChildren = content.findViewById(R.id.linear_agenda_item_children);
 
         Call itemCall = apiInterface.getEvent("bearer " + sharedPreferences.getString("token",null), itemId);
+        final ProgressDialog progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage(getResources().getString(R.string.getting_data));
+        progressDialog.setTitle(getResources().getString(R.string.loading));
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
         itemCall.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
@@ -102,13 +115,32 @@ public class AgendaItemFragment extends Fragment{
                     vTextViewTitle.setText(event.getTitle());
 
 
-                    String children = "";
-                    for (Child child : event.getchildren()) {
-                        children += " " + child.getFirstname() + " " + child.getLastname();
-                    }
-                    Log.i("children",children);
-                    vTextViewChildren.setText(children);
 
+                    LayoutInflater inflater = getActivity().getLayoutInflater();
+                    final ViewGroup main = vLinearChildren;
+
+                    for (Child child : event.getchildren()) {
+
+                        View childView = inflater.inflate(R.layout.child_list_item,null);
+
+                        CircularImageView imgView = childView.findViewById(R.id.imageview_child_item);
+                        TextView textView = childView.findViewById(R.id.textview_child_item_name);
+
+                        textView.setText(child.getFirstname() + " " + child.getLastname());
+
+
+
+                        if(child.getPicture() != null){
+                            byte[] decodedString = Base64.decode(child.getPicture().getValue(),Base64.DEFAULT);
+                            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString,0,decodedString.length);
+                            imgView.setImageBitmap(decodedByte);
+                        }else{
+                            Bitmap image = BitmapFactory.decodeResource(Resources.getSystem(),R.drawable.no_picture);
+                            imgView.setImageBitmap(image);
+                        }
+
+                        main.addView(childView);
+                    }
 
 
                     ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
@@ -120,9 +152,12 @@ public class AgendaItemFragment extends Fragment{
                     TextView title = getActivity().findViewById(getResources().getIdentifier("action_bar_title", "id", getActivity().getPackageName()));
                     title.setText(event.getCategory().getType());
 
+
+
                 }else{
                     Snackbar.make(getView(), R.string.get_event_neg,Snackbar.LENGTH_SHORT).show();
                 }
+                progressDialog.dismiss();
             }
 
             @Override
@@ -130,7 +165,9 @@ public class AgendaItemFragment extends Fragment{
                 Log.i("ERROR", t.getMessage());
                 Snackbar.make(getView(),R.string.geen_verbinding,Snackbar.LENGTH_SHORT).show();
                 call.cancel();
+                progressDialog.dismiss();
             }
+
         });
 
 
