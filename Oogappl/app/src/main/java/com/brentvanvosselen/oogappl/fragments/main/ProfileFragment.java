@@ -1,11 +1,13 @@
 package com.brentvanvosselen.oogappl.fragments.main;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
@@ -14,8 +16,10 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -55,6 +59,8 @@ public class ProfileFragment extends Fragment {
     private SharedPreferences sharedPreferences;
     private int GALLERY_REQUEST = 1;
     private int CAMERA_REQUEST = 2;
+
+    private static final int CAMERA_PERMISSION_CONSTANT = 100;
 
     TextView vTextViewEmail, vTextViewFirstname, vTextViewAddress, vTextViewTelephone, vTextViewWork, vTextViewType;
     CircularImageView vImageViewProfile;
@@ -201,6 +207,7 @@ public class ProfileFragment extends Fragment {
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(galleryIntent, GALLERY_REQUEST);
     }
+
     private void takePhotoFromCamera(){
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE_SECURE);
         startActivityForResult(intent, CAMERA_REQUEST);

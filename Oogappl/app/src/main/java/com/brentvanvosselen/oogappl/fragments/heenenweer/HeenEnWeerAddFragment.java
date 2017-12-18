@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -163,6 +164,7 @@ public class HeenEnWeerAddFragment extends Fragment{
                 Child child = children.get(selectedChild);
                 try {
                     day = DATE_FORMAT.parse(vEdittextDate.getText().toString());
+                    Log.i("DAY", day + "");
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -171,6 +173,7 @@ public class HeenEnWeerAddFragment extends Fragment{
                     vEdittextDate.setError("Geen datum");
                     correctform = false;
                 }
+
                 if(correctform){
                     HeenEnWeerDag newDay = new HeenEnWeerDag(day,description,child);
                     Call addDayCall = apiInterface.addHeenEnWeerDay("bearer " + sharedPreferences.getString("token",null), newDay);

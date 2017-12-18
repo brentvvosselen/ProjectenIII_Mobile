@@ -20,6 +20,9 @@ public class Cost {
     @SerializedName("children")
     @Expose
     private Child[] children;
+    @SerializedName("picture")
+    @Expose
+    private Image image;
 
     public Cost(String title, String description, double amount, Date date, CostCategory category, Child[] children) {
         this.title = title;
@@ -62,4 +65,12 @@ public class Cost {
     }
 
     public Child[] getChildren() { return children; }
+
+    public Image getImage() {
+        return this.image;
+    }
+
+    public void setImage(Image m) {
+        this.image = m;
+    }
 }
